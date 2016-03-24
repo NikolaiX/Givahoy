@@ -1,0 +1,279 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BLE\"><param name=\"android-package\" value=\"com.evothings.BLE\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest/application": [
+                        {
+                            "xml": "<receiver android:name=\"org.altbeacon.beacon.startup.StartupBroadcastReceiver\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /><action android:name=\"android.intent.action.ACTION_POWER_CONNECTED\" /><action android:name=\"android.intent.action.ACTION_POWER_DISCONNECTED\" /></intent-filter></receiver>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:exported=\"true\" android:isolatedProcess=\"false\" android:label=\"iBeacon\" android:name=\"org.altbeacon.beacon.service.BeaconService\"></service>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:enabled=\"true\" android:name=\"org.altbeacon.beacon.BeaconIntentProcessor\"><meta-data android:name=\"background\" android:value=\"true\" /><intent-filter android:priority=\"1\"><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_RANGING\" /><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_MONITORING\" /></intent-filter></service>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "com.compellingsoftware.plugins.http": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "com.unarin.cordova.beacon": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-ble": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-eddystone": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+            "id": "cordova-plugin-whitelist.whitelist",
+            "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+            "id": "cordova-plugin-dialogs.notification",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+            "id": "cordova-plugin-dialogs.notification_android",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+            "id": "cordova-plugin-geolocation.geolocation",
+            "clobbers": [
+                "navigator.geolocation"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+            "id": "cordova-plugin-geolocation.PositionError",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.compellingsoftware.plugins.http/www/cordovaHTTP.js",
+            "id": "com.compellingsoftware.plugins.http.CordovaHttpPlugin",
+            "clobbers": [
+                "plugins.CordovaHttpPlugin"
+            ]
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/lib/underscore-min-1.6.js",
+            "id": "com.unarin.cordova.beacon.underscorejs",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/lib/q.min.js",
+            "id": "com.unarin.cordova.beacon.Q",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/LocationManager.js",
+            "id": "com.unarin.cordova.beacon.LocationManager",
+            "merges": [
+                "cordova.plugins"
+            ]
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/Delegate.js",
+            "id": "com.unarin.cordova.beacon.Delegate",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/Region.js",
+            "id": "com.unarin.cordova.beacon.Region",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/Regions.js",
+            "id": "com.unarin.cordova.beacon.Regions",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/CircularRegion.js",
+            "id": "com.unarin.cordova.beacon.CircularRegion",
+            "runs": true
+        },
+        {
+            "file": "plugins/com.unarin.cordova.beacon/www/model/BeaconRegion.js",
+            "id": "com.unarin.cordova.beacon.BeaconRegion",
+            "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
+            "id": "cordova-plugin-globalization.GlobalizationError",
+            "clobbers": [
+                "window.GlobalizationError"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-globalization/www/globalization.js",
+            "id": "cordova-plugin-globalization.globalization",
+            "clobbers": [
+                "navigator.globalization"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-network-information/www/network.js",
+            "id": "cordova-plugin-network-information.network",
+            "clobbers": [
+                "navigator.connection",
+                "navigator.network.connection"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+            "id": "cordova-plugin-network-information.Connection",
+            "clobbers": [
+                "Connection"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-ble/ble.js",
+            "id": "cordova-plugin-ble.BLE",
+            "clobbers": [
+                "evothings.ble"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
+            "id": "cordova-plugin-eddystone.eddystoneplugin",
+            "clobbers": [
+                "evothings.eddystone"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-whitelist": "1.2.1",
+        "cordova-plugin-device": "1.1.1",
+        "cordova-plugin-console": "1.0.2",
+        "cordova-plugin-dialogs": "1.2.0",
+        "cordova-plugin-geolocation": "2.1.0",
+        "com.compellingsoftware.plugins.http": "0.3.0",
+        "com.unarin.cordova.beacon": "3.4.0",
+        "cordova-plugin-globalization": "1.0.2",
+        "cordova-plugin-network-information": "1.2.0",
+        "cordova-plugin-ble": "1.0.1",
+        "cordova-plugin-eddystone": "1.0.2"
+    }
+}

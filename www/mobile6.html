@@ -1,0 +1,511 @@
+<!doctype html>
+<html>
+<head>
+
+    <title>Givahoy</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="./themes/givahoy1.css"/>
+    <link rel="stylesheet" href="./themes/givahoy1.min.css"/>
+    <link rel="stylesheet" href="./themes/jquery.mobile.icons.min.css"/>
+    <style>
+
+        body{
+            text-align: center !important;
+            font-family: arial !important;
+        }
+        #givepage {
+            background-color: #7FBDE8 !important;
+        }
+
+
+        .button {
+            height: inherit;
+            margin: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+
+        .styled-select select {
+            background: transparent;
+            width: 268px;
+            padding: 0px;
+            font-size: 16px;
+            line-height: 1;
+            border: 0;
+            border-radius: 0;
+            height: 34px;
+            -webkit-appearance: none;
+        }
+
+        .styled-select {
+            width: 98%;
+            height: 100%;
+            overflow: hidden;
+            background-color: transparent;
+            background-size: 33px;
+            background-width: auto;
+            margin: 0 !important;
+        }
+
+        .ui-select{
+            margin: 0;
+        }
+        #location-button{
+            border: 0;
+        }
+        .modal {
+            display:    none;
+            position:   fixed;
+            z-index:    1000;
+            top:        5%;
+            left:       5%;
+            height:     90%;
+            width:      90%;
+            text-align: center;
+            justify-content:center;
+            align-items:center;
+
+        }
+
+        .modal img{
+            padding-bottom: 40px;
+            overflow: auto;
+        }
+        .modal.processingTransaction {
+            display: block;
+            background: #EEE;
+
+        }
+        .modal.dismissible .exitButton{
+            display: block;
+        }
+        .modal .exitButton{
+            display: none;
+            background: url('images/cross.png') no-repeat;
+            background-size: contain;
+            height: 40px;
+            width: 40px;
+            float: right;
+            margin: 10px;
+        }
+        .modal .container{
+            top: 50%;
+            position: relative;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            padding-left: 20%;
+            padding-right: 20%;
+        }
+        .modal.completedTransaction{
+            display: block;
+            background: rgb( 226, 90, 76 );
+            color: RGB( 236, 234, 234 );
+            text-transform: uppercase;
+            font-size: large;
+        }
+        .modal.completedTransaction .dismissible{
+            display: block;
+        }
+        .modal.completedTransaction .container{
+            display: block;
+        }
+    </style>
+
+
+</head>
+<body>
+<div data-role="page" id="givepage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
+    </div>
+
+
+    <br>
+    <br>
+            <select id="locations"></select>
+    <br>
+    <br>
+    <div class="button-block">
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="initiateTrans(1)" class="round-button">$1</a></div>
+        </div>
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="initiateTrans(2)" class="round-button">$2</a></div>
+        </div>
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="initiateTrans(5)" class="round-button">$5</a></div>
+        </div>
+    </div>
+    <div class="button-block">
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="initiateTrans(10)" class="round-button">$10</a></div>
+        </div>
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="initiateTrans(20)" class="round-button">$20</a></div>
+        </div>
+        <!---<div class="round-button"><div class="round-button-circle"><a onclick=" class="round-button">$x</a></div></div>
+        Put this back in when I decide to write a popup for other amounts
+        --->
+    </div>
+    <div class="button-block">
+        <div class="round-button">
+            <div class="round-button-circle"><a onclick="makeTrans(0)" class="round-button"
+                                                font-family="Arial">&hearts;</a></div>
+        </div>
+    </div>
+    <div>
+        <p id="availbal">Loading, please wait...</p>
+    </div>
+    <div data-role="footer" data-id="foo1" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#givepage" class="ui-btn-active ui-state-persist">Give &hearts;</a></li>
+                <li><a href="#historypage">History</a></li>
+                <li><a href="#settingspage">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div data-role="page" id="historypage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
+    </div>
+    <h2>To be implemented</h2>
+    <div data-role="footer" data-id="foo1" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#givepage">Give &hearts;</a></li>
+                <li><a href="#historypage" class="ui-btn-active ui-state-persist">History</a></li>
+                <li><a href="#settingspage">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div data-role="page" id="settingspage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
+    </div>
+    <h2>To be implemented</h2>
+    <div data-role="footer" data-id="foo1" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#givepage">Give &hearts;</a></li>
+                <li><a href="#historypage">History</a></li>
+                <li><a href="#settingspage" class="ui-btn-active ui-state-persist">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="modal ui-overlay-shadow">
+    <div class="exitButton"></div>
+    <div class="container"></div>
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="libs/evothings/evothings.js"></script>
+<script type="text/javascript" src="libs/evothings/ui/ui.js"></script>
+<script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+<script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+<script type="text/javascript" src="lib/moment/moment.js"></script>
+<script type="text/javascript" src="lib/url-template/url-template.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+<script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+<script type="text/javascript" src="apigClient.js"></script>
+<script>
+    var mybal = 0;
+    $( document ).ready(function() {
+
+    });
+    $(document).bind("mobileinit", function() {
+        $.mobile.defaultPageTransition = 'none';
+    });
+
+    function getSelectedLocation(){
+        selectedLocation =  $('#locations')
+                .find($('option:selected'));
+
+        return selectedLocation;
+    }
+
+    function updateViewBalance(){
+        console.log("mybal = " + mybal);
+        $('#availbal').text('Available Balance: $' + mybal);
+    }
+
+    function addLocationOptionToTopOfList(value, name, location){
+        var defaultSelected = true;
+        var nowSelected = true;
+        var listedName = name + ' (' + location + ')';
+
+        var newLocation = new Option(listedName, value,defaultSelected, nowSelected);
+
+        $('#locations').prepend(newLocation).change();
+    }
+
+    function initiateTrans(vamount){
+    /*
+     *
+     * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
+     *
+     * */
+        if (mybal + 50 <= vamount) {
+            alert('Insufficient Funds');
+            return;
+        }
+        navigator.notification.confirm(
+                "Are you sure you want to donate $" + vamount + " to " + getSelectedLocation().text() + "?",
+                function(buttonIndex){
+                    if(buttonIndex==1){
+                        /*
+                        Create processing page
+
+                         */
+                        transactionData = transactionDataBody(vamount, getSelectedLocation().val());
+                        makeTrans(transactionData)
+                    }
+                });
+    }
+    function transactionDataBody(vamount, location){
+        /*
+        Example data:
+         "saction": "MakeTransaction",
+         "mvalue": vamount, //Decimal value
+         "linstancelocationid": $('#location option:selected').val(),
+         "tuuid": device.uuid,
+         "vuid": localStorage.uid,
+         "vrandom": localStorage.vrandom,
+         "dbcr": "db"
+         Every value must be accounted for!
+         */
+        var body = {
+            //This is where you define the body of the request
+
+            "saction": "MakeTransaction",
+            "mvalue": vamount, //Decimal value
+            "linstancelocationid": location,
+            "tuuid": device.uuid,
+            "vuid": localStorage.uid,
+            "vrandom": localStorage.vrandom,
+            "dbcr": "db"
+        };
+        return body;
+    }
+
+    $(" .modal .exitButton").click(function(){
+        clearModal();
+    });
+
+    function clearModal(){
+        console.log("clearModal called");
+        $(".modal")
+                .removeClass("processingTransaction")
+                .removeClass("completedTransaction")
+                .removeClass("dismissible");
+    }
+    function showTransactionProcessModal(){
+
+/*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
+        optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
+        //adds option to list of locations
+        $('#locations').prepend(optionHtml); */
+
+        clearModal();
+        $(".modal")
+                .addClass("processingTransaction");
+        $(".modal .container")
+                .text("Your Transaction is being Processed")
+                .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
+
+    }
+    function showTransactionCompletedModal(charity, amount){
+        clearModal();
+        $(".modal")
+                .addClass("completedTransaction")
+                .addClass("dismissible");
+        $(".modal .container")
+                .text("Thank you for your $" + amount + " donation to " + charity)
+                .prepend('<div class="exit"></div><img id="theImg" src="images/heart.png" /><br>');
+    }
+    function makeTrans(body) {
+        console.log("Transaction initiated for " + getSelectedLocation().val());
+        //mybal = mybal - vamount;
+        //updateViewBalance();
+        //Transaction record is Date, Amount and destination
+
+        showTransactionProcessModal();
+
+        var apigClient = apigClientFactory.newClient();
+
+
+        //alert (JSON.stringify(body));
+        apigClient.allpurposePost({}, body, {})
+                .then(function (result) {
+                    //This is where you would put a success callback
+                    var myresult = result;
+                    mybal = myresult.data.mbalance.mbalance;
+                    for (var i = 0, len = myresult.data.sresult.length; i < len; i++) {
+                        //You can now access individual properties like this:
+                        //var json = $.parseJSON(data.locationlist.location[i]);
+                        if (i == 0) {
+                            var output = '';
+                        }
+
+                        addLocationOptionToTopOfList(myresult.data.sresult[i].llocationid, myresult.data.sresult[i].slocationname);
+                    }
+                    updateViewBalance();
+
+                    /*
+                    Keep eye on this if statement, it doesn't look right
+                     */
+                    if (localStorage.uid) {
+                        localStorage.setItem("uid", myresult.data.mbalance.vuid);
+                    }
+                    localStorage.setItem("vrandom", myresult.data.sresult.checker);
+                    //alert('Payment: ' + myresult.data.sresult.status + ' $' + body.mvalue + ' to ' + $('#location option:selected').text() + '!');
+                    showTransactionCompletedModal(getSelectedLocation().text(), body.mvalue);
+                    console.log(myresult);
+                }).catch(function (result) {
+            //This is where you would put an error callback
+            alert("Sorry, there was a problem processing your donation.");
+            clearModal();
+            console.log(result);
+        });
+    }
+
+    function testJsonBeacon(){
+        console.log(
+                createJsonForBeacons(getBeacons())
+        );
+    }
+
+    function getBeacons(){
+        //placeholder until I can receive actual beacons
+        var beaconlist = [];
+        beaconlist.push(1234);
+        beaconlist.push(1235);
+
+        return beaconlist;
+    }
+
+    function createJsonForBeacons(beaconIdArray){
+        var jsonMessage = [];
+        var loopcount = beaconIdArray.length;
+        for(var i= 0; i < loopcount; i++){
+            jsonMessage.push(
+                    {"beaconid": beaconIdArray[i]}
+            );
+        }
+        return jsonMessage;
+    }
+
+    function showPosition(position) {
+        ltd = position.coords.latitude;
+        lgt = position.coords.longitude;
+        nearbyBeacons = createJsonForBeacons(getBeacons());
+
+        var body = {
+            //This is where you define the body of the request
+            "saction": "GetLocation",
+            "llatitude": ltd.toString(),
+            "llongitude": lgt.toString(),
+            "tuuid": device.uuid,
+            "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
+            "vrandom": window.localStorage.getItem('vrandom'),
+            "beaconlist": createJsonForBeacons(getBeacons())
+        };
+        console.log(body);
+        console.log(JSON.stringify(body));
+
+        var apigClient = apigClientFactory.newClient();
+        apigClient.allpurposePost({}, body, {})
+                .then(function (result) {
+                    //This is where you would put a success callback
+                    //alert(result.data.locationlist.location.length);
+                    //When DOM loaded we attach click event to button
+                    //after button is clicked we download the data
+                    var myresult = result;
+                    console.log(JSON.stringify(myresult.data));
+                    mybal = myresult.data.mbalance.mbalance;
+
+
+                    if(myresult.data.sresult){
+                        for (var i = 0; i < myresult.data.sresult.length; i++) {
+                            if (i == 0) {
+                                var output = '';
+                            }
+                            addLocationOptionToTopOfList(
+                                    myresult.data.sresult[i].linstancelocationid,
+                                    myresult.data.sresult[i].sinstancename,
+                                    myresult.data.sresult[i].slocationname
+                            );
+                        }
+                    }
+
+                    updateViewBalance();
+                    if (localStorage.uid) {
+                        localStorage.setItem("uid", myresult.data.mbalance.vuid);
+                    }
+
+                }).catch(function (result) {
+            alert("There was an error getting data from the server");
+            console.log(result);
+        });
+
+    }
+
+    function showPositionOnError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("Error getting position: Permission denied");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Error getting position: Permission unavailable");
+                break;
+            case error.TIMEOUT:
+                console.log("Error getting position: Timed out");
+                break;
+            case error.UNKNOWN_ERROR:
+                console.log("Error getting position: Unknown error");
+                break;
+        }
+    }
+
+    function onDeviceReady() {
+        console.log("onDeviceReady Called");
+        updateViewBalance();
+        if (navigator.geolocation) {
+            console.log("geolocation enabled");
+
+            navigator.geolocation.getCurrentPosition(showPosition, showPositionOnError);
+
+            addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
+        }
+        else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    }
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+</script>
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+
+    <title>How to Parse a JSON file using jQuery</title>
+    
+    <style>
+        body{
+            text-align: center;
+            font-family: arial;
+            background-color: #7FBDE8;
+        }
+
+        .button{
+            margin:20px;
+            font-size:16px;
+            font-weight: bold;
+            padding:5px 10px;
+        }
+				.styled-select select {
+				   background: transparent;
+				   width: 268px;
+				   padding: 5px;
+				   font-size: 16px;
+				   line-height: 1;
+				   border: 0;
+				   border-radius: 0;
+				   height: 34px;
+				   -webkit-appearance: none;
+				   }
+   				.styled-select {
+				   width: 98%;
+				   height: 100%;
+				   overflow: hidden;
+				   background-color: transparent;
+				   background: url(round_arrow.png) no-repeat right;
+				   background-size:33px;
+				   background-width:auto;
+				   
+				   }
+       </style>
+
+
+    <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="lib/moment/moment.js"></script>
+    <script type="text/javascript" src="lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="apigClient.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<link rel="stylesheet" href="./themes/givahoy1.css" />
+		<link rel="stylesheet" href="./themes/givahoy1.min.css" />
+		<link rel="stylesheet" href="./themes/jquery.mobile.icons.min.css" />
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script src="cordova.js"></script>
+		<script src="libs/evothings/evothings.js"></script>
+		<script src="libs/evothings/ui/ui.js"></script>
+    <script src="lib/jquery.min.js"></script>
+
+<script>
+
+				//var mybal = 25;
+				function makeTrans(vamount)
+				{
+					if (vamount <= mybal+50){
+						//mybal = mybal - vamount;
+						//$('#availbal').text('Available Balance: $' + mybal);
+						//Transaction record is Date, Amount and destination
+		      var apigClient = apigClientFactory.newClient();
+				  var body = {
+				    //This is where you define the body of the request
+            
+        "saction": "MakeTransaction",
+	        "mvalue": vamount,
+	        "linstancelocationid": $('#location option:selected').val(),
+	        "tuuid": device.uuid//,
+			    //"vuid": window.localStorage.getItem('uid'),
+			    //"vrandom": window.localStorage.getItem('vrandom')
+	        "dbcr": "db"
+			    
+					};
+					
+          //alert (JSON.stringify(body));
+			    apigClient.allpurposePost({},body,{})
+				    .then(function(result){
+				        //This is where you would put a success callback
+			    		var myresult = result;
+		          mybal = myresult.data.mbalance.mbalance;
+			        for (var i = 0, len = myresult.data.sresult.length; i < len; i++) {
+			          //You can now access individual properties like this:
+			          //var json = $.parseJSON(data.locationlist.location[i]);
+			          if (i==0){var output='';}
+			          
+			          $('#results select').append('<option value=' + myresult.data.sresult[i].llocationid + '>' + myresult.data.sresult[i].slocationname + '</option>');
+							};
+							$('#availbal').text('Available Balance: ' + mybal);
+							//if (window.localStorage.getItem('uid') = '' ) {
+							//	window.localStorage.setItem('uid', myresult.data.mbalance.vuid);
+							//}
+							//window.localStorage.setItem('vrandom', myresult.data.sresult.checker);
+
+				    }).catch( function(result){
+				        //This is where you would put an error callback
+				        alert('error');
+				    });
+				    }
+					else{
+						alert ('Insufficient Funds');
+					}
+				}
+        function showPosition(position)
+        {
+        	ltd=position.coords.latitude;
+          lgt=position.coords.longitude;
+		      var apigClient = apigClientFactory.newClient();
+				  var body = {
+				    //This is where you define the body of the request
+            
+        "saction": "GetLocation",
+	        "llatitude": ltd.toString(),
+	        "llongitude": lgt.toString(),
+	        "tuuid": device.uuid//,
+			    //"vuid": window.localStorage.getItem('uid'),
+			    //"vrandom": window.localStorage.getItem('vrandom')
+					};
+					
+		    var params = {
+				    //This is where any header, path, or querystring request params go. The key is the parameter named as defined in the API
+				    llatitude: '',
+				    llongitude: '',
+				    tuuid: device.uuid,
+				    saction: "GetLocation"
+					};
+					var additionalParams = {
+					    //If there are any unmodeled query parameters or headers that need to be sent with the request you can add them here
+					    headers: {
+					        param0: '',
+					        param1: ''
+					    },
+					    queryParams: {
+					        param0: '',
+					        param1: ''
+					    }
+					};
+          //alert (JSON.stringify(body));
+			    apigClient.allpurposePost({},body,{})
+				    .then(function(result){
+				        //This is where you would put a success callback
+				        //alert(result.data.locationlist.location.length);
+			      //When DOM loaded we attach click event to button
+			    //after button is clicked we download the data
+			    		var myresult = result;
+			    		//alert (JSON.stringify(myresult.data.mbalance.mbalance));
+  	          mybal = myresult.data.mbalance.mbalance;
+  	          $('#results select').empty();
+			        for (var i = 0, len = myresult.data.sresult.length; i < len; i++) {
+			          //You can now access individual properties like this:
+			          //var json = $.parseJSON(data.locationlist.location[i]);
+			          //alert (JSON.stringify(myresult.data.sresult[0].llocationid));
+			          //alert ('<option value=' + myresult.data.sresult[i].llocationid + '>' + myresult.data.sresult[i].slocationname + '</option>');
+			          if (i==0){var output='';}
+			          //output= output + '<p/>' + data.locationlist.location[i].name;
+			          
+			          $('#results select').append('<option value=' + myresult.data.sresult[i].linstancelocationid + '>' + myresult.data.sresult[i].sinstancename + '(' + myresult.data.sresult[i].slocationname + ')' + '</option>');
+			          //$('#txns').append('<span><div><option value=' + myresult.data.sresult[i].llocationid + '>' + myresult.data.sresult[i].slocationname + '</option></div></span>');
+			          
+			          //$('#select-choice-a-menu ul').append('<li data-option-index="0" data-icon="false" class="ui-first-child" role="option" aria-selected="false"><a href="#" tabindex="-1" class="ui-btn">Option 1</a></li>');
+							};
+							$('#availbal').text('Available Balance: $' + mybal) ;
+							//if (window.localStorage.getItem('uid') = '' ) {
+							//	window.localStorage.setItem('uid', myresult.data.mbalance.vuid);
+							//}
+							$('#results select').append('<option value="17">Neo Natal Trust (Default)</option>');
+				    }).catch( function(result){
+				        //This is where you would put an error callback
+				        alert('error');
+				    });
+			    
+        }
+
+        function showError(error)
+        {
+            switch(error.code)
+            {
+                case error.PERMISSION_DENIED:
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    break;
+                case error.TIMEOUT:
+                    break;
+                case error.UNKNOWN_ERROR:
+                    break;
+            }
+        }
+			function onDeviceReady() {
+				
+		      if (navigator.geolocation)
+			    {
+			        alert ('ready');
+			        navigator.geolocation.getCurrentPosition(showPosition,showError);
+			        $('#results select').append('<option value="17">Neo Natal Trust (Device Default)</option>');
+			    }
+			    else{alert('Geolocation is not supported by this browser.');}
+		        
+			}
+      document.addEventListener("deviceready", onDeviceReady, false);
+</script>
+
+</head>
+<body>
+	<div data-role="page" id="pageone">
+	<img src="givahoybanner.jpg" width="50%" height="auto"/>
+
+		<div data-theme="a" data-overlay-theme="a" id="select-choice-a-listbox" class="ui-selectmenu ui-popup ui-body-a ui-overlay-shadow ui-corner-all">
+			<div class="ui-header ui-bar-a ui-screen-hidden">
+				<p class="ui-title">
+					<div class="styled-select">
+						<span id="results">
+							<select id="location"></select>
+					</span>
+					</div>
+				</p>
+			</div>
+		</div>
+
+
+    <div class="button-block">
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(1)" class="round-button">$1</a></div></div>
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(2)" class="round-button">$2</a></div></div>
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(5)" class="round-button">$5</a></div></div>
+		</div>
+    <div class="button-block">
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(10)" class="round-button">$10</a></div></div>
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(20)" class="round-button">$20</a></div></div>
+			<div class="round-button"><div class="round-button-circle"><a onclick=" class="round-button">$x</a></div></div>
+		</div>
+    <div class="button-block">
+			<div class="round-button"><div class="round-button-circle"><a onclick="makeTrans(0)" class="round-button">$0</a></div></div>
+		</div>
+
+		</div>
+	<div id="txns">
+		
+	</div>
+  <div data-role="footer">
+    <p id="availbal">Loading...</p>
+  </div>
+</div> 
+</body>
+</html>
