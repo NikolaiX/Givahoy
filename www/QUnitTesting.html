@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>QUnit Example</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.22.0.css">
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<script src="src/models.js"></script>
+<script src="src/app.js"></script>
+<script src="libs/QUnit/qunit-1.22.0.js"></script>
+</body>
+<script>
+
+    //Mocks server for testing
+    server = function(body){
+
+        var sresult = [];
+
+        switch (body.saction) {
+            case "GetLocation":
+                if (parseInt(body.llatitude) == 1 && parseInt(body.llongitude) == 1) {
+
+                    sresult.push({
+                        "linstanceid": 5,
+                        "linstancelocationid": 6,
+                        "locsort": 10,
+                        "loctype": "l",
+                        "nlatitude": 1,
+                        "nlongitude": 1,
+                        "sinstancename": "Mocked Charity",
+                        "slocationname": "Mock location"
+                    });
+                }
+                if (body.beaconList) {
+                    for (var beacon in body.beaconList) {
+                        if (body.beaconList.hasOwnProperty(beacon) && body.beaconList[beacon].beaconid === 1234){
+                            sresult.push({
+                                "linstanceid": 7,
+                                "linstancelocationid": 8,
+                                "locsort": 20,
+                                "loctype": "b",
+                                "nlatitude": 0,
+                                "nlongitude": 0,
+                                "sinstancename": "Mocked Beacon",
+                                "slocationname": "Mock location"
+                            });
+                        }
+                    }
+                }
+                break;
+
+        }
+        //myresult.data.sresult[i]
+        //myresult.data.status
+        var response ={
+            data: {
+                status: "Success: GetLocation",
+                    sresult
+            }
+        };
+        console.log(response);
+        return response;
+    };
+    //Mock user location
+    userLocation ={
+        "llatitude": 1,
+        "llongitude": 1
+
+    };
+
+    deviceID ={
+        "tuuid": 1,
+        "vuid": 1, //Currently coming back as null
+        "vrandom": 1
+    };
+
+
+/*    QUnit.test("Test Mock Server", function( assert ) {
+        var request = CharityRequestBuilder()
+                .useBeacons()=
+                .useLocation()
+                .build();
+
+    });*/
+
+    QUnit.test("Charity request builder - location", function( assert ) {
+        var expectedOutput = {
+            "saction": "GetLocation",
+            "tuuid": 1,
+            "vuid": 1,
+            "vrandom": 1,
+            "llatitude": 1,
+            "llongitude": 1
+        };
+         var actualOutput = new CharityRequestBuilder()
+                 .useLocation()
+                 .build();
+
+        assert.deepEqual(actualOutput,expectedOutput);
+    });
+
+    QUnit.test("Charity request builder - beacon", function( assert ) {
+        var expectedOutput = {
+            "saction": "GetLocation",
+            "tuuid": 1,
+            "vuid": 1,
+            "vrandom": 1,
+            "beaconList":[
+                {"beaconid": 1234},
+                {"beaconid": 1235}
+            ]
+        };
+
+        var actualOutput = new CharityRequestBuilder()
+                .useBeacons()
+                .build();
+
+        assert.deepEqual(actualOutput,expectedOutput);
+    });
+
+    QUnit.test("Charity request builder - All options", function( assert ) {
+        var expectedOutput = {
+            "saction": "GetLocation",
+            "tuuid": 1,
+            "vuid": 1,
+            "vrandom": 1,
+            "llatitude": 1,
+            "llongitude": 1,
+            "beaconList":[
+                {"beaconid": 1234},
+                {"beaconid": 1235}
+            ]
+        };
+
+        var actualOutput = new CharityRequestBuilder()
+                .useBeacons()
+                .useLocation()
+                .build();
+
+        assert.deepEqual(actualOutput,expectedOutput);
+    });
+    QUnit.test("Test Mock Server", function( assert ) {
+        var charityRequest = new CharityRequestBuilder()
+                .useBeacons()
+                .useLocation()
+                .build();
+        var actualOutput = server(charityRequest);
+        assert.equal(actualOutput.data.sresult.length, 2)
+
+        charityRequest = new CharityRequestBuilder()
+                .useLocation()
+                .build();
+        var actualOutput = server(charityRequest);
+        assert.equal(actualOutput.data.sresult.length, 1)
+
+        charityRequest = new CharityRequestBuilder()
+                .useBeacons()
+                .build();
+        var actualOutput = server(charityRequest);
+        assert.equal(actualOutput.data.sresult.length, 1)
+    });
+
+    QUnit.test("Test Creating Charities From Server Data", function( assert ) {
+        var charityRequest = new CharityRequestBuilder()
+                .useBeacons()
+                .useLocation()
+                .build();
+        var actualOutput = retrieveCharityData(charityRequest);
+
+
+        var numberOfCharitiesActual = actualOutput.length;
+        var numberOfCharitiesExpected = 2;
+        console.log(actualOutput);
+        assert.equal(numberOfCharitiesActual,numberOfCharitiesExpected);
+        var pass = false;
+        if((actualOutput[0].name == "Mocked Charity" && actualOutput[1].name == "Mocked Beacon") ||
+                (actualOutput[0].name == "Mocked Beacon" && actualOutput[1].name == "Mocked Charity")){
+            pass = true;
+        }
+
+        assert.ok(pass);
+    });
+</script>
+
+</html>
