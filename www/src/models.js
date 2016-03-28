@@ -80,7 +80,8 @@ function ServerCache(charityDataRequest){
 
     //Retrieve data from server. Gets called immediately on serverCache creation
     this.update = function(charityDataRequest){
-        this.lastServerResponse = server(charityDataRequest);
+
+        this.lastServerResponse = server(charityDataRequest);        console.log(this.lastServerResponse);
         if (this.lastServerResponse.data.status.indexOf("Success") != -1){
             this.localCharities = getCharitiesFromJson(this.lastServerResponse);
             this.localBalance = getBalanceFromJson(this.lastServerResponse);

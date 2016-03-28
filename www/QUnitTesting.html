@@ -68,6 +68,10 @@
                 response ={
                     data: {
                         status: "Success: GetLocation",
+                        "mbalance":{
+                            "mbalance":5,
+                            "vuid":null
+                        },
                         sresult
                     }
                 };
@@ -115,7 +119,7 @@
     }
 
 /*    QUnit.test("Test Mock Server", function( assert ) {
-        var request = CharityRequestBuilder()
+        var request = ServerDataRequestBuilder()
                 .useBeacons()=
                 .useLocation()
                 .build();
@@ -131,8 +135,8 @@
             "llatitude": 1,
             "llongitude": 1
         };
-         var actualOutput = new CharityRequestBuilder()
-                 .useLocation()
+         var actualOutput = new ServerDataRequestBuilder()
+                 .useLocation(userLocation)
                  .build();
 
         assert.deepEqual(actualOutput,expectedOutput);
@@ -153,8 +157,8 @@
             ]
         };
 
-        var actualOutput = new CharityRequestBuilder()
-                .useBeacons()
+        var actualOutput = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
                 .build();
 
         assert.deepEqual(actualOutput,expectedOutput);
@@ -173,43 +177,32 @@
                 {"beaconid": 1234},
                 {"beaconid": 1235}
             ]
-        };    var getBeacons = function(return3NextCall) {
-        if(return3NextCall){
-            this.return3 = true;
-            return;
-        }
-        if(return3NextCall){
-            return3NextCall = false;
-            return mockGet2ValidBeacons();
-        }else {
-            return mockGet1ValidBeacon();
-        }
-    };
+        };
 
-        var actualOutput = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        var actualOutput = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .build();
 
         assert.deepEqual(actualOutput,expectedOutput);
     });
     QUnit.test("Test Mock Server", function( assert ) {
         var getBeacons = mockGet1ValidBeacon();
-        var charityRequest = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        var charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .build();
         var actualOutput = server(charityRequest);
         assert.equal(actualOutput.data.sresult.length, 2);
 
-        charityRequest = new CharityRequestBuilder()
-                .useLocation()
+        charityRequest = new ServerDataRequestBuilder()
+                .useLocation(userLocation)
                 .build();
         var actualOutput = server(charityRequest);
         assert.equal(actualOutput.data.sresult.length, 1);
 
-        charityRequest = new CharityRequestBuilder()
-                .useBeacons()
+        charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
                 .build();
         var actualOutput = server(charityRequest);
         assert.equal(actualOutput.data.sresult.length, 1)
@@ -217,9 +210,9 @@
 
     QUnit.test("Test Creating Charities From Json", function( assert ) {
         var getBeacons = mockGet1ValidBeacon();
-        var charityRequest = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        var charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .build();
         var json = server(charityRequest);
         var actualOutput = getCharitiesFromJson(json);
@@ -239,9 +232,10 @@
 
     QUnit.test("Test Server Cache", function( assert ) {
         //Test that data is downloaded and stored
-        var charityRequest = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        var getBeacons = mockGet1ValidBeacon();
+        var charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .build();
         var cache = new ServerCache(charityRequest);
 
@@ -250,10 +244,10 @@
         assert.equal(numberOfCharitiesActual,numberOfCharitiesExpected);
 
         //Test that data is updated with new info
-        getBeacons = function(){return mockGet2ValidBeacons()};
-        charityRequest = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        getBeacons = mockGet2ValidBeacons();
+        charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .build();
         cache.update(charityRequest);
 
@@ -263,9 +257,9 @@
 
         //Test that cache persists when server returns with an error
         alert = function(){};
-        charityRequest = new CharityRequestBuilder()
-                .useBeacons()
-                .useLocation()
+        charityRequest = new ServerDataRequestBuilder()
+                .useBeacons(getBeacons)
+                .useLocation(userLocation)
                 .triggerError()
                 .build();
         cache.update(charityRequest);

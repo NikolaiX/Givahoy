@@ -2,7 +2,8 @@
  * Created by nikolai on 24/03/16.
  */
 
-var CharityRequestBuilder = function(){
+var ServerDataRequestBuilder = function(){
+    var body = {};
     this.retrieveLocation = false;
     this.retrieveBeacons = false;
     this.triggerError = false;
@@ -12,16 +13,21 @@ var CharityRequestBuilder = function(){
         this.triggerError = true;
         return this;
     };
-    this.useLocation = function(){
+    this.useLocation = function(locationData){
         this.retrieveLocation = true;
+        body.llatitude = locationData.llatitude;
+        body.llongitude = locationData.llongitude;
         return this;
     };
-    this.useBeacons = function(){
+    this.useBeacons = function(beaconData){
+        body.beaconList = (
+            createJsonForBeacons(beaconData)
+        );
         this.retrieveBeacons = true;
         return this;
     };
     this.build = function(){
-        var body = {};
+
 
         if(this.triggerError == true){
             body.saction = "Error"
@@ -33,16 +39,6 @@ var CharityRequestBuilder = function(){
         body.tuuid = deviceID.tuuid;
         body.vrandom = deviceID.vrandom;
 
-        if(this.retrieveLocation == true){
-            body.llatitude = userLocation.llatitude;
-            body.llongitude = userLocation.llongitude;
-        }
-        if(this.retrieveBeacons == true){
-            var beacons = createJsonForBeacons(getBeacons());
-            body.beaconList = (
-                beacons
-            )
-        }
         return body;
     };
 };
