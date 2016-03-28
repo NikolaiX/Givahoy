@@ -432,8 +432,6 @@
             "vrandom": window.localStorage.getItem('vrandom'),
             "beaconlist": createJsonForBeacons(getBeacons())
         };
-        console.log(body);
-        console.log(JSON.stringify(body));
 
         var apigClient = apigClientFactory.newClient();
         apigClient.allpurposePost({}, body, {})
@@ -443,7 +441,7 @@
                     //When DOM loaded we attach click event to button
                     //after button is clicked we download the data
                     var myresult = result;
-                    console.log(JSON.stringify(myresult.data));
+                    console.log(JSON.stringify(myresult));
                     mybal = myresult.data.mbalance.mbalance;
 
 

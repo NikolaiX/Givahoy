@@ -70,7 +70,7 @@ function getCharitiesFromJson(json){
 }
 
 function getBalanceFromJson(json){
-    var serverCharities = json.data;
+    return json.data.mbalance.mbalance;
 }
 
 function ServerCache(charityDataRequest){

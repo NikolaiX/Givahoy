@@ -19,7 +19,7 @@
 	/* Make sure to catch any DOMContentLoaded events occurring before
 	 * asynchronous loading of src. Those src, like ui.js, should check
 	 * this variable before listening for the event. */
-	evothings.gotDOMContentLoaded = false;
+	evothings.gotDOMContentLoaded = false
 
 	window.addEventListener('DOMContentLoaded', function(e)
 	{
