@@ -127,7 +127,7 @@
 
     <br>
     <br>
-            <select id="locations"></select>
+    <select id="locations"></select>
     <br>
     <br>
     <div class="button-block">
@@ -230,6 +230,7 @@
 <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
 <script type="text/javascript" src="apigClient.js"></script>
+
 <script type="text/javascript" src="src/models.js"></script>
 <script type="text/javascript" src="src/app.js"></script>
 
@@ -265,11 +266,11 @@
     }
 
     function initiateTrans(vamount){
-    /*
-     *
-     * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
-     *
-     * */
+        /*
+         *
+         * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
+         *
+         * */
         if (mybal + 50 <= vamount) {
             alert('Insufficient Funds');
             return;
@@ -279,7 +280,7 @@
                 function(buttonIndex){
                     if(buttonIndex==1){
                         /*
-                        Create processing page
+                         Create processing page
 
                          */
                         transactionData = transactionDataBody(vamount, getSelectedLocation().val());
@@ -289,7 +290,7 @@
     }
     function transactionDataBody(vamount, location){
         /*
-        Example data:
+         Example data:
          "saction": "MakeTransaction",
          "mvalue": vamount, //Decimal value
          "linstancelocationid": $('#location option:selected').val(),
@@ -326,10 +327,10 @@
     }
     function showTransactionProcessModal(){
 
-/*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
-        optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
-        //adds option to list of locations
-        $('#locations').prepend(optionHtml); */
+        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
+         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
+         //adds option to list of locations
+         $('#locations').prepend(optionHtml); */
 
         clearModal();
         $(".modal")
@@ -416,25 +417,23 @@
         }
         return jsonMessage;
     }
-
-    function setUserLocation(location){
+    function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
+        showPosition();
     }
 
-    function showPosition(position) {
-        ltd = position.coords.latitude;
-        lgt = position.coords.longitude;
+    function showPosition() {
         nearbyBeacons = createJsonForBeacons(getBeacons());
 
         var body = {
             //This is where you define the body of the request
             "saction": "GetLocation",
-            "llatitude": ltd.toString(),
-            "llongitude": lgt.toString(),
+            "llatitude": userLocation.ltd.toString(),
+            "llongitude": userLocation.lgt.toString(),
             "tuuid": device.uuid,
             "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-            "vrandom": window.localStorage.getItem('vrandom'),
+            "vrandom": window.localStorage.getItem,
             "beaconlist": createJsonForBeacons(getBeacons())
         };
 
@@ -492,13 +491,69 @@
         }
     }
 
+    /*
+     Checks beacon namespace
+     Must be modified to check namespace properly once one has been decided
+     */
+    function isGivahoyBeacon(beacon){
+        return true
+    }
+
+    //Taken from cordova-eddystone plugin example
+    function uint8ArrayToString(uint8Array)
+    {
+        function format(x)
+        {
+            var hex = x.toString(16);
+            return hex.length < 2 ? '0' + hex : hex;
+        }
+        var result = '';
+        for (var i = 0; i < uint8Array.length; ++i)
+        {
+            result += format(uint8Array[i]);
+        }
+        return result;
+    }
+
+    var beacons = [];
+    function startBeaconScan(){
+
+        if(device.model == "Chrome"){
+            console.log("Running from browser, beacon scan cancelled");
+            return;
+        }
+        evothings.eddystone.startScan(
+                function(beacon){
+                    console.log(uint8ArrayToString(beacon.bid));
+                    var listed = false;
+                    for(existingBeacon in beacons){
+                        if( beacon.bid == existingBeacon.bid){
+                            listed = true;
+                        }
+                    }
+                    if(!listed){
+                        beacons.push(beacon);
+
+                        alert('Found new beacon, namespace id: ' + beacon.nid + ', beacon id: ' + beacon.bid );
+                    }
+
+                },
+                function(error){
+                    alert('Scan error: ' + error);
+                }
+        )
+    }
+
     function onDeviceReady() {
-        console.log("onDeviceReady Called");
+        console.log(evothings.eddystone);
+        console.info("onDeviceReady Called");
         updateViewBalance();
         if (navigator.geolocation) {
-            console.log("geolocation enabled");
+            console.log("geololocalStorage.uid)cation enabled");
 
-            navigator.geolocation.getCurrentPosition(setUserLocation, showPositionOnError);
+
+            navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
+            startBeaconScan();
 
             addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
         }

@@ -15,8 +15,8 @@ var ServerDataRequestBuilder = function(){
     };
     this.useLocation = function(locationData){
         this.retrieveLocation = true;
-        body.llatitude = locationData.llatitude;
-        body.llongitude = locationData.llongitude;
+        body.llatitude = locationData.latitude;
+        body.llongitude = locationData.longitude;
         return this;
     };
     this.useBeacons = function(beaconData){

@@ -43,8 +43,8 @@ function createJsonForBeacons(beaconIdArray){
 }
 
 var userLocation ={
-    "llatitude": ltd.toString(),
-    "llongitude": lgt.toString()
+    "latitude": 0,
+    "longitude": 0
 };
 
 var deviceID ={
