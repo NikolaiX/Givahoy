@@ -373,10 +373,7 @@
                     }
                     updateViewBalance();
 
-                    /*
-                    Keep eye on this if statement, it doesn't look right
-                     */
-                    if (localStorage.uid) {
+                    if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
                     localStorage.setItem("vrandom", myresult.data.sresult.checker);
@@ -459,7 +456,7 @@
                     }
 
                     updateViewBalance();
-                    if (localStorage.uid) {
+                    if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
 
