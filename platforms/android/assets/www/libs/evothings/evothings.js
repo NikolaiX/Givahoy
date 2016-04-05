@@ -2,7 +2,7 @@
 {
 	/**
 	 * @namespace
-	 * @description <p>Functions for loading scripts asynchronously,
+	 * @description <p>Functions for loading src asynchronously,
 	 * detecting platform, and other common application functionality.</p>
 	 * @alias evothings
 	 * @public
@@ -17,7 +17,7 @@
 	var scriptsLoadedCallbacks = [];
 
 	/* Make sure to catch any DOMContentLoaded events occurring before
-	 * asynchronous loading of scripts. Those scripts, like ui.js, should check
+	 * asynchronous loading of src. Those src, like ui.js, should check
 	 * this variable before listening for the event. */
 	evothings.gotDOMContentLoaded = false
 
@@ -43,7 +43,7 @@
 			return;
 		}
 
-		// Add script to dictionary of loaded scripts.
+		// Add script to dictionary of loaded src.
 		loadedScripts[url] = 'loadingstarted';
 		++scriptLoadingCounter;
 
@@ -62,7 +62,7 @@
 			// Call callback if given.
 			callback && callback();
 
-			// Call scripts loaded callbacks if this was the last script loaded.
+			// Call src loaded callbacks if this was the last script loaded.
 			if (0 == scriptLoadingCounter)
 			{
 				for (var i = 0; i < scriptsLoadedCallbacks.length; ++i)
@@ -89,12 +89,12 @@
 	};
 
 	/**
-	 * Load array of scripts.
+	 * Load array of src.
 	 * @param {array} array - Array of URL or path name stringa.
 	 * Relative paths are relative to the HTML file that initiated
 	 * script loading.
 	 * @param {function} loadedCallback - Optional parameterless
-	 * function called when all scripts in the array has loaded.
+	 * function called when all src in the array has loaded.
 	 * @public
 	 */
 	evothings.loadScripts = function(array, loadedCallback)
@@ -102,7 +102,7 @@
 		var lib = array.shift();
 		if (!lib)
 		{
-			// Array is empty and all scripts are loaded.
+			// Array is empty and all src are loaded.
 			loadedCallback && loadedCallback();
 		}
 		else
@@ -128,16 +128,16 @@
 	};
 
 	/**
-	 * <p>Add a callback that will be called when all scripts are loaded.</p>
+	 * <p>Add a callback that will be called when all src are loaded.</p>
 	 * <p><strong>It is good practise to always use this function when
 	 * loading script asynchronously or using a library that does so.</strong></p>
 	 * @param  {function} callback - Parameterless function that will
-	 * be called when all scripts have finished loading.
+	 * be called when all src have finished loading.
 	 * @public
 	 */
 	evothings.scriptsLoaded = function(callback)
 	{
-		// If scripts are already loaded call the callback directly,
+		// If src are already loaded call the callback directly,
 		// else add the callback to the callbacks array.
 		if (0 != Object.keys(loadedScripts).length &&
 			0 == scriptLoadingCounter)

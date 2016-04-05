@@ -6,19 +6,23 @@
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.css">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" href="./themes/givahoy1.css"/>
     <link rel="stylesheet" href="./themes/givahoy1.min.css"/>
     <link rel="stylesheet" href="./themes/jquery.mobile.icons.min.css"/>
     <style>
-        #main {
+
+        body{
             text-align: center !important;
             font-family: arial !important;
+        }
+        #givepage {
             background-color: #7FBDE8 !important;
         }
 
+
         .button {
+            height: inherit;
             margin: 20px;
             font-size: 16px;
             font-weight: bold;
@@ -42,7 +46,6 @@
             height: 100%;
             overflow: hidden;
             background-color: transparent;
-            background: url(round_arrow.png) no-repeat right;
             background-size: 33px;
             background-width: auto;
             margin: 0 !important;
@@ -116,17 +119,15 @@
 
 </head>
 <body>
-<div data-role="page" id="main">
-    <img src="givahoybanner.jpg" width="50%" height="auto"/>
-
-    <br>
-    <br>
-
-    <div data-theme="a" data-overlay-theme="a" id="location-dropdown"
-         class="styled-select menu ui-popup ui-body-a ui-overlay-shadow ui-corner-all">
-            <select id="location"></select>
-
+<div data-role="page" id="givepage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
     </div>
+
+
+    <br>
+    <br>
+    <select id="locations"></select>
     <br>
     <br>
     <div class="button-block">
@@ -163,19 +164,39 @@
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar">
             <ul>
-                <li><a href="#main" class="ui-btn-active">Give &hearts;</a></li>
-                <li><a href="#history">History</a></li>
+                <li><a href="#givepage" class="ui-btn-active ui-state-persist">Give &hearts;</a></li>
+                <li><a href="#historypage">History</a></li>
+                <li><a href="#settingspage">Settings</a></li>
             </ul>
         </div>
     </div>
 </div>
-<div data-role="page" id="history">
+<div data-role="page" id="historypage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
+    </div>
     <h2>To be implemented</h2>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar">
             <ul>
-                <li><a href="#main" class="ui-btn-active">Give &hearts;</a></li>
-                <li><a href="#history">History</a></li>
+                <li><a href="#givepage">Give &hearts;</a></li>
+                <li><a href="#historypage" class="ui-btn-active ui-state-persist">History</a></li>
+                <li><a href="#settingspage">Settings</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div data-role="page" id="settingspage">
+    <div data-role="header">
+        <img src="givahoybanner.png" width="50%" height="auto"/>
+    </div>
+    <h2>To be implemented</h2>
+    <div data-role="footer" data-id="foo1" data-position="fixed">
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#givepage">Give &hearts;</a></li>
+                <li><a href="#historypage">History</a></li>
+                <li><a href="#settingspage" class="ui-btn-active ui-state-persist">Settings</a></li>
             </ul>
         </div>
     </div>
@@ -192,8 +213,7 @@
 
 
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="libs/evothings/evothings.js"></script>
 <script type="text/javascript" src="libs/evothings/ui/ui.js"></script>
@@ -210,49 +230,67 @@
 <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
 <script type="text/javascript" src="apigClient.js"></script>
+
+<script type="text/javascript" src="src/models.js"></script>
+<script type="text/javascript" src="src/app.js"></script>
+
 <script>
-    var mybal = 50;
+    var mybal = 0;
+    $( document ).ready(function() {
+
+    });
+    $(document).bind("mobileinit", function() {
+        $.mobile.defaultPageTransition = 'none';
+    });
+
+    function getSelectedLocation(){
+        selectedLocation =  $('#locations')
+                .find($('option:selected'));
+
+        return selectedLocation;
+    }
 
     function updateViewBalance(){
         console.log("mybal = " + mybal);
         $('#availbal').text('Available Balance: $' + mybal);
     }
-    function addLocationOptionToTopOfList(value, name, location){
-        optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
-        $('#location-dropdown select').prepend(optionHtml);
-        $('#location-dropdown select').val(value);
 
-       $('#location-dropdown').find($('span')).text(
-                $('#location option:selected').text()
-        );
+    function addLocationOptionToTopOfList(value, name, location){
+        var defaultSelected = true;
+        var nowSelected = true;
+        var listedName = name + ' (' + location + ')';
+
+        var newLocation = new Option(listedName, value,defaultSelected, nowSelected);
+
+        $('#locations').prepend(newLocation).change();
     }
 
     function initiateTrans(vamount){
-    /*
-     *
-     * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
-     *
-     * */
+        /*
+         *
+         * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
+         *
+         * */
         if (mybal + 50 <= vamount) {
             alert('Insufficient Funds');
             return;
         }
         navigator.notification.confirm(
-                "Are you sure you want to donate $" + vamount + " to " + $('#location option:selected').text() + "?",
+                "Are you sure you want to donate $" + vamount + " to " + getSelectedLocation().text() + "?",
                 function(buttonIndex){
                     if(buttonIndex==1){
                         /*
-                        Create processing page
+                         Create processing page
 
                          */
-                        transactionData = transactionDataBody(vamount, $('#location option:selected').val());
+                        transactionData = transactionDataBody(vamount, getSelectedLocation().val());
                         makeTrans(transactionData)
                     }
                 });
     }
     function transactionDataBody(vamount, location){
         /*
-        Example data:
+         Example data:
          "saction": "MakeTransaction",
          "mvalue": vamount, //Decimal value
          "linstancelocationid": $('#location option:selected').val(),
@@ -288,6 +326,12 @@
                 .removeClass("dismissible");
     }
     function showTransactionProcessModal(){
+
+        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
+         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
+         //adds option to list of locations
+         $('#locations').prepend(optionHtml); */
+
         clearModal();
         $(".modal")
                 .addClass("processingTransaction");
@@ -306,7 +350,7 @@
                 .prepend('<div class="exit"></div><img id="theImg" src="images/heart.png" /><br>');
     }
     function makeTrans(body) {
-        console.log("Transaction initiated for " + $('#location option:selected').val());
+        console.log("Transaction initiated for " + getSelectedLocation().val());
         //mybal = mybal - vamount;
         //updateViewBalance();
         //Transaction record is Date, Amount and destination
@@ -333,39 +377,60 @@
                     }
                     updateViewBalance();
 
-                    /*
-                    Keep eye on this if statement, it doesn't look right
-                     */
-                    if (localStorage.uid) {
+                    if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
                     localStorage.setItem("vrandom", myresult.data.sresult.checker);
                     //alert('Payment: ' + myresult.data.sresult.status + ' $' + body.mvalue + ' to ' + $('#location option:selected').text() + '!');
-                    showTransactionCompletedModal($('#location option:selected').text(), body.mvalue);
+                    showTransactionCompletedModal(getSelectedLocation().text(), body.mvalue);
                     console.log(myresult);
                 }).catch(function (result) {
             //This is where you would put an error callback
             alert("Sorry, there was a problem processing your donation.");
+            clearModal();
             console.log(result);
         });
     }
 
-    function showPosition(position) {
-        ltd = position.coords.latitude;
-        lgt = position.coords.longitude;
+    function testJsonBeacon(){
+        console.log(
+                createJsonForBeacons(getBeacons())
+        );
+    }
+
+
+
+    function createJsonForBeacons(beaconIdArray){
+        var jsonMessage = [];
+        var loopcount = beaconIdArray.length;
+        for(var i= 0; i < loopcount; i++){
+            jsonMessage.push(
+                    {"beaconid": beaconIdArray[i]}
+            );
+        }
+        return jsonMessage;
+    }
+    function setLocation(location){
+        userLocation.latitude = location.coords.latitude;
+        userLocation.longitude = location.coords.longitude;
+
+    }
+
+    function showPosition() {
+        nearbyBeacons = createJsonForBeacons(getBeacons());
 
         var body = {
             //This is where you define the body of the request
             "saction": "GetLocation",
-            "llatitude": ltd.toString(),
-            "llongitude": lgt.toString(),
+            "llatitude": userLocation.ltd.toString(),
+            "llongitude": userLocation.lgt.toString(),
             "tuuid": device.uuid,
             "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-            "vrandom": window.localStorage.getItem('vrandom')
+            "vrandom": window.localStorage.getItem,
+            "beaconlist": createJsonForBeacons(getBeacons())
         };
 
-        console.log(JSON.stringify(body));
-
+        console.log(body);
         var apigClient = apigClientFactory.newClient();
         apigClient.allpurposePost({}, body, {})
                 .then(function (result) {
@@ -374,16 +439,12 @@
                     //When DOM loaded we attach click event to button
                     //after button is clicked we download the data
                     var myresult = result;
-                    console.log(JSON.stringify(myresult.data));
+                    console.log(JSON.stringify(myresult));
                     mybal = myresult.data.mbalance.mbalance;
 
 
                     if(myresult.data.sresult){
                         for (var i = 0; i < myresult.data.sresult.length; i++) {
-                            //You can now access individual properties like this:
-                            //var json = $.parseJSON(data.locationlist.location[i]);
-                            //alert (JSON.stringify(myresult.data.sresult[0].llocationid));
-                            //alert ('<option value=' + myresult.data.sresult[i].llocationid + '>' + myresult.data.sresult[i].slocationname + '</option>');
                             if (i == 0) {
                                 var output = '';
                             }
@@ -396,7 +457,7 @@
                     }
 
                     updateViewBalance();
-                    if (localStorage.uid) {
+                    if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
 
@@ -423,22 +484,88 @@
                 break;
         }
     }
+
+    /*
+     Checks beacon namespace
+     Must be modified to check namespace properly once one has been decided
+     */
+    function isGivahoyBeacon(beacon){
+        return true
+    }
+
+
+
+    //Taken from cordova-eddystone plugin example
+    function uint8ArrayToString(uint8Array)
+    {
+        function format(x)
+        {
+            var hex = x.toString(16);
+            return hex.length < 2 ? '0' + hex : hex;
+        }
+        var result = '';
+        for (var i = 0; i < uint8Array.length; ++i)
+        {
+            result += format(uint8Array[i]);
+        }
+        return result;
+    }
+
+    var beacons = [];
+
+    function getBeacons(){
+        //placeholder until I can receive actual beacons
+        var beaconlist = [];
+        for(beacon in beacons){
+            beaconID = uint8ArrayToString(beacon.bid);
+            beaconlist.push(beaconID);
+        }
+
+        return beaconlist;
+    }
+
+    function startBeaconScan(){
+
+        if(device.model == "Chrome"){
+            console.log("Running from browser, beacon scan cancelled");
+            return;
+        }
+        evothings.eddystone.startScan(
+                function(beacon){
+                    console.log(uint8ArrayToString(beacon.bid));
+                    var listed = false;
+                    if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
+                        beacons[beacon.address] = beacon;
+                        alert('Found new beacon, namespace id: ' + beacon.nid + ', beacon id: ' + beacon.bid );
+                    }
+                },
+                function(error){
+                    alert('Scan error: ' + error);
+                }
+        )
+    }
+
     function onDeviceReady() {
-        console.log("onDeviceReady Called");
+        console.log(evothings.eddystone);
+        console.info("onDeviceReady Called");
         updateViewBalance();
         if (navigator.geolocation) {
-            console.log("geolocation enabled");
+            console.log("geololocalStorage.uid)cation enabled");
 
-            navigator.geolocation.getCurrentPosition(showPosition, showPositionOnError);
 
+            navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
+            startBeaconScan();
+
+            setTimeout(showPosition, 500);
             addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
         }
         else {
             alert('Geolocation is not supported by this browser.');
         }
     }
+
     document.addEventListener("deviceready", onDeviceReady, false);
 </script>
-
+<script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </body>
 </html>

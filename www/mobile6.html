@@ -398,14 +398,7 @@
         );
     }
 
-    function getBeacons(){
-        //placeholder until I can receive actual beacons
-        var beaconlist = [];
-        beaconlist.push(1234);
-        beaconlist.push(1235);
 
-        return beaconlist;
-    }
 
     function createJsonForBeacons(beaconIdArray){
         var jsonMessage = [];
@@ -420,7 +413,7 @@
     function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
-        showPosition();
+
     }
 
     function showPosition() {
@@ -437,6 +430,7 @@
             "beaconlist": createJsonForBeacons(getBeacons())
         };
 
+        console.log(body);
         var apigClient = apigClientFactory.newClient();
         apigClient.allpurposePost({}, body, {})
                 .then(function (result) {
@@ -499,6 +493,8 @@
         return true
     }
 
+
+
     //Taken from cordova-eddystone plugin example
     function uint8ArrayToString(uint8Array)
     {
@@ -516,6 +512,18 @@
     }
 
     var beacons = [];
+
+    function getBeacons(){
+        //placeholder until I can receive actual beacons
+        var beaconlist = [];
+        for(beacon in beacons){
+            beaconID = uint8ArrayToString(beacon.bid);
+            beaconlist.push(beaconID);
+        }
+
+        return beaconlist;
+    }
+
     function startBeaconScan(){
 
         if(device.model == "Chrome"){
@@ -524,19 +532,10 @@
         }
         evothings.eddystone.startScan(
                 function(beacon){
-                    console.log(uint8ArrayToString(beacon.bid));
                     var listed = false;
-                    for(existingBeacon in beacons){
-                        if( beacon.bid == existingBeacon.bid){
-                            listed = true;
-                        }
+                    if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
+                        beacons[beacon.address] = beacon;
                     }
-                    if(!listed){
-                        beacons.push(beacon);
-
-                        alert('Found new beacon, namespace id: ' + beacon.nid + ', beacon id: ' + beacon.bid );
-                    }
-
                 },
                 function(error){
                     alert('Scan error: ' + error);
@@ -555,6 +554,7 @@
             navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
             startBeaconScan();
 
+            setTimeout(showPosition, 500);
             addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
         }
         else {
