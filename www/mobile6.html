@@ -392,14 +392,6 @@
         });
     }
 
-    function testJsonBeacon(){
-        console.log(
-                createJsonForBeacons(getBeacons())
-        );
-    }
-
-
-
     function createJsonForBeacons(beaconIdArray){
         var jsonMessage = [];
         var loopcount = beaconIdArray.length;
@@ -413,7 +405,7 @@
     function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
-
+        console.log(JSON.stringify(location));
     }
 
     function showPosition() {
@@ -422,15 +414,19 @@
         var body = {
             //This is where you define the body of the request
             "saction": "GetLocation",
-            "llatitude": userLocation.ltd.toString(),
-            "llongitude": userLocation.lgt.toString(),
+            "llatitude": userLocation.latitude,
+            "llongitude": userLocation.longitude,
             "tuuid": device.uuid,
             "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
             "vrandom": window.localStorage.getItem,
             "beaconlist": createJsonForBeacons(getBeacons())
         };
 
-        console.log(body);
+            console.log(JSON.stringify(body));
+
+        console.log("Initial data collection started");
+
+
         var apigClient = apigClientFactory.newClient();
         apigClient.allpurposePost({}, body, {})
                 .then(function (result) {
@@ -511,17 +507,17 @@
         return result;
     }
 
-    var beacons = [];
+    var beacons = {};
 
     function getBeacons(){
-        //placeholder until I can receive actual beacons
-        var beaconlist = [];
-        for(beacon in beacons){
+        var beaconList = [];
+        var beacon;
+        for(beaconKey in beacons){
+            beacon = beacons[beaconKey];
             beaconID = uint8ArrayToString(beacon.bid);
-            beaconlist.push(beaconID);
+            beaconList.push(beaconID);
         }
-
-        return beaconlist;
+        return beaconList;
     }
 
     function startBeaconScan(){
@@ -535,6 +531,9 @@
                     var listed = false;
                     if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
                         beacons[beacon.address] = beacon;
+                        console.log("beacon pushed to array");
+                        console.log(JSON.stringify(beacons));
+                        console.log(beacons[beacon.address].address);
                     }
                 },
                 function(error){
@@ -544,7 +543,6 @@
     }
 
     function onDeviceReady() {
-        console.log(evothings.eddystone);
         console.info("onDeviceReady Called");
         updateViewBalance();
         if (navigator.geolocation) {
@@ -554,7 +552,8 @@
             navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
             startBeaconScan();
 
-            setTimeout(showPosition, 500);
+
+            setTimeout(showPosition, 10000);
             addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
         }
         else {
