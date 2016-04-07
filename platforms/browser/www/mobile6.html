@@ -160,7 +160,6 @@
     </div>
     <div>
         <p id="availbal">Loading, please wait...</p>
-        <button id="DevButton">Test Button</button>
     </div>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar">
@@ -341,6 +340,23 @@
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
 
     }
+
+    function showLoadingModal(){
+
+        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
+         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
+         //adds option to list of locations
+         $('#locations').prepend(optionHtml); */
+
+        clearModal();
+        $(".modal")
+                .addClass("processingTransaction");
+        $(".modal .container")
+                .text("Available charities are being loaded")
+                .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
+
+    }
+
     function showTransactionCompletedModal(charity, amount){
         clearModal();
         $(".modal")
@@ -456,9 +472,10 @@
                     if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
-
+                    clearModal();
                 }).catch(function (result) {
             alert("There was an error getting data from the server");
+            clearModal();
             console.log(result);
         });
 
@@ -625,18 +642,18 @@
 
     }
 
-    $("#DevButton").click(function(){
-
-    });
     function onDeviceReady() {
         console.info("onDeviceReady Called");
-
+        showLoadingModal();
         cordova.plugins.BluetoothStatus.initPlugin();
 
         /*
          Fixes issue with bluetooth status not being represented correctly
          */
         setTimeout(function() {
+            if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
+                alert("Please enable bluetooth and refresh list to see available beacons");
+            }
             initialiseCharityRetrieval();
         }, 1);
 
