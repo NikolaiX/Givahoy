@@ -340,6 +340,23 @@
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
 
     }
+
+    function showLoadingModal(){
+
+        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
+         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
+         //adds option to list of locations
+         $('#locations').prepend(optionHtml); */
+
+        clearModal();
+        $(".modal")
+                .addClass("processingTransaction");
+        $(".modal .container")
+                .text("Available charities are being loaded")
+                .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
+
+    }
+
     function showTransactionCompletedModal(charity, amount){
         clearModal();
         $(".modal")
@@ -405,7 +422,6 @@
     function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
-        console.log(JSON.stringify(location));
     }
 
     function showPosition() {
@@ -418,7 +434,7 @@
             "llongitude": userLocation.longitude,
             "tuuid": device.uuid,
             "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-            "vrandom": window.localStorage.getItem,
+            "vrandom": window.localStorage.getItem('vrandom'),
             "beaconlist": createJsonForBeacons(getBeacons())
         };
 
@@ -456,9 +472,10 @@
                     if (!localStorage.uid) {
                         localStorage.setItem("uid", myresult.data.mbalance.vuid);
                     }
-
+                    clearModal();
                 }).catch(function (result) {
             alert("There was an error getting data from the server");
+            clearModal();
             console.log(result);
         });
 
@@ -521,44 +538,127 @@
     }
 
     function startBeaconScan(){
-
-        if(device.model == "Chrome"){
-            console.log("Running from browser, beacon scan cancelled");
-            return;
-        }
         evothings.eddystone.startScan(
-                function(beacon){
-                    var listed = false;
-                    if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
-                        beacons[beacon.address] = beacon;
-                        console.log("beacon pushed to array");
-                        console.log(JSON.stringify(beacons));
-                        console.log(beacons[beacon.address].address);
+            function(beacon){
+                var listed = false;
+                if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
+                    beacons[beacon.address] = beacon;
+                    console.log("beacon pushed to array");
+                }
+            },
+            function(error){
+                alert('Scan error: ' + error);
+            }
+        )
+
+    }
+
+    /*
+        A promise wrapper for the geolocation callback
+    */
+    function initialiseLocation(){
+        return new Promise(function(resolve, reject) {
+            navigator.geolocation.getCurrentPosition(
+                    function (location) {
+                        setLocation(location);
+                        console.log("Success");
+                        resolve();
+                    },
+                    function (error) {
+                        showPositionOnError(error);
+                        console.log("Failed");
+                        reject(error);
                     }
+            );
+        });
+    }
+
+
+    function initialiseBeacons(){
+        return new Promise(function(resolve, reject){
+            startBeaconScan();
+            setTimeout(function(){
+                var beacons = createJsonForBeacons(getBeacons());
+                return resolve(beacons);
+            }, 5000);
+        });
+    }
+
+    function initialiseCharityRetrieval(){
+        var attemptedLocation = false;
+        var attemptedBeacons = false;
+        var charityRequest = new ServerDataRequestBuilder();
+
+        if (typeof navigator.geolocation === undefined) {
+            console.log("location disabled");
+            attemptedLocation = true;
+            CallServerIfReady(attemptedLocation, attemptedBeacons);
+        }
+        else {
+            initialiseLocation()
+                    .then(function(){
+                                console.log("Location promise returned success");
+                                attemptedLocation = true;
+                                charityRequest.useLocation(userLocation);
+                                CallServerIfReady(attemptedLocation, attemptedBeacons);
+                            },
+                            function(error){
+                                console.log("Location promise returned fail");
+                                attemptedLocation = true;
+                                CallServerIfReady(attemptedLocation, attemptedBeacons);
+                            }
+                    );
+        }
+
+        if(cordova.plugins.BluetoothStatus.BTenabled !== true) {
+            console.log("bluetoothLE is not enabled, skipping beacon scan");
+            attemptedBeacons = true;
+            CallServerIfReady(attemptedLocation, attemptedBeacons);
+        }
+        else{
+            initialiseBeacons()
+                .then(function(beacons){
+                    console.log("Beacon promise returned success");
+                    attemptedBeacons = true;
+                    charityRequest.useBeacons(beacons);
+                    CallServerIfReady(attemptedLocation, attemptedBeacons);
                 },
                 function(error){
-                    alert('Scan error: ' + error);
+                    console.log("Beacon promise returned fail");
+                    console.log(error);
+                    attemptedBeacons = true;
+                    CallServerIfReady(attemptedLocation, attemptedBeacons);
                 }
-        )
+            )
+        }
+    }
+
+    function CallServerIfReady(location, beacon){
+        console.log(location);
+        console.log(beacon);
+        if(location && beacon){
+            showPosition();
+        }
+
     }
 
     function onDeviceReady() {
         console.info("onDeviceReady Called");
+        showLoadingModal();
+        cordova.plugins.BluetoothStatus.initPlugin();
+
+        /*
+         Fixes issue with bluetooth status not being represented correctly
+         */
+        setTimeout(function() {
+            if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
+                alert("Please enable bluetooth and refresh list to see available beacons");
+            }
+            initialiseCharityRetrieval();
+        }, 1);
+
         updateViewBalance();
-        if (navigator.geolocation) {
-            console.log("geololocalStorage.uid)cation enabled");
 
-
-            navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
-            startBeaconScan();
-
-
-            setTimeout(showPosition, 10000);
-            addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
-        }
-        else {
-            alert('Geolocation is not supported by this browser.');
-        }
     }
 
     document.addEventListener("deviceready", onDeviceReady, false);

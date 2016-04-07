@@ -129,6 +129,13 @@ module.exports = [
         "clobbers": [
             "evothings.eddystone"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+        "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+        "clobbers": [
+            "cordova.plugins.BluetoothStatus"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -144,7 +151,8 @@ module.exports.metadata =
     "cordova-plugin-globalization": "1.0.2",
     "cordova-plugin-network-information": "1.2.0",
     "cordova-plugin-ble": "1.0.1",
-    "cordova-plugin-eddystone": "1.0.2"
+    "cordova-plugin-eddystone": "1.0.2",
+    "cordova-plugin-bluetooth-status": "1.0.4"
 };
 // BOTTOM OF METADATA
 });

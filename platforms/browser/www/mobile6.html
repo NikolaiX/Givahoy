@@ -160,6 +160,7 @@
     </div>
     <div>
         <p id="availbal">Loading, please wait...</p>
+        <button id="DevButton">Test Button</button>
     </div>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar">
@@ -392,14 +393,6 @@
         });
     }
 
-    function testJsonBeacon(){
-        console.log(
-                createJsonForBeacons(getBeacons())
-        );
-    }
-
-
-
     function createJsonForBeacons(beaconIdArray){
         var jsonMessage = [];
         var loopcount = beaconIdArray.length;
@@ -413,7 +406,6 @@
     function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
-
     }
 
     function showPosition() {
@@ -422,15 +414,19 @@
         var body = {
             //This is where you define the body of the request
             "saction": "GetLocation",
-            "llatitude": userLocation.ltd.toString(),
-            "llongitude": userLocation.lgt.toString(),
+            "llatitude": userLocation.latitude,
+            "llongitude": userLocation.longitude,
             "tuuid": device.uuid,
             "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-            "vrandom": window.localStorage.getItem,
+            "vrandom": window.localStorage.getItem('vrandom'),
             "beaconlist": createJsonForBeacons(getBeacons())
         };
 
-        console.log(body);
+            console.log(JSON.stringify(body));
+
+        console.log("Initial data collection started");
+
+
         var apigClient = apigClientFactory.newClient();
         apigClient.allpurposePost({}, body, {})
                 .then(function (result) {
@@ -511,53 +507,141 @@
         return result;
     }
 
-    var beacons = [];
+    var beacons = {};
 
     function getBeacons(){
-        var beaconlist = [];
-        for(beacon in beacons){
+        var beaconList = [];
+        var beacon;
+        for(beaconKey in beacons){
+            beacon = beacons[beaconKey];
             beaconID = uint8ArrayToString(beacon.bid);
-            beaconlist.push(beaconID);
+            beaconList.push(beaconID);
         }
-
-        return beaconlist;
+        return beaconList;
     }
 
     function startBeaconScan(){
-
-        if(device.model == "Chrome"){
-            console.log("Running from browser, beacon scan cancelled");
-            return;
-        }
         evothings.eddystone.startScan(
-                function(beacon){
-                    var listed = false;
-                    if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
-                        beacons[beacon.address] = beacon;
-                    }
-                },
-                function(error){
-                    alert('Scan error: ' + error);
+            function(beacon){
+                var listed = false;
+                if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
+                    beacons[beacon.address] = beacon;
+                    console.log("beacon pushed to array");
                 }
+            },
+            function(error){
+                alert('Scan error: ' + error);
+            }
         )
+
     }
 
-    function onDeviceReady() {
-        console.info("onDeviceReady Called");
-        updateViewBalance();
-        if (navigator.geolocation) {
-            console.log("geololocalStorage.uid)cation enabled");
+    /*
+        A promise wrapper for the geolocation callback
+    */
+    function initialiseLocation(){
+        return new Promise(function(resolve, reject) {
+            navigator.geolocation.getCurrentPosition(
+                    function (location) {
+                        setLocation(location);
+                        console.log("Success");
+                        resolve();
+                    },
+                    function (error) {
+                        showPositionOnError(error);
+                        console.log("Failed");
+                        reject(error);
+                    }
+            );
+        });
+    }
 
 
-            navigator.geolocation.getCurrentPosition(setLocation, showPositionOnError);
+    function initialiseBeacons(){
+        return new Promise(function(resolve, reject){
             startBeaconScan();
+            setTimeout(function(){
+                var beacons = createJsonForBeacons(getBeacons());
+                return resolve(beacons);
+            }, 5000);
+        });
+    }
 
-            setTimeout(showPosition, 500);
-            addLocationOptionToTopOfList(17, "Neo Natal Trust",  "Device Default");
+    function initialiseCharityRetrieval(){
+        var attemptedLocation = false;
+        var attemptedBeacons = false;
+        var charityRequest = new ServerDataRequestBuilder();
+
+        if (typeof navigator.geolocation === undefined) {
+            console.log("location disabled");
+            attemptedLocation = true;
+            CallServerIfReady(attemptedLocation, attemptedBeacons);
         }
         else {
-            alert('Geolocation is not supported by this browser.');
+            initialiseLocation()
+                    .then(function(){
+                                console.log("Location promise returned success");
+                                attemptedLocation = true;
+                                charityRequest.useLocation(userLocation);
+                                CallServerIfReady(attemptedLocation, attemptedBeacons);
+                            },
+                            function(error){
+                                console.log("Location promise returned fail");
+                                attemptedLocation = true;
+                                CallServerIfReady(attemptedLocation, attemptedBeacons);
+                            }
+                    );
         }
+
+        if(cordova.plugins.BluetoothStatus.BTenabled !== true) {
+            console.log("bluetoothLE is not enabled, skipping beacon scan");
+            attemptedBeacons = true;
+            CallServerIfReady(attemptedLocation, attemptedBeacons);
+        }
+        else{
+            initialiseBeacons()
+                .then(function(beacons){
+                    console.log("Beacon promise returned success");
+                    attemptedBeacons = true;
+                    charityRequest.useBeacons(beacons);
+                    CallServerIfReady(attemptedLocation, attemptedBeacons);
+                },
+                function(error){
+                    console.log("Beacon promise returned fail");
+                    console.log(error);
+                    attemptedBeacons = true;
+                    CallServerIfReady(attemptedLocation, attemptedBeacons);
+                }
+            )
+        }
+    }
+
+    function CallServerIfReady(location, beacon){
+        console.log(location);
+        console.log(beacon);
+        if(location && beacon){
+            showPosition();
+        }
+
+    }
+
+    $("#DevButton").click(function(){
+
+    });
+    function onDeviceReady() {
+        console.info("onDeviceReady Called");
+
+        cordova.plugins.BluetoothStatus.initPlugin();
+
+        /*
+         Fixes issue with bluetooth status not being represented correctly
+         */
+        setTimeout(function() {
+            initialiseCharityRetrieval();
+        }, 1);
+
+        updateViewBalance();
+
     }
 
     document.addEventListener("deviceready", onDeviceReady, false);

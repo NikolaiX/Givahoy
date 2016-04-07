@@ -81,11 +81,18 @@
     },
     "cordova-plugin-ble": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/evothings/cordova-ble",
-            "subdir": "."
+            "type": "registry",
+            "id": "cordova-plugin-ble"
         },
-        "is_top_level": false,
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-bluetooth-status": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-bluetooth-status"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

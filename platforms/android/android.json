@@ -39,8 +39,13 @@
                         {
                             "xml": "<feature name=\"BLE\"><param name=\"android-package\" value=\"com.evothings.BLE\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
+                            "count": 1
                         }
-                    ]
+                    ],
+                    "/widget": []
                 }
             },
             "AndroidManifest.xml": {
@@ -56,6 +61,18 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.bluetooth_le\" android:required=\"false\" />",
                             "count": 1
                         }
                     ],
@@ -127,6 +144,9 @@
             "PACKAGE_NAME": "com.mangetout.giveahoy"
         },
         "cordova-plugin-eddystone": {
+            "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "com.mangetout.giveahoy"
         }
     },
@@ -261,6 +281,13 @@
             "clobbers": [
                 "evothings.eddystone"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+            "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+            "clobbers": [
+                "cordova.plugins.BluetoothStatus"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -274,6 +301,7 @@
         "cordova-plugin-globalization": "1.0.2",
         "cordova-plugin-network-information": "1.2.0",
         "cordova-plugin-ble": "1.0.1",
-        "cordova-plugin-eddystone": "1.0.2"
+        "cordova-plugin-eddystone": "1.0.2",
+        "cordova-plugin-bluetooth-status": "1.0.4"
     }
 }
