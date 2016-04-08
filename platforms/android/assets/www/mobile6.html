@@ -534,6 +534,7 @@
         evothings.eddystone.startScan(
             function(beacon){
                 var listed = false;
+                console.info("Beacon transmission detected");
                 if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
                     beacons[beacon.address] = beacon;
                     console.log("beacon pushed to array");
@@ -573,7 +574,7 @@
             setTimeout(function(){
                 var beacons = createJsonForBeacons(getBeacons());
                 return resolve(beacons);
-            }, 5000);
+            }, 10000);
         });
     }
 
