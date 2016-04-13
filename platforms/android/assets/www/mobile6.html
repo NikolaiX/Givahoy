@@ -127,34 +127,30 @@
 
     <br>
     <br>
-    <div ng-controller="givahoyAppController">   <button ng-click="testButton()">test button</button>
+    <div ng-controller="givahoyAppController">
         <select id="locations">
-            <option id="defaultoption" disabled selected>Select your option</option>
-            <option ng-repeat="charity in ServerData().localData.charities | orderBy:'type'" value="{{charity.type}}">
-                {{charity.name}} ({{charity.location}})</option>
+            <option id="defaultOption" disabled selected>Select your option</option>
+            <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
         </select>
-        <input ng-model="testValue">
-        {{testValue}}
-
         <br>
         <br>
         <div class="button-block">
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="initiateTrans(1)" class="round-button">$1</a></div>
+                <div class="round-button-circle"><a ng-click="makeTransaction(1)" class="round-button">$1</a></div>
             </div>
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="initiateTrans(2)" class="round-button">$2</a></div>
+                <div class="round-button-circle"><a ng-click="makeTransaction(2)" class="round-button">$2</a></div>
             </div>
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="initiateTrans(5)" class="round-button">$5</a></div>
+                <div class="round-button-circle"><a ng-click="makeTransaction(5)" class="round-button">$5</a></div>
             </div>
         </div>
         <div class="button-block">
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="initiateTrans(10)" class="round-button">$10</a></div>
+                <div class="round-button-circle"><a ng-click="makeTransaction(10)" class="round-button">$10</a></div>
             </div>
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="initiateTrans(20)" class="round-button">$20</a></div>
+                <div class="round-button-circle"><a ng-click="makeTransaction(20)" class="round-button">$20</a></div>
             </div>
             <!---<div class="round-button"><div class="round-button-circle"><a onclick=" class="round-button">$x</a></div></div>
             Put this back in when I decide to write a popup for other amounts
@@ -162,12 +158,12 @@
         </div>
         <div class="button-block">
             <div class="round-button">
-                <div class="round-button-circle"><a onclick="makeTrans(0)" class="round-button"
+                <div class="round-button-circle"><a ng-click="makeTransaction(0)" class="round-button"
                                                     font-family="Arial">&hearts;</a></div>
             </div>
         </div>
         <div>
-            <p id="availbal">Available Balance: ${{ServerData().userBalance}}</p>
+            <p id="availbal">Available Balance: ${{ServerData.balance}}</p>
         </div>
     </div>
     <div data-role="footer" data-id="foo1" data-position="fixed">
@@ -291,31 +287,7 @@
                     }
                 });
     }
-    function transactionDataBody(vamount, location){
-        /*
-         Example data:
-         "saction": "MakeTransaction",
-         "mvalue": vamount, //Decimal value
-         "linstancelocationid": $('#location option:selected').val(),
-         "tuuid": device.uuid,
-         "vuid": localStorage.uid,
-         "vrandom": localStorage.vrandom,
-         "dbcr": "db"
-         Every value must be accounted for!
-         */
-        var body = {
-            //This is where you define the body of the request
 
-            "saction": "MakeTransaction",
-            "mvalue": vamount, //Decimal value
-            "linstancelocationid": location,
-            "tuuid": device.uuid,
-            "vuid": localStorage.uid,
-            "vrandom": localStorage.vrandom,
-            "dbcr": "db"
-        };
-        return body;
-    }
 
     $(" .modal .exitButton").click(function(){
         clearModal();

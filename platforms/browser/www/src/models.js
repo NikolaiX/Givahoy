@@ -29,6 +29,8 @@ function ServerPromise(){
     }
 }
 
+
+
 var GetDataFromServer = function(body){
     var apigClient = apigClientFactory.newClient();
 
@@ -110,9 +112,13 @@ function uint8ArrayToString(uint8Array)
 }
 
 function getCharitiesFromJson(json){
+    var charityObjects = [];
     var serverCharities = json.data.sresult;
 
-    var charityObjects = [];
+    if(serverCharities === null){
+        return charityObjects;
+    }
+
     for (var i = 0; i < serverCharities.length; i++) {
 
         charityObjects.push(new Charity(

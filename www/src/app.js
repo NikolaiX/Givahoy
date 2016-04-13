@@ -3,6 +3,7 @@
  */
 var givahoyApp = angular.module('givahoyApp',[]);
 givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', function($scope, RuntimeDataFactory){
+    showLoadingModal();
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -11,13 +12,34 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
         "vuid": 1234,
         "vrandom": 5678
     };
-    console.log("Angular controller has been loaded");
+    var userLocation = {
+        enabled: false
+    };
 
-    showLoadingModal();
-    RuntimeDataFactory.Initialise( device.uuid, window.localStorage.getItem('uid'), window.localStorage.getItem('vrandom'), function(){
-        updateScope();
-         clearModal();
-    });
+    navigator.geolocation.getCurrentPosition(
+        function(currentLocation) {
+            userLocation = currentLocation;
+            userLocation.enabled = true;
+            RuntimeDataFactory.Initialise( device.uuid,
+                window.localStorage.getItem('uid'),
+                window.localStorage.getItem('vrandom'),
+                function(){
+                    updateScope();
+                    clearModal();
+                },
+                userLocation
+            );
+        },
+        function(result){
+            RuntimeDataFactory.Initialise( device.uuid, window.localStorage.getItem('uid'), window.localStorage.getItem('vrandom'), function(){
+                console.log("Location not enabled");
+                console.log(result);
+                updateScope();
+                clearModal();
+            });
+        });
+
+    console.log("Angular controller has been loaded");
 
     function updateScope(){
         $scope.$apply();
@@ -29,13 +51,52 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
         balance: RuntimeDataFactory.balance
     };
 
-    $scope.makeTransaction = function(amount){
+    $scope.makeTransaction = InitiateTransaction;
 
-    };
+    function InitiateTransaction(amount) {
+        var theAmount = amount;
+        console.log(amount);
+        if (mybal + 50 <= amount) {
+            alert('Insufficient Funds');
+            return;
+        }
+
+        if(getSelectedLocation().attr("id") =="defaultOption"){
+            alert("Please choose a charity");
+            return;
+        }
+        /*
+         todo: Change selected Charity check to angular model
+         */
+        navigator.notification.confirm(
+            "Are you sure you want to donate $" + amount + " to " + getSelectedLocation().text() + "?",
+            function (buttonIndex) {
+                if (buttonIndex == 1) {
+                    /*
+                     Create processing page
+                     */
+                    console.log(amount);
+                    showTransactionProcessModal();
+                    RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
+                        console.log(status);
+
+                        console.log(amount);
+                        if(status == "Success"){
+                            showTransactionCompletedModal(getSelectedLocation().text(), amount);
+                        }else{
+                            alert("Sorry, there was a problem processing your donation.");
+                            clearModal();
+                        }
+                    });
+                }
+            });
+    }
     $scope.testValue = "Testvalue";
+
     /*
-     Fixes issue with bluetooth status not being represented correctly
+     Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
      */
+
     setTimeout(function() {
         if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
             alert("Please enable bluetooth and refresh list to see available beacons");
@@ -46,6 +107,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
             console.log("No bluetoothLE detected, beacon functionality cancelled");
         }
     }, 1);
+
 
     var discoveredBeacons = {};
     function startBeaconScan(){
@@ -67,8 +129,20 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     }
 }]);
 
+
+
+
+
+
+
+
+
+
+
+
+
 givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
-    var GetDataFromServer = function(body){
+    var ContactServer = function(body){
         var apigClient = apigClientFactory.newClient();
 
         return apigClient.allpurposePost({}, body, {});
@@ -79,35 +153,51 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
     };
 
 
-    function Initialise(tuuid, vuid, vrandom, onCallback){
+    function Initialise(tuuid, vuid, vrandom, onCallback, location){
         deviceID.tuuid = tuuid;
         deviceID.vuid = vuid;
         deviceID.vrandom = vrandom;
 
-        var location = {
-            latitude: -41.2904522,
-            longitude: 174.7798954
-        };
-        var initialiseRequest = new ServerDataRequestBuilder()
-            .useLocation(location);
-        console.log(initialiseRequest);
+        var initialiseRequest = new ServerDataRequestBuilder();
 
-
-        console.log(location);
+        if(typeof location !== 'undefined'){
+            console.log("Location detected");
+            console.log(location);
+            initialiseRequest = initialiseRequest.useLocation(location);
+        }
         var request = initialiseRequest
             .build();
 
-
-
-        console.log(request);
-        GetDataFromServer(request)
+        ContactServer(request)
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
                 userBalance = getBalanceFromJson(result);
+                console.log(JSON.stringify(result));
                 onCallback();
             });
     }
 
+    function makeTransaction(amount, charityValue, onCallback){
+        console.log(charityValue);
+        var body = transactionDataBody(amount, charityValue);
+        console.log("make transaction called in factory");
+        console.log(JSON.stringify(body));
+        console.log("Above code hsoudl have worled");
+        ContactServer(body)
+            .then(function(result){
+                var returnedData = result.data;
+                console.log(returnedData);
+                ServerDataObjects.userBalance = returnedData.mbalance.mbalance;
+                onCallback("Success");
+            })
+            .catch(function(result){
+                alert("Sorry, there was a problem processing your donation.");
+                console.log(result);
+                onCallback("Fail");
+            });
+
+
+    }
     //Todo Create new function that handles multiple beacons
     function GetCharityFromBeacon(beacon, onCallBack){
         console.log("getcharitiesfrombeacon called");
@@ -118,7 +208,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         var builtRequest = request.build();
 
         console.log(JSON.stringify(builtRequest));
-        GetDataFromServer(request.build())
+        ContactServer(request.build())
             .then(function (result) {
                 console.log("Data for beacon returned");
                 console.log(JSON.stringify(result));
@@ -129,8 +219,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
     function GetCharitiesFromLocation(location, onCallBack){
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
-        GetDataFromServer(request.build())
+        ContactServer(request.build())
             .then(function (result) {
+
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
                 onCallback();
             });
@@ -141,7 +232,8 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         charities: ServerDataObjects.charities,
         balance: ServerDataObjects.userBalance,
         AddLocation: GetCharitiesFromLocation,
-        AddBeacon: GetCharityFromBeacon
+        AddBeacon: GetCharityFromBeacon,
+        makeTransaction: makeTransaction
     }
 });
 
@@ -159,8 +251,8 @@ var ServerDataRequestBuilder = function(){
     };
     this.useLocation = function(locationData){
         this.retrieveLocation = true;
-        this.body.llatitude = locationData.latitude;
-        this.body.llongitude = locationData.longitude;
+        this.body.llatitude = locationData.coords.latitude;
+        this.body.llongitude = locationData.coords.longitude;
         return this;
     };
     this.useBeacons = function(beaconData){
@@ -192,3 +284,31 @@ var ServerDataRequestBuilder = function(){
         return this.body;
     };
 };
+
+function transactionDataBody(amount, charityValue){
+    /*
+     Example data:
+     "saction": "MakeTransaction",
+     "mvalue": amount, //Decimal value
+     "linstancelocationid": $('#location option:selected').val(),
+     "tuuid": device.uuid,
+     "vuid": localStorage.uid,
+     "vrandom": localStorage.vrandom,
+     "dbcr": "db"
+     Every value must be accounted for!
+     */
+    console.log(amount);
+    console.log(charityValue);
+    var body = {
+        //This is where you define the body of the request
+
+        "saction": "MakeTransaction",
+        "mvalue": amount, //Decimal value
+        "linstancelocationid": charityValue,
+        "tuuid": device.uuid,
+        "vuid": localStorage.uid,
+        "vrandom": localStorage.vrandom,
+        "dbcr": "db"
+    };
+    return body;
+}
