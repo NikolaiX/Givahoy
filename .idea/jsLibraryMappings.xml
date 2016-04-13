@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{jquery.mobile-1.4.5, qunit-1.22.0, rivets.bundled}" />
+    <file url="PROJECT" libraries="{angularjs-DefinitelyTyped, jquery.mobile-1.4.5, qunit-1.22.0, rivets.bundled}" />
   </component>
 </project>

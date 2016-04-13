@@ -7,5 +7,6 @@
     <orderEntry type="library" name="qunit-1.22.0" level="application" />
     <orderEntry type="library" name="rivets.bundled" level="application" />
     <orderEntry type="library" name="jquery.mobile-1.4.5" level="application" />
+    <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
   </component>
 </module>

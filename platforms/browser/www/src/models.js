@@ -7,6 +7,33 @@ function Charity(Value, Name, Location, Type){
     this.location = Location;
     this.type = Type;
 }
+/*
+ Checks beacon namespace
+ Must be modified to check namespace properly once one has been decided
+ */
+function isGivahoyBeacon(beacon){
+    return true
+}
+
+/*
+Returns promise directly to caller
+ */
+console.log(this);
+function ServerPromise(){
+    var apigClient = apigClientFactory.newClient();
+    var execute = function(body){
+        return apigClient.allpurposePost({}, body, {});
+    };
+    return{
+        execute: execute
+    }
+}
+
+var GetDataFromServer = function(body){
+    var apigClient = apigClientFactory.newClient();
+
+    return apigClient.allpurposePost({}, body, {});
+};
 
 //Provides function for sending and receiving Json. Sends Json body given via argument and returns response
 var server = function(body){
@@ -35,8 +62,10 @@ function createJsonForBeacons(beaconIdArray){
     var jsonMessage = [];
     var loopcount = beaconIdArray.length;
     for(var i= 0; i < loopcount; i++){
+        var beaconId = uint8ArrayToString(beaconIdArray[i].bid);
+        console.log("Processed beacon ID: " + beaconId);
         jsonMessage.push(
-            {"beaconid": beaconIdArray[i]}
+            {"beaconid": beaconId}
         );
     }
     return jsonMessage;
@@ -47,11 +76,38 @@ var userLocation ={
     "longitude": 0
 };
 
-var deviceID ={
+/*
+Temporary hack until registration is done
+
+ */
+var deviceID={
+    "tuuid": device.uuid,
+    "vuid": 1234,
+    "vrandom": 5678
+};
+
+
+/*var deviceID ={
     "tuuid": device.uuid,
     "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
     "vrandom": window.localStorage.getItem('vrandom')
-};
+};*/
+
+//Taken from cordova-eddystone plugin example
+function uint8ArrayToString(uint8Array)
+{
+    function format(x)
+    {
+        var hex = x.toString(16);
+        return hex.length < 2 ? '0' + hex : hex;
+    }
+    var result = '';
+    for (var i = 0; i < uint8Array.length; ++i)
+    {
+        result += format(uint8Array[i]);
+    }
+    return result;
+}
 
 function getCharitiesFromJson(json){
     var serverCharities = json.data.sresult;
@@ -72,6 +128,8 @@ function getCharitiesFromJson(json){
 function getBalanceFromJson(json){
     return json.data.mbalance.mbalance;
 }
+
+
 
 function ServerCache(charityDataRequest){
     this.lastServerResponse = 0;

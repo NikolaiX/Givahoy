@@ -127,39 +127,46 @@
 
     <br>
     <br>
-    <select id="locations"></select>
-    <br>
-    <br>
-    <div class="button-block">
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="initiateTrans(1)" class="round-button">$1</a></div>
+    <div ng-controller="givahoyAppController">
+        <select id="locations">
+            <option id="defaultoption" disabled selected>Select your option</option>
+            <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value="{{charity.type}}">
+                {{charity.name}} ({{charity.location}})</option>
+        </select>
+
+        <br>
+        <br>
+        <div class="button-block">
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="initiateTrans(1)" class="round-button">$1</a></div>
+            </div>
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="initiateTrans(2)" class="round-button">$2</a></div>
+            </div>
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="initiateTrans(5)" class="round-button">$5</a></div>
+            </div>
         </div>
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="initiateTrans(2)" class="round-button">$2</a></div>
+        <div class="button-block">
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="initiateTrans(10)" class="round-button">$10</a></div>
+            </div>
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="initiateTrans(20)" class="round-button">$20</a></div>
+            </div>
+            <!---<div class="round-button"><div class="round-button-circle"><a onclick=" class="round-button">$x</a></div></div>
+            Put this back in when I decide to write a popup for other amounts
+            --->
         </div>
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="initiateTrans(5)" class="round-button">$5</a></div>
+        <div class="button-block">
+            <div class="round-button">
+                <div class="round-button-circle"><a onclick="makeTrans(0)" class="round-button"
+                                                    font-family="Arial">&hearts;</a></div>
+            </div>
         </div>
-    </div>
-    <div class="button-block">
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="initiateTrans(10)" class="round-button">$10</a></div>
+        <div>
+            <p id="availbal">Available Balance: ${{ServerData.balance}}</p>
         </div>
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="initiateTrans(20)" class="round-button">$20</a></div>
-        </div>
-        <!---<div class="round-button"><div class="round-button-circle"><a onclick=" class="round-button">$x</a></div></div>
-        Put this back in when I decide to write a popup for other amounts
-        --->
-    </div>
-    <div class="button-block">
-        <div class="round-button">
-            <div class="round-button-circle"><a onclick="makeTrans(0)" class="round-button"
-                                                font-family="Arial">&hearts;</a></div>
-        </div>
-    </div>
-    <div>
-        <p id="availbal">Loading, please wait...</p>
     </div>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar">
@@ -207,13 +214,7 @@
     <div class="container"></div>
 </div>
 
-
-
-
-
-
-
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="libs/evothings/evothings.js"></script>
 <script type="text/javascript" src="libs/evothings/ui/ui.js"></script>
@@ -409,7 +410,7 @@
         });
     }
 
-    function createJsonForBeacons(beaconIdArray){
+/*    function createJsonForBeacons(beaconIdArray){
         var jsonMessage = [];
         var loopcount = beaconIdArray.length;
         for(var i= 0; i < loopcount; i++){
@@ -418,7 +419,7 @@
             );
         }
         return jsonMessage;
-    }
+    }*/
     function setLocation(location){
         userLocation.latitude = location.coords.latitude;
         userLocation.longitude = location.coords.longitude;
@@ -498,31 +499,11 @@
         }
     }
 
-    /*
-     Checks beacon namespace
-     Must be modified to check namespace properly once one has been decided
-     */
-    function isGivahoyBeacon(beacon){
-        return true
-    }
 
 
 
-    //Taken from cordova-eddystone plugin example
-    function uint8ArrayToString(uint8Array)
-    {
-        function format(x)
-        {
-            var hex = x.toString(16);
-            return hex.length < 2 ? '0' + hex : hex;
-        }
-        var result = '';
-        for (var i = 0; i < uint8Array.length; ++i)
-        {
-            result += format(uint8Array[i]);
-        }
-        return result;
-    }
+
+
 
     var beacons = {};
 
@@ -541,6 +522,7 @@
         evothings.eddystone.startScan(
             function(beacon){
                 var listed = false;
+                console.info("Beacon transmission detected");
                 if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
                     beacons[beacon.address] = beacon;
                     console.log("beacon pushed to array");
@@ -580,7 +562,7 @@
             setTimeout(function(){
                 var beacons = createJsonForBeacons(getBeacons());
                 return resolve(beacons);
-            }, 5000);
+            }, 10000);
         });
     }
 
@@ -597,16 +579,16 @@
         else {
             initialiseLocation()
                     .then(function(){
-                                console.log("Location promise returned success");
-                                attemptedLocation = true;
-                                charityRequest.useLocation(userLocation);
-                                CallServerIfReady(attemptedLocation, attemptedBeacons);
-                            },
-                            function(error){
-                                console.log("Location promise returned fail");
-                                attemptedLocation = true;
-                                CallServerIfReady(attemptedLocation, attemptedBeacons);
-                            }
+                            console.log("Location promise returned success");
+                            attemptedLocation = true;
+                            charityRequest.useLocation(userLocation);
+                            CallServerIfReady(attemptedLocation, attemptedBeacons);
+                        },
+                        function(error){
+                            console.log("Location promise returned fail");
+                            attemptedLocation = true;
+                            CallServerIfReady(attemptedLocation, attemptedBeacons);
+                        }
                     );
         }
 
@@ -642,22 +624,11 @@
 
     }
 
+
     function onDeviceReady() {
         console.info("onDeviceReady Called");
-        showLoadingModal();
         cordova.plugins.BluetoothStatus.initPlugin();
-
-        /*
-         Fixes issue with bluetooth status not being represented correctly
-         */
-        setTimeout(function() {
-            if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
-                alert("Please enable bluetooth and refresh list to see available beacons");
-            }
-            initialiseCharityRetrieval();
-        }, 1);
-
-        updateViewBalance();
+        angular.bootstrap($('html'), ["givahoyApp"]);
 
     }
 
