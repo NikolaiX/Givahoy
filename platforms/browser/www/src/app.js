@@ -270,7 +270,7 @@ var ServerDataRequestBuilder = function(){
         }
         else{
             if(this.retrieveBeacons == true && this.retrieveLocation == false){
-                this.body.saction = "GetBeacons"
+                this.body.saction = "getbeacons"
             }
             else{
                 this.body.saction = "GetLocation";
