@@ -80,7 +80,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
                     showTransactionProcessModal();
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         console.log(status);
-
+                        updateScope();
                         console.log(amount);
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
@@ -125,8 +125,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
             )
         },
         processBeaconBroadcast: function (beacon) {
-            console.log("Beacon broadcast found");
-            console.log(JSON.stringify(discoveredBeacons));
             if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
                 discoveredBeacons[beacon.address] = beacon;
                 console.log("beacon pushed to array");
@@ -178,8 +176,10 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         ContactServer(request)
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
-                userBalance = getBalanceFromJson(result);
+                console.log(getBalanceFromJson(result));
+                ServerDataObjects.userBalance = getBalanceFromJson(result);
                 console.log(JSON.stringify(result));
+                console.log(ServerDataObjects.userBalance);
                 onCallback();
             });
     }
@@ -188,13 +188,12 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         console.log(charityValue);
         var body = transactionDataBody(amount, charityValue);
         console.log("make transaction called in factory");
-        console.log(JSON.stringify(body));
-        console.log("Above code hsoudl have worled");
         ContactServer(body)
             .then(function(result){
-                var returnedData = result.data;
-                console.log(returnedData);
-                ServerDataObjects.userBalance = returnedData.mbalance.mbalance;
+                console.log(getBalanceFromJson(result));
+                ServerDataObjects.userBalance = getBalanceFromJson(result);
+                console.log(JSON.stringify(result));
+                console.log(ServerDataObjects.userBalance);
                 onCallback("Success");
             })
             .catch(function(result){
@@ -246,6 +245,22 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         makeTransaction: makeTransaction
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //todo: Move this into models
 var ServerDataRequestBuilder = function(){

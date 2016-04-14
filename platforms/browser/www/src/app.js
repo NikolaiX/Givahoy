@@ -43,6 +43,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
 
     function updateScope(){
         $scope.$apply();
+        console.log("Scope updated");
     }
     $scope.ServerData = {
         testValue: "Test value",
@@ -102,7 +103,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
             alert("Please enable bluetooth and refresh list to see available beacons");
         }
         if(cordova.plugins.BluetoothStatus.BTenabled === true){
-            startBeaconScan();
+            BeaconScanner.begin();
         }else{
             console.log("No bluetoothLE detected, beacon functionality cancelled");
         }
@@ -110,23 +111,27 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
 
 
     var discoveredBeacons = {};
-    function startBeaconScan(){
-        console.log("Started scanning for beacons");
-        evothings.eddystone.startScan(
-            function(beacon){
-                var listed = false;
-                if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
-                    discoveredBeacons[beacon.address] = beacon;
-                    console.log("beacon pushed to array");
-                    RuntimeDataFactory.AddBeacon(beacon, updateScope);
-                }
-            },
-            function(error){
-                alert('Scan error: ' + error);
-            }
-        )
+    var BeaconScanner = {
 
-    }
+        begin: function(){
+            console.log("Started scanning for beacons");
+            console.log(JSON.stringify(this));
+            evothings.eddystone.startScan(
+                    this.processBeaconBroadcast
+            ,
+                function(error){
+                    alert('Scan error: ' + error);
+                }
+            )
+        },
+        processBeaconBroadcast: function (beacon) {
+            if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
+                discoveredBeacons[beacon.address] = beacon;
+                console.log("beacon pushed to array");
+                RuntimeDataFactory.AddBeacon(beacon, updateScope);
+            }
+        }
+    };
 }]);
 
 
@@ -171,8 +176,10 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         ContactServer(request)
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
-                userBalance = getBalanceFromJson(result);
+                console.log(getBalanceFromJson(result));
+                ServerDataObjects.userBalance = getBalanceFromJson(result);
                 console.log(JSON.stringify(result));
+                console.log(ServerDataObjects.userBalance);
                 onCallback();
             });
     }
@@ -181,8 +188,6 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         console.log(charityValue);
         var body = transactionDataBody(amount, charityValue);
         console.log("make transaction called in factory");
-        console.log(JSON.stringify(body));
-        console.log("Above code hsoudl have worled");
         ContactServer(body)
             .then(function(result){
                 var returnedData = result.data;
@@ -212,7 +217,10 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             .then(function (result) {
                 console.log("Data for beacon returned");
                 console.log(JSON.stringify(result));
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
+                var convertedCharities = getCharitiesFromJson(result);
+                console.log(convertedCharities);
+                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, convertedCharities);
+                console.log(ServerDataObjects);
                 onCallback();
             });
     }
@@ -237,6 +245,22 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
     }
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //todo: Move this into models
 var ServerDataRequestBuilder = function(){
     this.body = {};
@@ -256,7 +280,7 @@ var ServerDataRequestBuilder = function(){
         return this;
     };
     this.useBeacons = function(beaconData){
-        this.body.beaconList = (
+        this.body.beaconlist = (
             createJsonForBeacons(beaconData)
         );
         this.retrieveBeacons = true;
@@ -270,7 +294,7 @@ var ServerDataRequestBuilder = function(){
         }
         else{
             if(this.retrieveBeacons == true && this.retrieveLocation == false){
-                this.body.saction = "getbeacons"
+                this.body.saction = "GetBeacons"
             }
             else{
                 this.body.saction = "GetLocation";
