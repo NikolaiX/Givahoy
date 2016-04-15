@@ -80,7 +80,9 @@ var userLocation ={
 
 /*
 Temporary hack until registration is done
-
+ "uuid":
+ "uid"
+ "vrandom"
  */
 var deviceID={
 };
@@ -108,7 +110,7 @@ function uint8ArrayToString(uint8Array)
     return result;
 }
 
-function getCharitiesFromJson(json){
+function ServerResultGetCharities(json){
     var charityObjects = [];
     var serverCharities = json.data.sresult;
 
@@ -128,10 +130,12 @@ function getCharitiesFromJson(json){
     return charityObjects;
 }
 
-function getBalanceFromJson(json){
+function ServerResultGetBalance(json){
     return json.data.mbalance.mbalance;
 }
-
+function ServerResultGetUID(json){
+    return json.data.mbalance.vuid;
+}
 
 
 function ServerCache(charityDataRequest){
@@ -144,8 +148,8 @@ function ServerCache(charityDataRequest){
 
         this.lastServerResponse = server(charityDataRequest);        console.log(this.lastServerResponse);
         if (this.lastServerResponse.data.status.indexOf("Success") != -1){
-            this.localCharities = getCharitiesFromJson(this.lastServerResponse);
-            this.localBalance = getBalanceFromJson(this.lastServerResponse);
+            this.localCharities = ServerResultGetCharities(this.lastServerResponse);
+            this.localBalance = ServerResultGetBalance(this.lastServerResponse);
         }else{
             alert("There was a problem getting data from the server.");
         }

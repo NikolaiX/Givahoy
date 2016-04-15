@@ -215,7 +215,7 @@
                 .useLocation(userLocation)
                 .build();
         var json = server(charityRequest);
-        var actualOutput = getCharitiesFromJson(json);
+        var actualOutput = ServerResultGetCharities(json);
 
 
         var numberOfCharitiesActual = actualOutput.length;

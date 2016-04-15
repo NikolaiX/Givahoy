@@ -2,8 +2,11 @@
  * Created by nikolai on 24/03/16.
  */
 var givahoyApp = angular.module('givahoyApp',[]);
-givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', function($scope, RuntimeDataFactory){
+givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory', function($scope, $timeout, RuntimeDataFactory){
     showLoadingModal();
+    $timeout(function(){
+        console.log("Scope updated");
+    });
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -15,6 +18,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     var userLocation = {
         enabled: false
     };
+
     $scope.ServerData = {
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
@@ -65,8 +69,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     console.log("Angular controller has been loaded");
 
     function updateScope(){
-        $scope.$apply();
-        console.log("Scope updated");
+        $timeout(function(){
+            console.log("Scope updated");
+        });
+
     }
 
     function InitiateTransaction(amount) {
@@ -172,11 +178,12 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         var request = initialiseRequest
             .build();
 
+        console.log(JSON.stringify(request));
         ContactServer(request)
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
-                console.log(ServerResultGetBalance(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
+                deviceID.uid = ServerResultGetUID(result);
                 console.log(JSON.stringify(result));
                 console.log(ServerDataObjects.userBalance);
                 onCallback();
@@ -301,8 +308,8 @@ var ServerDataRequestBuilder = function(){
             }
 
         }
-        this.body.vuid = deviceID.vuid;
-        this.body.tuuid = deviceID.tuuid;
+        this.body.vuid = deviceID.uid;
+        this.body.tuuid = deviceID.uuid;
         this.body.vrandom = deviceID.vrandom;
 
         return this.body;
@@ -329,9 +336,9 @@ function transactionDataBody(amount, charityValue){
         "saction": "MakeTransaction",
         "mvalue": amount, //Decimal value
         "linstancelocationid": charityValue,
-        "tuuid": device.uuid,
-        "vuid": localStorage.uid,
-        "vrandom": localStorage.vrandom,
+        "tuuid": deviceID.uuid,
+        "vuid": deviceID.uid,
+        "vrandom": deviceID.vrandom,
         "dbcr": "db"
     };
     return body;

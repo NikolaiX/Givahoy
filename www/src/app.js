@@ -2,7 +2,7 @@
  * Created by nikolai on 24/03/16.
  */
 var givahoyApp = angular.module('givahoyApp',[]);
-givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', function($scope, RuntimeDataFactory){
+givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory', function($scope, $timeout, RuntimeDataFactory){
     showLoadingModal();
     /*
     Temporary initialisation until registration model is implemented
@@ -15,6 +15,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     var userLocation = {
         enabled: false
     };
+
     $scope.ServerData = {
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
@@ -65,8 +66,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     console.log("Angular controller has been loaded");
 
     function updateScope(){
-        $scope.$apply();
-        console.log("Scope updated");
+        $timeout(function(){
+            console.log("Scope updated");
+        });
+
     }
 
     function InitiateTransaction(amount) {
@@ -184,7 +187,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             });
     }
 
-    function makeTransaction(amount, charityValue, onCallback){
+    function makeTransaction(amount, charityValue, onCallBack){
         console.log(charityValue);
         var body = transactionDataBody(amount, charityValue);
         console.log("make transaction called in factory");
@@ -194,12 +197,12 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
                 console.log(JSON.stringify(result));
                 console.log(ServerDataObjects.userBalance);
-                onCallback("Success");
+                onCallBack("Success");
             })
             .catch(function(result){
                 alert("Sorry, there was a problem processing your donation.");
                 console.log(result);
-                onCallback("Fail");
+                onCallBack("Fail");
             });
 
 
@@ -222,9 +225,10 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 console.log(convertedCharities);
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, convertedCharities);
                 console.log(ServerDataObjects);
-                onCallback();
+                onCallBack();
             });
     }
+
     function GetCharitiesFromLocation(location, onCallBack){
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
@@ -232,7 +236,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             .then(function (result) {
 
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
-                onCallback();
+                onCallBack();
             });
     }
     return{
