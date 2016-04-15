@@ -83,9 +83,6 @@ Temporary hack until registration is done
 
  */
 var deviceID={
-    "tuuid": device.uuid,
-    "vuid": 1234,
-    "vrandom": 5678
 };
 
 

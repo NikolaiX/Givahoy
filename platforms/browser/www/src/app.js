@@ -8,51 +8,66 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
     Temporary initialisation until registration model is implemented
      */
     deviceID={
-        "tuuid": device.uuid,
-        "vuid": 1234,
-        "vrandom": 5678
+        "uuid": device.uuid,
+        "uid": window.localStorage.getItem('uid'),
+        "vrandom": window.localStorage.getItem('vrandom')
     };
     var userLocation = {
         enabled: false
     };
-
-    navigator.geolocation.getCurrentPosition(
-        function(currentLocation) {
-            userLocation = currentLocation;
-            userLocation.enabled = true;
-            RuntimeDataFactory.Initialise( device.uuid,
-                window.localStorage.getItem('uid'),
-                window.localStorage.getItem('vrandom'),
-                function(){
-                    updateScope();
-                    clearModal();
-                },
-                userLocation
-            );
-        },
-        function(result){
-            RuntimeDataFactory.Initialise( device.uuid, window.localStorage.getItem('uid'), window.localStorage.getItem('vrandom'), function(){
-                console.log("Location not enabled");
-                console.log(result);
-                updateScope();
-                clearModal();
-            });
-        });
-
-    console.log("Angular controller has been loaded");
-
-    function updateScope(){
-        $scope.$apply();
-        console.log("Scope updated");
-    }
     $scope.ServerData = {
-        testValue: "Test value",
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
         balance: RuntimeDataFactory.balance
     };
 
     $scope.makeTransaction = InitiateTransaction;
+    navigator.geolocation.getCurrentPosition(
+        function(currentLocation) {
+            userLocation = currentLocation;
+            userLocation.enabled = true;
+            RuntimeDataFactory.Initialise(
+                deviceID.uuid,
+                deviceID.uid,
+                deviceID.vrandom,
+                function(){
+                    updateScope();
+                    clearModal();
+                },
+                userLocation
+            );
+        },/*Initialise Server without location data if not available*/
+        function(result){
+            RuntimeDataFactory.Initialise(
+                deviceID.uuid,
+                deviceID.uid,
+                deviceID.vrandom,
+                function(){
+                    console.log("Location not enabled");
+                    updateScope();
+                    clearModal();
+                });
+        });
+
+    /*
+     Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
+     */
+    setTimeout(function() {
+        if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
+            alert("Please enable bluetooth and refresh list to see available beacons");
+        }
+        if(cordova.plugins.BluetoothStatus.BTenabled === true){
+            BeaconScanner.begin();
+        }else{
+            console.log("No bluetoothLE detected, beacon functionality cancelled");
+        }
+    }, 1);
+    console.log("Angular controller has been loaded");
+
+    function updateScope(){
+        $scope.$apply();
+        console.log("Scope updated");
+    }
 
     function InitiateTransaction(amount) {
         var theAmount = amount;
@@ -80,7 +95,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
                     showTransactionProcessModal();
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         console.log(status);
-
+                        updateScope();
                         console.log(amount);
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
@@ -92,22 +107,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', 'RuntimeDataFactory', f
                 }
             });
     }
-    $scope.testValue = "Testvalue";
-
-    /*
-     Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
-     */
-
-    setTimeout(function() {
-        if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
-            alert("Please enable bluetooth and refresh list to see available beacons");
-        }
-        if(cordova.plugins.BluetoothStatus.BTenabled === true){
-            BeaconScanner.begin();
-        }else{
-            console.log("No bluetoothLE detected, beacon functionality cancelled");
-        }
-    }, 1);
 
 
     var discoveredBeacons = {};
@@ -159,8 +158,8 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
 
 
     function Initialise(tuuid, vuid, vrandom, onCallback, location){
-        deviceID.tuuid = tuuid;
-        deviceID.vuid = vuid;
+        deviceID.uuid = tuuid;
+        deviceID.uid = vuid;
         deviceID.vrandom = vrandom;
 
         var initialiseRequest = new ServerDataRequestBuilder();
@@ -175,9 +174,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
 
         ContactServer(request)
             .then(function (result) {
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
-                console.log(getBalanceFromJson(result));
-                ServerDataObjects.userBalance = getBalanceFromJson(result);
+                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
+                console.log(ServerResultGetBalance(result));
+                ServerDataObjects.userBalance = ServerResultGetBalance(result);
                 console.log(JSON.stringify(result));
                 console.log(ServerDataObjects.userBalance);
                 onCallback();
@@ -190,9 +189,10 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         console.log("make transaction called in factory");
         ContactServer(body)
             .then(function(result){
-                var returnedData = result.data;
-                console.log(returnedData);
-                ServerDataObjects.userBalance = returnedData.mbalance.mbalance;
+                console.log(ServerResultGetBalance(result));
+                ServerDataObjects.userBalance = ServerResultGetBalance(result);
+                console.log(JSON.stringify(result));
+                console.log(ServerDataObjects.userBalance);
                 onCallback("Success");
             })
             .catch(function(result){
@@ -217,7 +217,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             .then(function (result) {
                 console.log("Data for beacon returned");
                 console.log(JSON.stringify(result));
-                var convertedCharities = getCharitiesFromJson(result);
+                var convertedCharities = ServerResultGetCharities(result);
                 console.log(convertedCharities);
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, convertedCharities);
                 console.log(ServerDataObjects);
@@ -230,7 +230,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         ContactServer(request.build())
             .then(function (result) {
 
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, getCharitiesFromJson(result));
+                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
                 onCallback();
             });
     }
