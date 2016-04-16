@@ -7,6 +7,7 @@ function Charity(Value, Name, Location, Type){
     this.location = Location;
     this.type = Type;
 }
+
 /*
  Checks beacon namespace
  Must be modified to check namespace properly once one has been decided
@@ -87,12 +88,6 @@ Temporary hack until registration is done
 var deviceID={
 };
 
-
-/*var deviceID ={
-    "tuuid": device.uuid,
-    "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-    "vrandom": window.localStorage.getItem('vrandom')
-};*/
 
 //Taken from cordova-eddystone plugin example
 function uint8ArrayToString(uint8Array)

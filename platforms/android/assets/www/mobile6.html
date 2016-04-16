@@ -132,7 +132,6 @@
             <option id="defaultOption" disabled selected>Select your option</option>
             <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
         </select>
-        <button ng-click="testButton()">Test button</button>
         <br>
         <br>
         <div class="button-block">
