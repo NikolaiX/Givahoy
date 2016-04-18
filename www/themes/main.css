@@ -6,6 +6,31 @@ body{
     background-color: #7FBDE8 !important;
 }
 
+[data-role="header"]{
+    width: 100%;
+}
+
+[data-role="header"] img{
+    width: 50%;
+}
+
+#locationWrapper{
+    height: 40px;
+    width: 100%;
+}
+#locationWrapper .ui-select{
+
+}
+
+#refreshLocation{
+    height: 40px;
+}
+
+
+
+#locations{
+
+}
 
 .button {
     height: inherit;

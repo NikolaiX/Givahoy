@@ -259,8 +259,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             .then(function (result) {
                 var newCharities = ServerResultGetCharities(result);
                 JSON.stringify(console.log(newCharities));
-                var charityAlreadyExists;
 
+                //Check if Charity is already in list
+                var charityAlreadyExists;
                 for(var newCharityindex in newCharities){
                     charityAlreadyExists = false;
                     for(existingCharityIndex in ServerDataObjects.charities){
