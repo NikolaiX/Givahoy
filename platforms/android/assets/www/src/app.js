@@ -51,6 +51,21 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 });
         });
 
+    $scope.refreshLocation = function(){
+        navigator.geolocation.getCurrentPosition(
+            function(currentLocation) {
+                userLocation = currentLocation;
+                console.log(userLocation);
+                RuntimeDataFactory.AddLocation(currentLocation, function(){
+                    updateScope();
+                    clearModal();
+                });
+            }, function(){
+                alert("There was a problem getting current location");
+                clearModal();
+            });
+    };
+
     /*
      Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
      */
@@ -213,7 +228,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
 
 
     }
-    //Todo Create new function that handles multiple beacons
+
     function GetCharityFromBeacon(beacon, onCallBack){
         console.log("getcharitiesfrombeacon called");
         var beacons = [];
@@ -238,10 +253,26 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
     function GetCharitiesFromLocation(location, onCallBack){
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
-        ContactServer(request.build())
+        var builtRequest = request.build();
+        JSON.stringify(console.log(builtRequest));
+        ContactServer(builtRequest)
             .then(function (result) {
+                var newCharities = ServerResultGetCharities(result);
+                JSON.stringify(console.log(newCharities));
 
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
+                //Check if Charity is already in list
+                var charityAlreadyExists;
+                for(var newCharityindex in newCharities){
+                    charityAlreadyExists = false;
+                    for(existingCharityIndex in ServerDataObjects.charities){
+                        if(newCharities[newCharityindex].value === ServerDataObjects.charities[existingCharityIndex].value){
+                            charityAlreadyExists = true;
+                        }
+                    }
+                    if(charityAlreadyExists == false){
+                        ServerDataObjects.charities.push(newCharities[newCharityindex]);
+                    }
+                }
                 onCallBack();
             });
     }
@@ -275,18 +306,18 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
 //todo: Move this into models
 var ServerDataRequestBuilder = function(){
     this.body = {};
-    this.initialCall = false;
+    this.retrieveInitialCall = false;
     this.retrieveLocation = false;
     this.retrieveBeacons = false;
-    this.triggerError = false;
+    this.mockTriggerError = false;
 
     //Used by mock server to test Json error handling
     this.triggerError = function(){
-        this.triggerError = true;
+        this.mockTriggerError = true;
         return this;
     };
     this.initialCall = function(){
-        this.initialCall = true;
+        this.retrieveInitialCall = true;
         return this;
     };
     this.useLocation = function(locationData){
@@ -304,18 +335,17 @@ var ServerDataRequestBuilder = function(){
     };
     this.build = function(){
 
-
-        if(this.triggerError == true){
+        if(this.mockTriggerError == true){
             this.body.saction = "Error";
         }
         else{
             if(this.retrieveBeacons == true){
                 this.body.saction = "GetBeacons"
             }
-            if(this.retrieveLocation == true && this.initialCall == false){
+            if(this.retrieveLocation == true && this.retrieveInitialCall == false){
                 this.body.saction = "GetLocation";
             }
-            if(this.initialCall == true){
+            if(this.retrieveInitialCall == true){
                 this.body.saction = "GetInitial";
             }
 

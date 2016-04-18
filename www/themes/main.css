@@ -1,0 +1,143 @@
+body{
+    text-align: center !important;
+    font-family: arial !important;
+}
+#givepage {
+    background-color: #7FBDE8 !important;
+}
+
+
+.button {
+    height: inherit;
+    margin: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.styled-select select {
+    background: transparent;
+    width: 268px;
+    padding: 0px;
+    font-size: 16px;
+    line-height: 1;
+    border: 0;
+    border-radius: 0;
+    height: 34px;
+    -webkit-appearance: none;
+}
+
+.styled-select {
+    width: 98%;
+    height: 100%;
+    overflow: hidden;
+    background-color: transparent;
+    background-size: 33px;
+    background-width: auto;
+    margin: 0 !important;
+}
+
+.ui-select{
+    margin: 0;
+}
+#location-button{
+    border: 0;
+}
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        5%;
+    left:       5%;
+    height:     90%;
+    width:      90%;
+    text-align: center;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.modal img{
+    padding-bottom: 40px;
+    overflow: auto;
+}
+.modal.processingTransaction {
+    display: block;
+    background: #EEE;
+
+}
+.modal.dismissible .exitButton{
+    display: block;
+}
+.modal .exitButton{
+    display: none;
+    background: url('cross.png') no-repeat;
+    background-size: contain;
+    height: 40px;
+    width: 40px;
+    float: right;
+    margin: 10px;
+}
+.modal .container{
+    top: 50%;
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding-left: 20%;
+    padding-right: 20%;
+}
+.modal.completedTransaction{
+    display: block;
+    background: rgb( 226, 90, 76 );
+    color: RGB( 236, 234, 234 );
+    text-transform: uppercase;
+    font-size: large;
+}
+.modal.completedTransaction .dismissible{
+    display: block;
+}
+.modal.completedTransaction .container{
+    display: block;
+}
+
+/* JB Added
+*/
+.button-block {
+    width:100%;
+    Text-align:center ;
+
+}
+.round-button {
+    display:inline-block;
+    width:25%;
+
+}
+.round-button-circle {
+    width: 90%;
+    height:0;
+    padding-bottom: 90%;
+    border-radius: 50%;
+    border:2px solid #ffffff;
+    overflow:hidden;
+    box-shadow: 0 0 3px gray;
+}
+.round-button-circle:hover {
+    background:#30588e;
+}
+.round-button a {
+    display:block;
+    float:left;
+    width:100%;
+    padding-top:50%;
+    padding-bottom:50%;
+    line-height:1em;
+    margin-top:-0.5em;
+
+    text-align:center;
+    color:#e2eaf3;
+    font-family:Verdana;
+    font-size:1.2em;
+
+    text-decoration:none;
+}
