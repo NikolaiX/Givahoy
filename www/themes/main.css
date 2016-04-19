@@ -14,7 +14,7 @@ body{
 
 
 #givepage {
-    background-color: #7FBDE8 !important;
+    background: linear-gradient(#5F91BD, #84ABCC) !important;
 }
 
 [data-role="header"]{
@@ -30,7 +30,7 @@ body{
     height: 44.4px;
     width: 100%;
     display: inline-block;
-    background-color: #f6f6f6;
+    background-color: #f3f3f3;
 
 }
 #locationWrapper .ui-select{
@@ -168,14 +168,14 @@ body{
     height:0;
     padding-bottom: 90%;
     border-radius: 50%;
-    border:2px solid #ffffff;
+    border:2px solid #f6f6f6;
     overflow:hidden;
-    box-shadow: 0 0 3px gray;
 }
 .round-button-circle:hover {
     background:#30588e;
 }
 .round-button a {
+    text-shadow: 0 0;
     display:block;
     float:left;
     width:100%;
