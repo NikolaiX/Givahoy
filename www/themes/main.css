@@ -39,6 +39,7 @@ body{
 
 #locations-button{
     border-color: #f6f6f6;
+    padding-right: 58.4px;;
 }
 #refreshLocation{
     height: 100%
