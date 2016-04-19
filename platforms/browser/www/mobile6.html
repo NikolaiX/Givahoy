@@ -23,7 +23,7 @@
     <div ng-controller="givahoyAppController">
        <!-- <button ng-click="refreshLocation()">Refresh location</button> -->
         <div id="locationWrapper">
-            <img id="refreshLocation" src="images/refresh.svg" ng-click="refreshLocation()">
+            <img id="refreshLocation" src="images/refresh.png" ng-click="refreshLocation()">
             <select id="locations" data-corners="false" data-shadow="false">
                 <option id="defaultOption" disabled selected>Select your option</option>
                 <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
