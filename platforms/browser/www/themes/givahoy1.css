@@ -215,8 +215,12 @@ html .ui-alt-icon .ui-radio-off:after {
 	background-size: 2.875em 2.875em;
 }
 /* Swatches */
-/* A
------------------------------------------------------------------------------------------------------------*/
+
+/* Disable jQuery UI focus glow */
+
+*:focus {
+	outline: 0;
+}
 
 .ui-bar-a {
 	border-width: 1px;

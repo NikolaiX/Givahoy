@@ -21,11 +21,17 @@
     <br>
     <br>
     <div ng-controller="givahoyAppController">
-        <button ng-click="refreshLocation()">Refresh location</button>
-        <select id="locations">
-            <option id="defaultOption" disabled selected>Select your option</option>
-            <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
-        </select>
+       <!-- <button ng-click="refreshLocation()">Refresh location</button> -->
+        <div id="locationWrapper">
+            <img id="refreshLocation" src="images/refresh.svg" ng-click="refreshLocation()">
+            <select id="locations" data-corners="false" data-shadow="false">
+                <option id="defaultOption" disabled selected>Select your option</option>
+                <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
+            </select>
+
+
+        </div>
+
         <br>
         <br>
         <div class="button-block">
@@ -106,7 +112,7 @@
     <div class="container"></div>
 </div>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+<script type="text/javascript" src="lib/angular.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="libs/evothings/evothings.js"></script>
 <script type="text/javascript" src="libs/evothings/ui/ui.js"></script>
@@ -494,6 +500,7 @@
 
 
     function onDeviceReady() {
+        $()
         console.info("onDeviceReady Called");
         cordova.plugins.BluetoothStatus.initPlugin();
         angular.bootstrap($('html'), ["givahoyApp"]);

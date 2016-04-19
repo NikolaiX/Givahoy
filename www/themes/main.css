@@ -1,13 +1,23 @@
 body{
-    text-align: center !important;
     font-family: arial !important;
 }
+
+/* Disable jQuery UI focus glow */
+
+.ui-focus {
+    outline: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
 #givepage {
     background-color: #7FBDE8 !important;
 }
 
 [data-role="header"]{
     width: 100%;
+    text-align: center;
 }
 
 [data-role="header"] img{
@@ -15,15 +25,23 @@ body{
 }
 
 #locationWrapper{
-    height: 40px;
+    height: 44.4px;
     width: 100%;
+    display: inline-block;
+    background-color: #f6f6f6;
+
 }
 #locationWrapper .ui-select{
-
+    float: right;
+    width: calc(100% - 44.4px);
+    height: 100%;
 }
 
+#locations-button{
+    border-color: #f6f6f6;
+}
 #refreshLocation{
-    height: 40px;
+    height: 100%
 }
 
 
@@ -32,6 +50,9 @@ body{
 
 }
 
+#availbal {
+    text-align: center;
+}
 .button {
     height: inherit;
     margin: 20px;
