@@ -216,18 +216,12 @@
 
     }
 
-    function showLoadingModal(){
-
-        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
-         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
-         //adds option to list of locations
-         $('#locations').prepend(optionHtml); */
-
+    function showLoadingModal(message){
         clearModal();
         $(".modal")
                 .addClass("processingTransaction");
         $(".modal .container")
-                .text("Available charities are being loaded")
+                .text(message)
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
 
     }
