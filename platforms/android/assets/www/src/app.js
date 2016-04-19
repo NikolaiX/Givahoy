@@ -3,7 +3,7 @@
  */
 var givahoyApp = angular.module('givahoyApp',[]);
 givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory', function($scope, $timeout, RuntimeDataFactory){
-    showLoadingModal("Contacting the server");
+    showLoadingModal("Initialising Application, please wait");
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -52,7 +52,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         });
 
     $scope.refreshLocation = function(){
-        showLoadingModal("Refreshing List");
+        showLoadingModal("Refreshing List of Charities");
         navigator.geolocation.getCurrentPosition(
             function(currentLocation) {
                 userLocation = currentLocation;

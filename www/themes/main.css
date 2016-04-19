@@ -11,6 +11,8 @@ body{
     box-shadow: none !important;
 }
 
+
+
 #givepage {
     background-color: #7FBDE8 !important;
 }
@@ -40,6 +42,7 @@ body{
 #locations-button{
     border-color: #f6f6f6;
     padding-right: 58.4px;;
+    background-color: rgba(255,205,255,  0);
 }
 #refreshLocation{
     height: 100%
