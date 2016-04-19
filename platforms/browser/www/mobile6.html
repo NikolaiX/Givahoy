@@ -16,8 +16,7 @@
     <div data-role="header">
         <img src="givahoybanner.png" width="50%" height="auto"/>
     </div>
-
-
+    <br>
     <br>
     <br>
     <div ng-controller="givahoyAppController">
@@ -107,10 +106,12 @@
     </div>
 </div>
 
-<div class="modal ui-overlay-shadow">
-    <div class="exitButton"></div>
-    <div class="container"></div>
-</div>
+
+    <div class="modal ui-overlay-shadow">
+        <div class="exitButton"></div>
+        <div class="container"></div>
+    </div>
+<div class="modal-underlay"></div>
 
 <script type="text/javascript" src="lib/angular.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
@@ -196,7 +197,7 @@
     function clearModal(){
         console.log("clearModal called");
         $(".modal")
-                .removeClass("processingTransaction")
+                .removeClass("loading")
                 .removeClass("completedTransaction")
                 .removeClass("dismissible");
     }
@@ -209,7 +210,7 @@
 
         clearModal();
         $(".modal")
-                .addClass("processingTransaction");
+                .addClass("loading");
         $(".modal .container")
                 .text("Your Transaction is being Processed")
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
@@ -219,7 +220,7 @@
     function showLoadingModal(message){
         clearModal();
         $(".modal")
-                .addClass("processingTransaction");
+                .addClass("loading");
         $(".modal .container")
                 .text(message)
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');

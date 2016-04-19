@@ -20,10 +20,12 @@ body{
 [data-role="header"]{
     width: 100%;
     text-align: center;
+    height: 50px;
 }
 
 [data-role="header"] img{
-    width: 50%;
+    width: initial;
+    height: 100%;
 }
 
 #locationWrapper{
@@ -111,7 +113,7 @@ body{
     padding-bottom: 40px;
     overflow: auto;
 }
-.modal.processingTransaction {
+.modal.loading {
     display: block;
     background: #EEE;
 
@@ -150,6 +152,21 @@ body{
 .modal.completedTransaction .container{
     display: block;
 }
+.modal-underlay{
+    position:fixed;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+}
+.modal.loading ~ .modal-underlay{
+    display:block;
+}
+.modal.completedTransaction ~ .modal-underlay{
+    display:block;
+}
+
 
 /* JB Added
 */
