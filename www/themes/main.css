@@ -33,8 +33,8 @@ body{
     width: 100%;
     display: inline-block;
     background-color: #f3f3f3;
-
 }
+
 #locationWrapper .ui-select{
     float: right;
     width: calc(100% - 44.4px);
@@ -48,12 +48,6 @@ body{
 }
 #refreshLocation{
     height: 100%
-}
-
-
-
-#locations{
-
 }
 
 #availbal {
@@ -200,11 +194,9 @@ body{
     padding-bottom:50%;
     line-height:1em;
     margin-top:-0.5em;
-
     text-align:center;
     color:#e2eaf3;
     font-family:Verdana;
     font-size:1.2em;
-
     text-decoration:none;
 }
