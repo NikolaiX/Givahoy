@@ -7,6 +7,11 @@
     <author email="mangetout@outlook.com" href="http://givahoy.com/">
         Givahoy
     </author>
+    <icon src="www/images/icon.png" />
+    <icon src="www/images/icon.png" platform="android" density="ldpi" />
+    <icon src="www/images/icon.png" platform="android" density="mdpi" />
+    <icon src="www/images/icon.png" platform="android" density="hdpi" />
+    <icon src="www/images/icon.png" platform="android" density="xhdpi" />
     <content src="mobile6.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
