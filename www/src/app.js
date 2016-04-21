@@ -55,6 +55,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     $scope.refreshList = function() {
         showLoadingModal("Refreshing List of Charities");
 
+        //Enables beacon scanning in case bluetooth has been enabled after app initialisation
+        if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconScanner.enabled === false) {
+            BeaconScanner.begin();
+        }
         navigator.geolocation.getCurrentPosition(
             function (currentLocation) {
                 userLocation = currentLocation;
