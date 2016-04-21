@@ -24,6 +24,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     };
 
     $scope.makeTransaction = InitiateTransaction;
+
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
@@ -51,35 +52,38 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 });
         });
 
-    $scope.refreshLocation = function(){
+    $scope.refreshList = function() {
         showLoadingModal("Refreshing List of Charities");
+
+        //Enables beacon scanning in case bluetooth has been enabled after app initialisation
+        if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconScanner.enabled === false) {
+            BeaconScanner.begin();
+        }
         navigator.geolocation.getCurrentPosition(
-            function(currentLocation) {
+            function (currentLocation) {
                 userLocation = currentLocation;
                 console.log(userLocation);
-                RuntimeDataFactory.AddLocation(currentLocation, function(){
+                RuntimeDataFactory.AddLocation(currentLocation, function () {
                     updateScope();
                     clearModal();
                 });
-            }, function(){
+            }, function () {
                 alert("There was a problem getting current location");
                 clearModal();
             });
-    };
+    }
 
     /*
      Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
      */
     setTimeout(function() {
-        if(cordova.plugins.BluetoothStatus.hasBTLE && cordova.plugins.BluetoothStatus.BTenabled !== true){
-            alert("Please enable bluetooth and refresh list to see available beacons");
-        }
-        if(cordova.plugins.BluetoothStatus.BTenabled === true){
+        if(cordova.plugins.BluetoothStatus.hasBTLE){
             BeaconScanner.begin();
         }else{
-            console.log("No bluetoothLE detected, beacon functionality cancelled");
+            console.log("No bluetoothLE detected, beacon functionality disabled");
         }
     }, 1);
+
     console.log("Angular controller has been loaded");
 
     function updateScope(){
@@ -131,15 +135,18 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 
     var discoveredBeacons = {};
     var BeaconScanner = {
-
+        enabled: false,
         begin: function(){
             console.log("Started scanning for beacons");
+            this.enabled = true;
             console.log(JSON.stringify(this));
             evothings.eddystone.startScan(
                     this.processBeaconBroadcast
             ,
                 function(error){
-                    alert('Scan error: ' + error);
+                    BeaconScanner.enabled = false;
+                    console.log('Scan error: ' + error);
+                    evothings.eddystone.stopScan();
                 }
             )
         },

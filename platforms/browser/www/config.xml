@@ -10,6 +10,11 @@
     <author email="mangetout@outlook.com" href="http://givahoy.com/">
         Givahoy
     </author>
+    <icon src="www/images/icon.png" />
+    <icon density="ldpi" platform="android" src="www/images/icon.png" />
+    <icon density="mdpi" platform="android" src="www/images/icon.png" />
+    <icon density="hdpi" platform="android" src="www/images/icon.png" />
+    <icon density="xhdpi" platform="android" src="www/images/icon.png" />
     <content src="mobile6.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
