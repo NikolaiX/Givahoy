@@ -96,7 +96,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     function InitiateTransaction(amount) {
         var theAmount = amount;
         console.log(amount);
-        if (mybal + 50 <= amount) {
+        if (RuntimeDataFactory.balance + 50 <= amount) {
             alert('Insufficient Funds');
             return;
         }
