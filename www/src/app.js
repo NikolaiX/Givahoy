@@ -116,7 +116,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                      Create processing page
                      */
                     console.log(amount);
-                    showTransactionProcessModal();
+                    showLoadingModal("Your Transaction is being Processed");
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         console.log(status);
                         updateScope();
