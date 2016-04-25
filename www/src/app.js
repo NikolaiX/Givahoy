@@ -71,7 +71,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 alert("There was a problem getting current location");
                 clearModal();
             });
-    }
+    };
 
     /*
      Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
@@ -213,7 +213,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 console.log(JSON.stringify(result));
                 console.log(ServerDataObjects.userBalance);
                 onCallback();
-            });
+            }).catch(function (result) {
+                showErrorModal("There was a problem contacting the server, check your internet connection or try again later", false);
+        });
     }
 
     function makeTransaction(amount, charityValue, onCallBack){

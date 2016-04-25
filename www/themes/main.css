@@ -140,10 +140,23 @@ body{
     text-transform: uppercase;
     font-size: large;
 }
+.modal.error{
+    display: block;
+    background: rgb( 255, 73, 18 );
+    color: RGB( 236, 234, 234 );
+    font-size: medium;
+}
 .modal.completedTransaction .dismissible{
     display: block;
 }
+.modal.error .dismissible{
+    display: block;
+}
+
 .modal.completedTransaction .container{
+    display: block;
+}
+.modal.error .container{
     display: block;
 }
 .modal-underlay{
@@ -160,7 +173,9 @@ body{
 .modal.completedTransaction ~ .modal-underlay{
     display:block;
 }
-
+.modal.error ~ .modal-underlay{
+    display:block;
+}
 
 /* JB Added
 */

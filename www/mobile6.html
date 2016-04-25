@@ -154,15 +154,8 @@
         $(".modal")
                 .removeClass("loading")
                 .removeClass("completedTransaction")
+                .removeClass("error")
                 .removeClass("dismissible");
-    }
-    function showTransactionProcessModal(){
-        clearModal();
-        $(".modal")
-                .addClass("loading");
-        $(".modal .container")
-                .text("Your Transaction is being Processed")
-                .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
     }
 
     function showLoadingModal(message){
@@ -172,6 +165,18 @@
         $(".modal .container")
                 .text(message)
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
+    }
+
+    function showErrorModal(message, dismissable){
+        clearModal();
+        $(".modal").addClass("error");
+
+        if(dismissable) {
+            $(".modal").addClass("dismissible");
+        }
+        $(".modal .container")
+                .text(message)
+                .prepend('<div class="exit"></div><img id="theImg" src="images/warning.png" /><br>');
     }
 
     function showTransactionCompletedModal(charity, amount){
