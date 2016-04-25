@@ -284,7 +284,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                     }
                 }
                 onCallBack();
-            });
+            }).catch(function (result) {
+            showErrorModal("There was a problem contacting the server, check your internet connection or try again later", true);
+        });
     }
     return{
         Initialise: Initialise,

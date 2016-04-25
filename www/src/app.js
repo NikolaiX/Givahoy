@@ -231,7 +231,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 onCallBack("Success");
             })
             .catch(function(result){
-                alert("Sorry, there was a problem processing your donation.");
+                showErrorModal("Sorry, there was a problem processing your donation.", true);
                 console.log(result);
                 onCallBack("Fail");
             });
@@ -284,7 +284,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                     }
                 }
                 onCallBack();
-            });
+            }).catch(function (result) {
+            showErrorModal("There was a problem contacting the server, check your internet connection or try again later", true);
+        });
     }
     return{
         Initialise: Initialise,
