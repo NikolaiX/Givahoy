@@ -1,44 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/cordova-plugin-whitelist/whitelist.js",
-        "id": "cordova-plugin-whitelist.whitelist",
-        "runs": true
-    },
-    {
-        "file": "plugins/cordova-plugin-device/www/device.js",
-        "id": "cordova-plugin-device.device",
-        "clobbers": [
-            "device"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
-        "id": "cordova-plugin-dialogs.notification",
-        "merges": [
-            "navigator.notification"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
-        "id": "cordova-plugin-dialogs.notification_android",
-        "merges": [
-            "navigator.notification"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-        "id": "cordova-plugin-geolocation.geolocation",
-        "clobbers": [
-            "navigator.geolocation"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-        "id": "cordova-plugin-geolocation.PositionError",
-        "runs": true
-    },
-    {
         "file": "plugins/com.compellingsoftware.plugins.http/www/cordovaHTTP.js",
         "id": "com.compellingsoftware.plugins.http.CordovaHttpPlugin",
         "clobbers": [
@@ -88,6 +50,60 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/cordova-plugin-ble/ble.js",
+        "id": "cordova-plugin-ble.BLE",
+        "clobbers": [
+            "evothings.ble"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+        "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+        "clobbers": [
+            "cordova.plugins.BluetoothStatus"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-device/www/device.js",
+        "id": "cordova-plugin-device.device",
+        "clobbers": [
+            "device"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+        "id": "cordova-plugin-dialogs.notification_android",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
+        "id": "cordova-plugin-eddystone.eddystoneplugin",
+        "clobbers": [
+            "evothings.eddystone"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+        "id": "cordova-plugin-geolocation.geolocation",
+        "clobbers": [
+            "navigator.geolocation"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+        "id": "cordova-plugin-geolocation.PositionError",
+        "runs": true
+    },
+    {
         "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
         "id": "cordova-plugin-globalization.GlobalizationError",
         "clobbers": [
@@ -117,42 +133,26 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/cordova-plugin-ble/ble.js",
-        "id": "cordova-plugin-ble.BLE",
-        "clobbers": [
-            "evothings.ble"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
-        "id": "cordova-plugin-eddystone.eddystoneplugin",
-        "clobbers": [
-            "evothings.eddystone"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
-        "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
-        "clobbers": [
-            "cordova.plugins.BluetoothStatus"
-        ]
+        "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+        "id": "cordova-plugin-whitelist.whitelist",
+        "runs": true
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-whitelist": "1.2.1",
-    "cordova-plugin-device": "1.1.1",
-    "cordova-plugin-console": "1.0.2",
-    "cordova-plugin-dialogs": "1.2.0",
-    "cordova-plugin-geolocation": "2.1.0",
     "com.compellingsoftware.plugins.http": "0.3.0",
     "com.unarin.cordova.beacon": "3.4.0",
+    "cordova-plugin-ble": "1.0.1",
+    "cordova-plugin-bluetooth-status": "1.0.4",
+    "cordova-plugin-console": "1.0.2",
+    "cordova-plugin-device": "1.1.1",
+    "cordova-plugin-dialogs": "1.2.0",
+    "cordova-plugin-eddystone": "1.0.2",
+    "cordova-plugin-geolocation": "2.1.0",
     "cordova-plugin-globalization": "1.0.2",
     "cordova-plugin-network-information": "1.2.0",
-    "cordova-plugin-ble": "1.0.1",
-    "cordova-plugin-eddystone": "1.0.2",
-    "cordova-plugin-bluetooth-status": "1.0.4"
+    "cordova-plugin-whitelist": "1.2.1"
 };
 // BOTTOM OF METADATA
 });

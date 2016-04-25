@@ -146,6 +146,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 function(error){
                     BeaconScanner.enabled = false;
                     console.log('Scan error: ' + error);
+                    evothings.eddystone.stopScan();
                 }
             )
         },

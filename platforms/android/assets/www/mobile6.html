@@ -134,10 +134,6 @@
 <script type="text/javascript" src="src/app.js"></script>
 
 <script>
-    var mybal = 0;
-    $( document ).ready(function() {
-
-    });
     $(document).bind("mobileinit", function() {
         $.mobile.defaultPageTransition = 'none';
     });
@@ -148,46 +144,6 @@
 
         return selectedLocation;
     }
-
-    function updateViewBalance(){
-        console.log("mybal = " + mybal);
-        $('#availbal').text('Available Balance: $' + mybal);
-    }
-
-    function addLocationOptionToTopOfList(value, name, location){
-        var defaultSelected = true;
-        var nowSelected = true;
-        var listedName = name + ' (' + location + ')';
-
-        var newLocation = new Option(listedName, value,defaultSelected, nowSelected);
-
-        $('#locations').prepend(newLocation).change();
-    }
-
-    function initiateTrans(vamount){
-        /*
-         *
-         * MUST BE MODIFIED WHEN BALANCE IS FUNCTIONAL
-         *
-         * */
-        if (mybal + 50 <= vamount) {
-            alert('Insufficient Funds');
-            return;
-        }
-        navigator.notification.confirm(
-                "Are you sure you want to donate $" + vamount + " to " + getSelectedLocation().text() + "?",
-                function(buttonIndex){
-                    if(buttonIndex==1){
-                        /*
-                         Create processing page
-
-                         */
-                        transactionData = transactionDataBody(vamount, getSelectedLocation().val());
-                        makeTrans(transactionData)
-                    }
-                });
-    }
-
 
     $(" .modal .exitButton").click(function(){
         clearModal();
@@ -201,19 +157,12 @@
                 .removeClass("dismissible");
     }
     function showTransactionProcessModal(){
-
-        /*        $('#mySelect').append( new Option(text,val,defaultSelected,nowSelected) );
-         optionHtml = '<option value= '+ value + '>' + name + ' (' + location + ')</option>';
-         //adds option to list of locations
-         $('#locations').prepend(optionHtml); */
-
         clearModal();
         $(".modal")
                 .addClass("loading");
         $(".modal .container")
                 .text("Your Transaction is being Processed")
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
-
     }
 
     function showLoadingModal(message){
@@ -223,7 +172,6 @@
         $(".modal .container")
                 .text(message)
                 .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
-
     }
 
     function showTransactionCompletedModal(charity, amount){
@@ -235,266 +183,8 @@
                 .text("Thank you for your $" + amount + " donation to " + charity)
                 .prepend('<div class="exit"></div><img id="theImg" src="images/heart.png" /><br>');
     }
-    function makeTrans(body) {
-        console.log("Transaction initiated for " + getSelectedLocation().val());
-        //mybal = mybal - vamount;
-        //updateViewBalance();
-        //Transaction record is Date, Amount and destination
-
-        showTransactionProcessModal();
-
-        var apigClient = apigClientFactory.newClient();
-
-
-        //alert (JSON.stringify(body));
-        apigClient.allpurposePost({}, body, {})
-                .then(function (result) {
-                    //This is where you would put a success callback
-                    var myresult = result;
-                    mybal = myresult.data.mbalance.mbalance;
-                    for (var i = 0, len = myresult.data.sresult.length; i < len; i++) {
-                        //You can now access individual properties like this:
-                        //var json = $.parseJSON(data.locationlist.location[i]);
-                        if (i == 0) {
-                            var output = '';
-                        }
-
-                        addLocationOptionToTopOfList(myresult.data.sresult[i].llocationid, myresult.data.sresult[i].slocationname);
-                    }
-                    updateViewBalance();
-
-                    if (!localStorage.uid) {
-                        localStorage.setItem("uid", myresult.data.mbalance.vuid);
-                    }
-                    localStorage.setItem("vrandom", myresult.data.sresult.checker);
-                    //alert('Payment: ' + myresult.data.sresult.status + ' $' + body.mvalue + ' to ' + $('#location option:selected').text() + '!');
-                    showTransactionCompletedModal(getSelectedLocation().text(), body.mvalue);
-                    console.log(myresult);
-                }).catch(function (result) {
-            //This is where you would put an error callback
-            alert("Sorry, there was a problem processing your donation.");
-            clearModal();
-            console.log(result);
-        });
-    }
-
-/*    function createJsonForBeacons(beaconIdArray){
-        var jsonMessage = [];
-        var loopcount = beaconIdArray.length;
-        for(var i= 0; i < loopcount; i++){
-            jsonMessage.push(
-                    {"beaconid": beaconIdArray[i]}
-            );
-        }
-        return jsonMessage;
-    }*/
-    function setLocation(location){
-        userLocation.latitude = location.coords.latitude;
-        userLocation.longitude = location.coords.longitude;
-    }
-
-    function showPosition() {
-        nearbyBeacons = createJsonForBeacons(getBeacons());
-
-        var body = {
-            //This is where you define the body of the request
-            "saction": "GetLocation",
-            "llatitude": userLocation.latitude,
-            "llongitude": userLocation.longitude,
-            "tuuid": device.uuid,
-            "vuid": window.localStorage.getItem('uid'), //Currently coming back as null
-            "vrandom": window.localStorage.getItem('vrandom'),
-            "beaconlist": createJsonForBeacons(getBeacons())
-        };
-
-            console.log(JSON.stringify(body));
-
-        console.log("Initial data collection started");
-
-
-        var apigClient = apigClientFactory.newClient();
-        apigClient.allpurposePost({}, body, {})
-                .then(function (result) {
-                    //This is where you would put a success callback
-                    //alert(result.data.locationlist.location.length);
-                    //When DOM loaded we attach click event to button
-                    //after button is clicked we download the data
-                    var myresult = result;
-                    console.log(JSON.stringify(myresult));
-                    mybal = myresult.data.mbalance.mbalance;
-
-
-                    if(myresult.data.sresult){
-                        for (var i = 0; i < myresult.data.sresult.length; i++) {
-                            if (i == 0) {
-                                var output = '';
-                            }
-                            addLocationOptionToTopOfList(
-                                    myresult.data.sresult[i].linstancelocationid,
-                                    myresult.data.sresult[i].sinstancename,
-                                    myresult.data.sresult[i].slocationname
-                            );
-                        }
-                    }
-
-                    updateViewBalance();
-                    if (!localStorage.uid) {
-                        localStorage.setItem("uid", myresult.data.mbalance.vuid);
-                    }
-                    clearModal();
-                }).catch(function (result) {
-            alert("There was an error getting data from the server");
-            clearModal();
-            console.log(result);
-        });
-
-    }
-
-    function showPositionOnError(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                console.log("Error getting position: Permission denied");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                console.log("Error getting position: Permission unavailable");
-                break;
-            case error.TIMEOUT:
-                console.log("Error getting position: Timed out");
-                break;
-            case error.UNKNOWN_ERROR:
-                console.log("Error getting position: Unknown error");
-                break;
-        }
-    }
-
-
-
-
-
-
-
-    var beacons = {};
-
-    function getBeacons(){
-        var beaconList = [];
-        var beacon;
-        for(beaconKey in beacons){
-            beacon = beacons[beaconKey];
-            beaconID = uint8ArrayToString(beacon.bid);
-            beaconList.push(beaconID);
-        }
-        return beaconList;
-    }
-
-    function startBeaconScan(){
-        evothings.eddystone.startScan(
-            function(beacon){
-                var listed = false;
-                console.info("Beacon transmission detected");
-                if(!beacons[beacon.address] && isGivahoyBeacon(beacon)){
-                    beacons[beacon.address] = beacon;
-                    console.log("beacon pushed to array");
-                }
-            },
-            function(error){
-                alert('Scan error: ' + error);
-            }
-        )
-
-    }
-
-    /*
-        A promise wrapper for the geolocation callback
-    */
-    function initialiseLocation(){
-        return new Promise(function(resolve, reject) {
-            navigator.geolocation.getCurrentPosition(
-                    function (location) {
-                        setLocation(location);
-                        console.log("Success");
-                        resolve();
-                    },
-                    function (error) {
-                        showPositionOnError(error);
-                        console.log("Failed");
-                        reject(error);
-                    }
-            );
-        });
-    }
-
-
-    function initialiseBeacons(){
-        return new Promise(function(resolve, reject){
-            startBeaconScan();
-            setTimeout(function(){
-                var beacons = createJsonForBeacons(getBeacons());
-                return resolve(beacons);
-            }, 10000);
-        });
-    }
-
-    function initialiseCharityRetrieval(){
-        var attemptedLocation = false;
-        var attemptedBeacons = false;
-        var charityRequest = new ServerDataRequestBuilder();
-
-        if (typeof navigator.geolocation === undefined) {
-            console.log("location disabled");
-            attemptedLocation = true;
-            CallServerIfReady(attemptedLocation, attemptedBeacons);
-        }
-        else {
-            initialiseLocation()
-                    .then(function(){
-                            console.log("Location promise returned success");
-                            attemptedLocation = true;
-                            charityRequest.useLocation(userLocation);
-                            CallServerIfReady(attemptedLocation, attemptedBeacons);
-                        },
-                        function(error){
-                            console.log("Location promise returned fail");
-                            attemptedLocation = true;
-                            CallServerIfReady(attemptedLocation, attemptedBeacons);
-                        }
-                    );
-        }
-
-        if(cordova.plugins.BluetoothStatus.BTenabled !== true) {
-            console.log("bluetoothLE is not enabled, skipping beacon scan");
-            attemptedBeacons = true;
-            CallServerIfReady(attemptedLocation, attemptedBeacons);
-        }
-        else{
-            initialiseBeacons()
-                .then(function(beacons){
-                    console.log("Beacon promise returned success");
-                    attemptedBeacons = true;
-                    charityRequest.useBeacons(beacons);
-                    CallServerIfReady(attemptedLocation, attemptedBeacons);
-                },
-                function(error){
-                    console.log("Beacon promise returned fail");
-                    console.log(error);
-                    attemptedBeacons = true;
-                    CallServerIfReady(attemptedLocation, attemptedBeacons);
-                }
-            )
-        }
-    }
-
-    function CallServerIfReady(location, beacon){
-        console.log(location);
-        console.log(beacon);
-        if(location && beacon){
-            showPosition();
-        }
-
-    }
-
 
     function onDeviceReady() {
-        $()
         console.info("onDeviceReady Called");
         cordova.plugins.BluetoothStatus.initPlugin();
         angular.bootstrap($('html'), ["givahoyApp"]);

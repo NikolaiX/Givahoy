@@ -9,7 +9,15 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BLE\"><param name=\"android-package\" value=\"com.evothings.BLE\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
                             "count": 1
                         },
                         {
@@ -25,10 +33,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"LocationManager\"><param name=\"android-package\" value=\"com.unarin.cordova.beacon.LocationManager\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
                             "count": 1
                         },
@@ -37,45 +41,14 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"BLE\"><param name=\"android-package\" value=\"com.evothings.BLE\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"BluetoothStatus\"><param name=\"android-package\" value=\"com.twofivefivekb.android.bluetoothstatus.BluetoothStatus\" /></feature>",
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         }
-                    ],
-                    "/widget": []
+                    ]
                 }
             },
             "AndroidManifest.xml": {
                 "parents": {
-                    "/*": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.bluetooth_le\" android:required=\"false\" />",
-                            "count": 1
-                        }
-                    ],
                     "/manifest": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
@@ -107,89 +80,77 @@
                             "xml": "<service android:enabled=\"true\" android:name=\"org.altbeacon.beacon.BeaconIntentProcessor\"><meta-data android:name=\"background\" android:value=\"true\" /><intent-filter android:priority=\"1\"><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_RANGING\" /><action android:name=\"com.unarin.cordova.beacon.IBeaconPlugin.DID_MONITORING\" /></intent-filter></service>",
                             "count": 1
                         }
+                    ],
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.bluetooth_le\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+                            "count": 1
+                        }
                     ]
                 }
             }
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
         "com.compellingsoftware.plugins.http": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         },
         "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-globalization": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         },
         "cordova-plugin-ble": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-eddystone": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         },
         "cordova-plugin-bluetooth-status": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-eddystone": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         }
     },
     "dependent_plugins": {},
     "modules": [
-        {
-            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
-            "id": "cordova-plugin-whitelist.whitelist",
-            "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-device/www/device.js",
-            "id": "cordova-plugin-device.device",
-            "clobbers": [
-                "device"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
-            "id": "cordova-plugin-dialogs.notification",
-            "merges": [
-                "navigator.notification"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
-            "id": "cordova-plugin-dialogs.notification_android",
-            "merges": [
-                "navigator.notification"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-            "id": "cordova-plugin-geolocation.geolocation",
-            "clobbers": [
-                "navigator.geolocation"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-            "id": "cordova-plugin-geolocation.PositionError",
-            "runs": true
-        },
         {
             "file": "plugins/com.compellingsoftware.plugins.http/www/cordovaHTTP.js",
             "id": "com.compellingsoftware.plugins.http.CordovaHttpPlugin",
@@ -240,6 +201,60 @@
             "runs": true
         },
         {
+            "file": "plugins/cordova-plugin-ble/ble.js",
+            "id": "cordova-plugin-ble.BLE",
+            "clobbers": [
+                "evothings.ble"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
+            "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
+            "clobbers": [
+                "cordova.plugins.BluetoothStatus"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+            "id": "cordova-plugin-dialogs.notification",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+            "id": "cordova-plugin-dialogs.notification_android",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
+            "id": "cordova-plugin-eddystone.eddystoneplugin",
+            "clobbers": [
+                "evothings.eddystone"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+            "id": "cordova-plugin-geolocation.geolocation",
+            "clobbers": [
+                "navigator.geolocation"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+            "id": "cordova-plugin-geolocation.PositionError",
+            "runs": true
+        },
+        {
             "file": "plugins/cordova-plugin-globalization/www/GlobalizationError.js",
             "id": "cordova-plugin-globalization.GlobalizationError",
             "clobbers": [
@@ -269,39 +284,23 @@
             ]
         },
         {
-            "file": "plugins/cordova-plugin-ble/ble.js",
-            "id": "cordova-plugin-ble.BLE",
-            "clobbers": [
-                "evothings.ble"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
-            "id": "cordova-plugin-eddystone.eddystoneplugin",
-            "clobbers": [
-                "evothings.eddystone"
-            ]
-        },
-        {
-            "file": "plugins/cordova-plugin-bluetooth-status/BluetoothStatus.js",
-            "id": "cordova-plugin-bluetooth-status.BluetoothStatus",
-            "clobbers": [
-                "cordova.plugins.BluetoothStatus"
-            ]
+            "file": "plugins/cordova-plugin-whitelist/whitelist.js",
+            "id": "cordova-plugin-whitelist.whitelist",
+            "runs": true
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-whitelist": "1.2.1",
-        "cordova-plugin-device": "1.1.1",
-        "cordova-plugin-console": "1.0.2",
-        "cordova-plugin-dialogs": "1.2.0",
-        "cordova-plugin-geolocation": "2.1.0",
         "com.compellingsoftware.plugins.http": "0.3.0",
         "com.unarin.cordova.beacon": "3.4.0",
+        "cordova-plugin-ble": "1.0.1",
+        "cordova-plugin-bluetooth-status": "1.0.4",
+        "cordova-plugin-console": "1.0.2",
+        "cordova-plugin-device": "1.1.1",
+        "cordova-plugin-dialogs": "1.2.0",
+        "cordova-plugin-eddystone": "1.0.2",
+        "cordova-plugin-geolocation": "2.1.0",
         "cordova-plugin-globalization": "1.0.2",
         "cordova-plugin-network-information": "1.2.0",
-        "cordova-plugin-ble": "1.0.1",
-        "cordova-plugin-eddystone": "1.0.2",
-        "cordova-plugin-bluetooth-status": "1.0.4"
+        "cordova-plugin-whitelist": "1.2.1"
     }
 }

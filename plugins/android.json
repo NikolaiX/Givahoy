@@ -7,41 +7,41 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
         "com.compellingsoftware.plugins.http": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         },
         "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-globalization": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-eddystone": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
-        "cordova-plugin-bluetooth-status": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         },
         "cordova-plugin-ble": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-bluetooth-status": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-eddystone": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         }
     },
     "dependent_plugins": {}
