@@ -231,7 +231,7 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 onCallBack("Success");
             })
             .catch(function(result){
-                alert("Sorry, there was a problem processing your donation.");
+                showErrorModal("Sorry, there was a problem processing your donation.", true);
                 console.log(result);
                 onCallBack("Fail");
             });

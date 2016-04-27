@@ -24,7 +24,7 @@
             <img id="refreshCharityList" src="images/refresh.png" ng-click="refreshList()">
             <select id="locations" data-corners="false" data-shadow="false">
                 <option id="defaultOption" disabled selected>Select your option</option>
-                <option ng-repeat="charity in ServerData.charities | orderBy:'type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
+                <option ng-repeat="charity in ServerData.charities | orderBy:'-type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
             </select>
 
 
