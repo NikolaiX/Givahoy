@@ -27,11 +27,7 @@
                 <option ng-repeat="charity in ServerData.charities | orderBy:'-type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
             </select>
         </div>
-<button ng-click="updatescope()">Update Scope</button>
-        <button ng-click="addCharity()">Add Charity</button>
-        <button ng-click="logSelected()">Log</button>
         <br>
-        <div data-ng-model="testObject"></div>
         <br>
         <div class="button-block">
             <div class="round-button">
