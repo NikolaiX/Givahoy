@@ -16,14 +16,14 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     var userLocation = {
         enabled: false
     };
-
     $scope.ServerData = {
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
         balance: RuntimeDataFactory.balance
     };
-
+    $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
+
 
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
@@ -87,10 +87,24 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     console.log("Angular controller has been loaded");
 
     function updateScope(){
+        /*
+        Sets default selection on charity list to first charity found if none is already set
+         */
+        if ($scope.CharityDropdownValue === null && RuntimeDataFactory.charities.length > 0){
+            console.log("Fillin' the default");
+            $scope.CharityDropdownValue = RuntimeDataFactory.charities[0].value.toString();
+
+        }
+
+
+        console.log(this);
         $timeout(function(){
+            //Naughty hack to circumvent problem with dropdown label not updating
+            setTimeout(function(){
+                $('#locations').selectmenu('refresh');
+            },1);
             console.log("Scope updated");
         });
-
     }
 
     function InitiateTransaction(amount) {
@@ -119,7 +133,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                     showLoadingModal("Your Transaction is being Processed");
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         console.log(status);
-                        updateScope();
+                        //updateScope();
                         console.log(amount);
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
