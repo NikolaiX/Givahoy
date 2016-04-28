@@ -23,7 +23,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     };
     $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
-
+    $scope.refreshList = updateCharityList;
 
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
@@ -52,7 +52,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 });
         });
 
-    $scope.refreshList = function() {
+     function updateCharityList() {
         showLoadingModal("Refreshing List of Charities");
 
         //Enables beacon scanning in case bluetooth has been enabled after app initialisation
