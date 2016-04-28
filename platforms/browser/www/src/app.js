@@ -16,43 +16,15 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     var userLocation = {
         enabled: false
     };
-
     $scope.ServerData = {
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
         balance: RuntimeDataFactory.balance
     };
     $scope.CharityDropdownValue = null;
-    /*
-
-
-
-
-
-    IF DEFAULT NOT SELECTED (BOOLEAN),
-        CHANGE VIA JQUERY
-
-
-
-
-
-
-
-     */
-    $scope.updatescope = function(){
-
-        updateScope();
-
-    };
-    $scope.addCharity = function(){
-        RuntimeDataFactory.charities.push(new Charity(
-            2, "Test", "test", "l"
-        ));
-    };
-    $scope.logSelected = function(){
-        console.log(JSON.stringify(RuntimeDataFactory.charities));
-    };
     $scope.makeTransaction = InitiateTransaction;
+
+
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
@@ -131,7 +103,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             setTimeout(function(){
                 $('#locations').selectmenu('refresh');
             },1);
-
             console.log("Scope updated");
         });
     }
@@ -144,8 +115,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             return;
         }
 
-        if(getSelectedLocation().attr("id") =="defaultOption"){
-            alert("Please choose a charity");
+        if($scope.CharityDropdownValue === null){
+            alert("No Charities Found!");
             return;
         }
         /*

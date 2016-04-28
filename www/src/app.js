@@ -115,8 +115,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             return;
         }
 
-        if(getSelectedLocation().attr("id") =="defaultOption"){
-            alert("Please choose a charity");
+        if($scope.CharityDropdownValue === null){
+            alert("No Charities Found!");
             return;
         }
         /*
