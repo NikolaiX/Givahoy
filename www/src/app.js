@@ -175,7 +175,9 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 }]);
 
 
+givahoyApp.service("LocalData", function(){
 
+});
 
 
 
