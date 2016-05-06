@@ -175,8 +175,28 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 }]);
 
 
-givahoyApp.service("LocalData", function(){
+givahoyApp.factory("LocalData", function(){
+    var user = function(){
+        userData = {
+            "uuid": device.uuid,
+            "uid": window.localStorage.getItem('uid'),
+            "UserDeviceID": window.localStorage.getItem('vrandom'),
+            isRegistered: window.localStorage.getItem('isRegistered')
+        };
+        return userData;
+    };
+    var SetUser = function(uid, UserDeviceID){
+        if (uid === parseInt(uid, 10) && UserDeviceID === parseInt(UserDeviceID, 10)){
+            window.localStorage.setItem('uid', uid);
+            window.localStorage.setItem('vrandom', UserDeviceID);
+            window.localStorage.setItem('isRegistered', true);
+        }
+    };
 
+    return{
+        user: user(),
+        setUser: setUser()
+    }
 });
 
 
