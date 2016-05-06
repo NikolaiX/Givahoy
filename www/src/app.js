@@ -185,7 +185,7 @@ givahoyApp.factory("LocalData", function(){
         };
         return userData;
     };
-    var SetUser = function(uid, UserDeviceID){
+    var setUser = function(uid, UserDeviceID){
         if (uid === parseInt(uid, 10) && UserDeviceID === parseInt(UserDeviceID, 10)){
             window.localStorage.setItem('uid', uid);
             window.localStorage.setItem('vrandom', UserDeviceID);
@@ -208,7 +208,7 @@ givahoyApp.factory("LocalData", function(){
 
 
 
-givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
+givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
     var ContactServer = function(body){
         var apigClient = apigClientFactory.newClient();
 
@@ -229,7 +229,6 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
 
         if(typeof location !== 'undefined'){
             console.log("Location detected");
-            console.log(location);
             initialiseRequest = initialiseRequest.useLocation(location)
 
         }
@@ -237,7 +236,6 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             .initialCall()
             .build();
 
-        console.log(JSON.stringify(request));
         ContactServer(request)
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
@@ -246,8 +244,6 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
                 localStorage.setItem('uid', newUID);
                 deviceID.uid = newUID;
                // localStorage.setItem("vrandom", result.data.sresult.checker);
-                console.log(JSON.stringify(result));
-                console.log(ServerDataObjects.userBalance);
                 onCallback();
             }).catch(function (result) {
                 showErrorModal("There was a problem contacting the server, check your internet connection or try again later", false);
@@ -255,20 +251,15 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
     }
 
     function makeTransaction(amount, charityValue, onCallBack){
-        console.log(charityValue);
         var body = transactionDataBody(amount, charityValue);
         console.log("make transaction called in factory");
         ContactServer(body)
             .then(function(result){
-                console.log(ServerResultGetBalance(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
-                console.log(JSON.stringify(result));
-                console.log(ServerDataObjects.userBalance);
                 onCallBack("Success");
             })
             .catch(function(result){
                 showErrorModal("Sorry, there was a problem processing your donation.", true);
-                console.log(result);
                 onCallBack("Fail");
             });
 
@@ -287,11 +278,8 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         ContactServer(request.build())
             .then(function (result) {
                 console.log("Data for beacon returned");
-                console.log(JSON.stringify(result));
                 var convertedCharities = ServerResultGetCharities(result);
-                console.log(convertedCharities);
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, convertedCharities);
-                console.log(ServerDataObjects);
                 onCallBack();
             });
     }
@@ -300,11 +288,9 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
         var builtRequest = request.build();
-        JSON.stringify(console.log(builtRequest));
         ContactServer(builtRequest)
             .then(function (result) {
                 var newCharities = ServerResultGetCharities(result);
-                JSON.stringify(console.log(newCharities));
 
                 //Check if Charity is already in list
                 var charityAlreadyExists;
@@ -324,6 +310,87 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
             showErrorModal("There was a problem contacting the server, check your internet connection or try again later", true);
         });
     }
+
+    /*
+    Builder object that creates a JSON body for a charity information request that's readable by the server.
+     */
+    var ServerDataRequestBuilder = function(){
+        this.body = {};
+        this.body.vuid = LocalData.user.uid;
+        this.body.tuuid = LocalData.user.uuid;
+        this.body.vrandom = LocalData.user.UserDeviceID;
+        this.retrieveInitialCall = false;
+        this.retrieveLocation = false;
+        this.retrieveBeacons = false;
+        this.mockTriggerError = false;
+
+        //Used by mock server to test Json error handling
+        this.triggerError = function(){
+            this.mockTriggerError = true;
+            return this;
+        };
+        this.initialCall = function(){
+            this.retrieveInitialCall = true;
+            return this;
+        };
+        this.useLocation = function(locationData){
+            this.retrieveLocation = true;
+            this.body.llatitude = locationData.coords.latitude;
+            this.body.llongitude = locationData.coords.longitude;
+            return this;
+        };
+        this.useBeacons = function(beaconData){
+            this.body.beaconlist = (
+                createJsonForBeacons(beaconData)
+            );
+            this.retrieveBeacons = true;
+            return this;
+        };
+        this.build = function(){
+
+            if(this.mockTriggerError == true){
+                this.body.saction = "Error";
+            }
+            else{
+                if(this.retrieveBeacons == true){
+                    this.body.saction = "GetBeacons"
+                }
+                if(this.retrieveLocation == true && this.retrieveInitialCall == false){
+                    this.body.saction = "GetLocation";
+                }
+                if(this.retrieveInitialCall == true){
+                    this.body.saction = "GetInitial";
+                }
+            }
+            return this.body;
+        };
+    };
+
+    function transactionDataBody(amount, charityValue){
+        /*
+         Example data:
+         "saction": "MakeTransaction",
+         "mvalue": amount, //Decimal value
+         "linstancelocationid": $('#location option:selected').val(),
+         "tuuid": device.uuid,
+         "vuid": localStorage.uid,
+         "vrandom": localStorage.vrandom,
+         "dbcr": "db"
+         Every value must be accounted for!
+         */
+        var body = {
+            //This is where you define the body of the request
+
+            "saction": "MakeTransaction",
+            "mvalue": amount, //Decimal value
+            "linstancelocationid": charityValue,
+            "tuuid": LocalData.user.uuid,
+            "vuid": LocalData.user.uid,
+            "vrandom": LocalData.user.UserDeviceID,
+            "dbcr": "db"
+        };
+        return body;
+    }
     return{
         Initialise: Initialise,
         localData: ServerDataObjects,
@@ -333,103 +400,4 @@ givahoyApp.factory('RuntimeDataFactory', function RuntimeDataFactory() {
         AddBeacon: GetCharityFromBeacon,
         makeTransaction: makeTransaction
     }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//todo: Move this into models
-var ServerDataRequestBuilder = function(){
-    this.body = {};
-    this.retrieveInitialCall = false;
-    this.retrieveLocation = false;
-    this.retrieveBeacons = false;
-    this.mockTriggerError = false;
-
-    //Used by mock server to test Json error handling
-    this.triggerError = function(){
-        this.mockTriggerError = true;
-        return this;
-    };
-    this.initialCall = function(){
-        this.retrieveInitialCall = true;
-        return this;
-    };
-    this.useLocation = function(locationData){
-        this.retrieveLocation = true;
-        this.body.llatitude = locationData.coords.latitude;
-        this.body.llongitude = locationData.coords.longitude;
-        return this;
-    };
-    this.useBeacons = function(beaconData){
-        this.body.beaconlist = (
-            createJsonForBeacons(beaconData)
-        );
-        this.retrieveBeacons = true;
-        return this;
-    };
-    this.build = function(){
-
-        if(this.mockTriggerError == true){
-            this.body.saction = "Error";
-        }
-        else{
-            if(this.retrieveBeacons == true){
-                this.body.saction = "GetBeacons"
-            }
-            if(this.retrieveLocation == true && this.retrieveInitialCall == false){
-                this.body.saction = "GetLocation";
-            }
-            if(this.retrieveInitialCall == true){
-                this.body.saction = "GetInitial";
-            }
-
-        }
-        this.body.vuid = deviceID.uid;
-        this.body.tuuid = deviceID.uuid;
-        this.body.vrandom = deviceID.vrandom;
-
-        return this.body;
-    };
-};
-
-function transactionDataBody(amount, charityValue){
-    /*
-     Example data:
-     "saction": "MakeTransaction",
-     "mvalue": amount, //Decimal value
-     "linstancelocationid": $('#location option:selected').val(),
-     "tuuid": device.uuid,
-     "vuid": localStorage.uid,
-     "vrandom": localStorage.vrandom,
-     "dbcr": "db"
-     Every value must be accounted for!
-     */
-    console.log(amount);
-    console.log(charityValue);
-    var body = {
-        //This is where you define the body of the request
-
-        "saction": "MakeTransaction",
-        "mvalue": amount, //Decimal value
-        "linstancelocationid": charityValue,
-        "tuuid": deviceID.uuid,
-        "vuid": deviceID.uid,
-        "vrandom": deviceID.vrandom,
-        "dbcr": "db"
-    };
-    return body;
-}
+}]);
