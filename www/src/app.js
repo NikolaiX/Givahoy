@@ -30,9 +30,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             userLocation = currentLocation;
             userLocation.enabled = true;
             RuntimeDataFactory.Initialise(
-                deviceID.uuid,
-                deviceID.uid,
-                deviceID.vrandom,
                 function(){
                     updateScope();
                     clearModal();
@@ -42,9 +39,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         },/*Initialise Server without location data if not available*/
         function(result){
             RuntimeDataFactory.Initialise(
-                deviceID.uuid,
-                deviceID.uid,
-                deviceID.vrandom,
                 function(){
                     console.log("Location not enabled");
                     updateScope();
