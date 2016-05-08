@@ -220,10 +220,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
     };
 
 
-    function Initialise(tuuid, vuid, vrandom, onCallback, location){
-        deviceID.uuid = tuuid;
-        deviceID.uid = vuid;
-        deviceID.vrandom = vrandom;
+    function Initialise(onCallback, location){
 
         var initialiseRequest = new ServerDataRequestBuilder();
 
