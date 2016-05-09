@@ -370,7 +370,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
          "dbcr": "db"
          Every value must be accounted for!
          */
-        var body = {
+        return {
             //This is where you define the body of the request
 
             "saction": "MakeTransaction",
@@ -381,7 +381,6 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
             "vrandom": LocalData.user.UserDeviceID,
             "dbcr": "db"
         };
-        return body;
     }
     return{
         Initialise: Initialise,
