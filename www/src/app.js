@@ -65,7 +65,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                 alert("There was a problem getting current location");
                 clearModal();
             });
-    };
+    }
 
     /*
      Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
@@ -127,7 +127,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                     showLoadingModal("Your Transaction is being Processed");
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         console.log(status);
-                        //updateScope();
+                        updateScope();
                         console.log(amount);
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
@@ -231,9 +231,9 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
             .then(function (result) {
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
-                var newUID = ServerResultGetUID(result);
+/*                var newUID = ServerResultGetUID(result);
                 localStorage.setItem('uid', newUID);
-                deviceID.uid = newUID;
+                deviceID.uid = newUID;*/
                // localStorage.setItem("vrandom", result.data.sresult.checker);
                 onCallback();
             }).catch(function (result) {
@@ -246,6 +246,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         console.log("make transaction called in factory");
         ContactServer(body)
             .then(function(result){
+                console.log(JSON.stringify(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
                 onCallBack("Success");
             })

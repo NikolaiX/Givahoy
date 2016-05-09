@@ -38,8 +38,8 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/src/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
+            <state relative-caret-position="331">
+              <caret line="67" column="5" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -226,7 +226,7 @@
       <updated>1462405662738</updated>
       <workItem from="1462405664132" duration="1961000" />
       <workItem from="1462486202842" duration="10371000" />
-      <workItem from="1462748102888" duration="909000" />
+      <workItem from="1462748102888" duration="2464000" />
     </task>
     <task id="LOCAL-00001" summary="Added local data service">
       <created>1462415291883</created>
@@ -270,11 +270,18 @@
       <option name="project" value="LOCAL" />
       <updated>1462750536776</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Removed user id from runtimedata initialisation in main controller">
+      <created>1462750667317</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1462750667317</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13770000" />
+    <option name="totallyTimeSpent" value="15325000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="30" width="1922" height="1051" extended-state="6" />
@@ -336,7 +343,8 @@
     <MESSAGE value="Filled localData factory with storage logic using existing data storage method" />
     <MESSAGE value="Moved JSON builder objects into server request factory and pointed the user info variables to the new module" />
     <MESSAGE value="Removed user id from runtimedata initialisation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed user id from runtimedata initialisation" />
+    <MESSAGE value="Removed user id from runtimedata initialisation in main controller" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed user id from runtimedata initialisation in main controller" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -700,8 +708,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/src/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="40" column="42" selection-start-line="40" selection-start-column="42" selection-end-line="40" selection-end-column="42" />
+        <state relative-caret-position="331">
+          <caret line="67" column="5" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
           <folding />
         </state>
       </provider>
