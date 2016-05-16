@@ -215,3 +215,35 @@ body{
     font-size:1.2em;
     text-decoration:none;
 }
+
+#historypage{
+    background: linear-gradient(#F8D77D, #F6CD5D) !important;
+}
+
+.transaction-history-list{
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 100vh;
+    width: 90%;
+    overflow: scroll;
+
+}
+.transaction-history-list li{
+    list-style-type: none;
+}
+.transaction-history-list .transaction-item{
+    width: auto;
+    color: #5A5A5A;
+    font-family: Tahoma, Sans-serif;
+    border-color: #FAE3A5;
+    border-top:1px #FAE3A5 solid;
+    border-bottom: 1px #FAE3A5 solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 25px;
+    padding-right: 5px;
+}
+.transaction-history-list .transaction-item.special{
+    background-color: #FAE3A5;
+    font-weight: 600;
+}
