@@ -19,7 +19,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     $scope.ServerData = {
         localData: RuntimeDataFactory.localData,
         charities: RuntimeDataFactory.charities,
-        balance: RuntimeDataFactory.balance
+        balance: RuntimeDataFactory.balance,
+        transactionHistory: RuntimeDataFactory.transactionHistory
     };
     $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
@@ -210,7 +211,8 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
     };
     var ServerDataObjects = {
         charities: [],
-        userBalance: 0
+        userBalance: 0,
+        transactionHistory: []
     };
 
 
@@ -387,6 +389,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         localData: ServerDataObjects,
         charities: ServerDataObjects.charities,
         balance: ServerDataObjects.userBalance,
+        transactionHistory: ServerDataObjects.transactionHistory,
         AddLocation: GetCharitiesFromLocation,
         AddBeacon: GetCharityFromBeacon,
         makeTransaction: makeTransaction
