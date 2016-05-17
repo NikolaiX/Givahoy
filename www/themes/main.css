@@ -241,9 +241,33 @@ body{
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 25px;
-    padding-right: 5px;
+    padding-right: 20px;
 }
 .transaction-history-list .transaction-item.special{
     background-color: #FAE3A5;
     font-weight: 600;
+}
+.transaction-item .label{
+    display: inline-block;
+    text-align: left;
+    width: 30%;
+}
+.transaction-item .details{
+    width: 65%;
+    position: relative;
+    float: right;
+}
+.transaction-item .details .detail-small{
+    float: right;
+    display: inline-block;
+    text-align: right;
+    width: 10%;
+    margin-left: 8%;
+}
+.transaction-item .details .detail-medium{
+    float: right;
+    display: inline-block;
+    text-align: right;
+    width: 35%;
+    margin-left: 5%
 }
