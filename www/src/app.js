@@ -217,13 +217,11 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
 
 
     function Initialise(onCallback, location){
-
         var initialiseRequest = new ServerDataRequestBuilder();
 
         if(typeof location !== 'undefined'){
             console.log("Location detected");
             initialiseRequest = initialiseRequest.useLocation(location)
-
         }
         var request = initialiseRequest
             .initialCall()
@@ -231,12 +229,10 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
 
         ContactServer(request)
             .then(function (result) {
+                console.log(JSON.stringify(result));
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
-/*                var newUID = ServerResultGetUID(result);
-                localStorage.setItem('uid', newUID);
-                deviceID.uid = newUID;*/
-               // localStorage.setItem("vrandom", result.data.sresult.checker);
+                ServerDataObjects.transactionHistory.push.apply(ServerDataObjects.transactionHistory, ServerResultGetTransactionHistory(result));
                 onCallback();
             }).catch(function (result) {
                 showErrorModal("There was a problem contacting the server, check your internet connection or try again later", false);
@@ -245,6 +241,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
 
     function makeTransaction(amount, charityValue, onCallBack){
         var body = transactionDataBody(amount, charityValue);
+        console.log(JSON.stringify(body));
         console.log("make transaction called in factory");
         ContactServer(body)
             .then(function(result){

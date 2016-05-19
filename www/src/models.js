@@ -122,9 +122,9 @@ function ServerResultGetCharities(json){
             serverCharities[i].loctype
         ));
     }
+    console.log(serverCharities);
     return charityObjects;
 }
-
 function ServerResultGetBalance(json){
     return json.data.mbalance.mbalance;
 }
@@ -132,6 +132,7 @@ function ServerResultGetUID(json){
     return json.data.mbalance.vuid;
 }
 function ServerResultGetTransactionHistory(json){
+    console.log(json.data.sresult2.txns);
     return json.data.sresult2.txns;
 }
 
