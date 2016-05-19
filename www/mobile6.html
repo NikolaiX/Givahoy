@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="./themes/main.css"/>
 
 </head>
-<body ng-controller="givahoyAppController">
+<body>
 <div data-role="page" id="givepage">
     <div data-role="header">
         <img src="givahoybanner.png" width="50%" height="auto"/>
@@ -78,6 +78,11 @@
 
 
     <h2>To be implemented</h2>
+    <ul class="transaction-history-list">
+        <li ng-repeat="transaction in ServerData.transactionHistory" ng-class="transaction-item" value={{charity.value}}>
+            {{charity.name}} ({{charity.location}})
+        </li>
+    </ul>
 
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar" class="navbar">
