@@ -131,7 +131,9 @@ function ServerResultGetBalance(json){
 function ServerResultGetUID(json){
     return json.data.mbalance.vuid;
 }
-
+function ServerResultGetTransactionHistory(json){
+    return json.data.sresult2.txns;
+}
 
 function ServerCache(charityDataRequest){
     this.lastServerResponse = 0;
