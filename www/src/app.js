@@ -178,12 +178,7 @@ givahoyApp.factory("LocalData", function(){
             "UserDeviceID": window.localStorage.getItem('vrandom'),
             isRegistered: window.localStorage.getItem('isRegistered')
         };
-        fakedata = {
-            "uuid": "12b69eb1d5a2a398",
-            "uid": "501446376089",
-            "isRegistered": true
-        };
-        return fakedata;
+        return userData;
     };
     var setUser = function(uid, UserDeviceID){
         if (uid === parseInt(uid, 10) && UserDeviceID === parseInt(UserDeviceID, 10)){
