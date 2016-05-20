@@ -12,9 +12,12 @@ body{
 
 body .ui-page-theme-a {
     text-shadow:0 0 0 !important;
-
 }
 
+.page-heading{
+    font-weight: 600;
+    text-transform: uppercase;
+}
 #givepage {
     background: linear-gradient(#5F91BD, #84ABCC) !important;
 }
@@ -220,8 +223,14 @@ body .ui-page-theme-a {
 
 #historypage{
     background: linear-gradient(#F8D77E, #F6CD5D) !important;
+    color: #5A5A5A;
+    font-size: 10pt;
 }
-
+#historypage .page-heading{
+    padding-left: calc(5% + 15px);
+    padding-top: 20px;
+    font-size:11pt
+}
 .transaction-history-list{
     padding-left: 5%;
     padding-right: 5%;
@@ -233,18 +242,17 @@ body .ui-page-theme-a {
     list-style-type: none;
     font-family: Tahoma, Sans-serif;
     text-transform: uppercase;
-    font-size: 11pt;
+
 }
 .transaction-history-list .transaction-item{
     width: auto;
-    color: #5A5A5A;
 
     border-color: #FAE3A5;
     border-top:1px #FAE3A5 solid;
     border-bottom: 1px #FAE3A5 solid;
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 25px;
+    padding-left: 15px;
     padding-right: 20px;
 }
 .transaction-history-list .transaction-item.special{

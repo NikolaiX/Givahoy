@@ -76,6 +76,7 @@
         <img src="givahoybanner.png" width="50%" height="auto"/>
     </div>
 
+    <div class="page-heading">Transaction History</div>
     <ul class="transaction-history-list">
         <li class="transaction-item" ng-repeat="transaction in ServerData.transactionHistory" ng-class="{special: transaction.tdbcr !== 'db'}">
             <div ng-if="transaction.tdbcr === 'db'">
