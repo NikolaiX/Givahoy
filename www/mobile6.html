@@ -76,14 +76,25 @@
         <img src="givahoybanner.png" width="50%" height="auto"/>
     </div>
 
-
-    <h2>To be implemented</h2>
     <ul class="transaction-history-list">
-        <li ng-repeat="transaction in ServerData.transactionHistory" ng-class="transaction-item" value={{charity.value}}>
-            {{charity.name}} ({{charity.location}})
+        <li class="transaction-item" ng-repeat="transaction in ServerData.transactionHistory" ng-class="{special: transaction.tdbcr !== 'db'}">
+            <div ng-if="transaction.tdbcr === 'db'">
+                <div class="label">{{transaction.sinstancename}}</div>
+                <div class="details">
+                    <div class="detail-medium">{{transaction.ddate | date:'dd-MM-yyyy'}}</div>
+                    <div class="detail-medium">{{transaction.lpaymentid}}</div>
+                    <div class="detail-small">${{transaction.mpayamount}}</div>
+                </div>
+
+            </div>
+            <div ng-if="transaction.tdbcr === 'cr'">
+                <div class="label">{{transaction.sinstancename}}</div>
+                <div class="details">
+                    <div class="detail-small">${{transaction.mpayamount}}</div>
+                </div>
+            </div>
         </li>
     </ul>
-
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar" class="navbar">
             <ul>
