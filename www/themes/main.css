@@ -219,15 +219,14 @@ body .ui-page-theme-a {
 }
 
 #historypage{
-    background: linear-gradient(#F8D77D, #F6CD5D) !important;
+    background: linear-gradient(#F8D77E, #F6CD5D) !important;
 }
 
 .transaction-history-list{
     padding-left: 5%;
     padding-right: 5%;
-    height: 100vh;
     width: 90%;
-    overflow: scroll;
+    overflow: hidden;
 
 }
 .transaction-history-list li{
