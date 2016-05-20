@@ -220,16 +220,41 @@ body .ui-page-theme-a {
     font-size:1.2em;
     text-decoration:none;
 }
-
+@media screen and (min-width: 0px){
+    #historypage{
+        font-size: 8pt;
+    }
+    #historypage .page-heading{
+        font-size:9pt
+    }
+    .transaction-item .label{
+        width: 25%;
+    }
+    .transaction-item .details{
+        width: 70%;
+    }
+}
+@media screen and (min-width: 360px){
+    #historypage{
+        font-size: 9pt;
+    }
+    #historypage .page-heading{
+        font-size:10pt
+    }
+    .transaction-item .label{
+        width: 35%;
+    }
+    .transaction-item .details{
+        width: 65%;
+    }
+}
 #historypage{
     background: linear-gradient(#F8D77E, #F6CD5D) !important;
     color: #5A5A5A;
-    font-size: 10pt;
 }
 #historypage .page-heading{
     padding-left: calc(5% + 15px);
     padding-top: 20px;
-    font-size:11pt
 }
 .transaction-history-list{
     padding-left: 5%;
@@ -262,11 +287,9 @@ body .ui-page-theme-a {
 .transaction-item .label{
     display: inline-block;
     text-align: left;
-    width: 35%;
 }
 
 .transaction-item .details{
-    width: 60%;
     position: relative;
     float: right;
 }
