@@ -1,9 +1,8 @@
 body{
-    font-family: arial !important;
+    font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
 }
 
 /* Disable jQuery UI focus glow */
-
 .ui-focus {
     outline: none !important;
     -moz-box-shadow: none !important;
@@ -13,6 +12,7 @@ body{
 
 body .ui-page-theme-a {
     text-shadow:0 0 0 !important;
+
 }
 
 #givepage {
@@ -231,11 +231,14 @@ body .ui-page-theme-a {
 }
 .transaction-history-list li{
     list-style-type: none;
+    font-family: Tahoma, Sans-serif;
+    text-transform: uppercase;
+    font-size: 11pt;
 }
 .transaction-history-list .transaction-item{
     width: auto;
     color: #5A5A5A;
-    font-family: Tahoma, Sans-serif;
+
     border-color: #FAE3A5;
     border-top:1px #FAE3A5 solid;
     border-bottom: 1px #FAE3A5 solid;
@@ -251,24 +254,31 @@ body .ui-page-theme-a {
 .transaction-item .label{
     display: inline-block;
     text-align: left;
-    width: 30%;
+    width: 35%;
 }
+
 .transaction-item .details{
-    width: 65%;
+    width: 60%;
     position: relative;
     float: right;
+}
+.transaction-item.special .label{
+    width: 50%;
+}
+.transaction-item.special .details{
+    width: 50%;
 }
 .transaction-item .details .detail-small{
     float: right;
     display: inline-block;
     text-align: right;
-    width: 10%;
-    margin-left: 8%;
+    width: 15%;
+    padding-left: 5%;
 }
 .transaction-item .details .detail-medium{
     float: right;
     display: inline-block;
     text-align: right;
     width: 35%;
-    margin-left: 5%
+    padding-left: 5%;
 }
