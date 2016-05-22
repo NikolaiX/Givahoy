@@ -293,12 +293,7 @@ body .ui-page-theme-a {
     position: relative;
     float: right;
 }
-.transaction-item.special .label{
-    width: 50%;
-}
-.transaction-item.special .details{
-    width: 50%;
-}
+
 .transaction-item .details .detail-small{
     float: right;
     display: inline-block;

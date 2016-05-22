@@ -83,14 +83,15 @@
                 <div class="label">{{transaction.sinstancename}}</div>
                 <div class="details">
                     <div class="detail-medium">{{transaction.ddate | date:'dd-MM-yyyy'}}</div>
-                    <div class="detail-medium">{{transaction.lpaymentid}}</div>
                     <div class="detail-small">${{transaction.mpayamount}}</div>
+                    <div class="detail-medium">{{transaction.lpaymentid}}</div>
                 </div>
 
             </div>
             <div ng-if="transaction.tdbcr === 'cr'">
-                <div class="label">{{transaction.sinstancename}}</div>
+                <div class="label">Account Top Up</div>
                 <div class="details">
+                    <div class="detail-medium">{{transaction.ddate | date:'dd-MM-yyyy'}}</div>
                     <div class="detail-small">${{transaction.mpayamount}}</div>
                 </div>
             </div>
