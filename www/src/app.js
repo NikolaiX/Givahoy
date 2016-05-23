@@ -133,8 +133,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
                         }else{
-                            alert("Sorry, there was a problem processing your donation.");
-                            clearModal();
+                            showErrorModal("Sorry, there was a problem processing your donation.", true);
                         }
                     });
                 }
@@ -245,12 +244,14 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         console.log("make transaction called in factory");
         ContactServer(body)
             .then(function(result){
-                console.log(JSON.stringify(result));
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
+                /*
+                var newItem = ServerResultGetTransactionHistory(result);
+                ServerDataObjects.transactionHistory.push(newItem);
+                */
                 onCallBack("Success");
             })
             .catch(function(result){
-                showErrorModal("Sorry, there was a problem processing your donation.", true);
                 onCallBack("Fail");
             });
 
