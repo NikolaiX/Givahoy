@@ -221,31 +221,31 @@ body .ui-page-theme-a {
     text-decoration:none;
 }
 @media screen and (min-width: 0px){
-    #historypage{
-        font-size: 8pt;
-    }
-    #historypage .page-heading{
-        font-size:9pt
-    }
-    .transaction-item .label{
-        width: 25%;
-    }
-    .transaction-item .details{
-        width: 70%;
-    }
-}
-@media screen and (min-width: 360px){
-    #historypage{
+    #historypage .transaction-item{
         font-size: 9pt;
     }
     #historypage .page-heading{
         font-size:10pt
     }
-    .transaction-item .label{
-        width: 35%;
+    .transaction-item .details .detail-small{
+        width: 40px;
     }
-    .transaction-item .details{
-        width: 65%;
+    .transaction-item .details .detail-medium{
+        width: 80px;
+    }
+}
+@media screen and (min-width: 400px){
+    #historypage .transaction-item{
+        font-size: 10pt;
+    }
+    #historypage .page-heading{
+        font-size:11pt
+    }
+    .transaction-item .details .detail-small{
+        width: 60px;
+    }
+    .transaction-item .details .detail-medium{
+        width: 100px;
     }
 }
 #historypage{
@@ -267,7 +267,6 @@ body .ui-page-theme-a {
     list-style-type: none;
     font-family: Tahoma, Sans-serif;
     text-transform: uppercase;
-
 }
 .transaction-history-list .transaction-item{
     width: auto;
@@ -275,8 +274,8 @@ body .ui-page-theme-a {
     border-color: #FAE3A5;
     border-top:1px #FAE3A5 solid;
     border-bottom: 1px #FAE3A5 solid;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     padding-left: 15px;
     padding-right: 20px;
 }
@@ -287,24 +286,24 @@ body .ui-page-theme-a {
 .transaction-item .label{
     display: inline-block;
     text-align: left;
+    width: 45%;
 }
 
 .transaction-item .details{
     position: relative;
     float: right;
+    width: 55%;
 }
 
 .transaction-item .details .detail-small{
     float: right;
     display: inline-block;
     text-align: right;
-    width: 15%;
     padding-left: 5%;
 }
 .transaction-item .details .detail-medium{
     float: right;
     display: inline-block;
     text-align: right;
-    width: 35%;
     padding-left: 5%;
 }
