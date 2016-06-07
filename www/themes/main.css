@@ -1,3 +1,8 @@
+@font-face{
+    font-family: 'OpenSans';
+    src: url('fonts/OpenSans-Regular.ttf')
+}
+
 body{
     font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
 }
@@ -17,6 +22,7 @@ body .ui-page-theme-a {
 .page-heading{
     font-weight: 600;
     text-transform: uppercase;
+    font-family: 'OpenSans', sans-serif;
 }
 #givepage {
     background: linear-gradient(#5F91BD, #84ABCC) !important;
@@ -265,7 +271,7 @@ body .ui-page-theme-a {
 }
 .transaction-history-list li{
     list-style-type: none;
-    font-family: Tahoma, Sans-serif;
+    font-family: 'OpenSans', sans-serif;
     text-transform: uppercase;
 }
 .transaction-history-list .transaction-item{
