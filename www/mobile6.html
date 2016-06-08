@@ -123,9 +123,13 @@
 </div>
 
 
-    <div class="modal ui-overlay-shadow">
+    <div class="modal ui-overlay-shadow loading ">
+
         <div class="exitButton"></div>
-        <div class="container"></div>
+        <div class="container">
+            <img id="theImg" src="themes/ring.gif" /><br>
+            Initialising Application, please wait
+        </div>
     </div>
 <div class="modal-underlay"></div>
 
@@ -134,6 +138,7 @@
 <script type="text/javascript" src="libs/evothings/evothings.js"></script>
 <script type="text/javascript" src="libs/evothings/ui/ui.js"></script>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="./libs/jquery.mobile-1.4.5.js"></script>
 <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
@@ -181,7 +186,7 @@
                 .addClass("loading");
         $(".modal .container")
                 .text(message)
-                .prepend('<img id="theImg" src="themes/ring.svg" /><br>');
+                .prepend('<img id="theImg" src="themes/ring.gif" /><br>');
     }
 
     function showErrorModal(message, dismissable){
@@ -215,6 +220,6 @@
 
     document.addEventListener("deviceready", onDeviceReady, false);
 </script>
-<script type="text/javascript" src="./libs/jquery.mobile-1.4.5.js"></script>
+
 </body>
 </html>
