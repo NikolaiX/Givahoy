@@ -3,7 +3,6 @@
  */
 var givahoyApp = angular.module('givahoyApp',[]);
 givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory', function($scope, $timeout, RuntimeDataFactory){
-    showLoadingModal("Initialising Application, please wait");
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -177,6 +176,7 @@ givahoyApp.factory("LocalData", function(){
             "UserDeviceID": window.localStorage.getItem('vrandom'),
             isRegistered: window.localStorage.getItem('isRegistered')
         };
+
         return userData;
     };
     var setUser = function(uid, UserDeviceID){

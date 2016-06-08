@@ -123,9 +123,13 @@
 </div>
 
 
-    <div class="modal ui-overlay-shadow">
+    <div class="modal ui-overlay-shadow loading ">
+
         <div class="exitButton"></div>
-        <div class="container"></div>
+        <div class="container">
+            <img id="theImg" src="themes/ring.gif" /><br>
+            Initialising Application, please wait
+        </div>
     </div>
 <div class="modal-underlay"></div>
 
@@ -181,7 +185,7 @@
                 .addClass("loading");
         $(".modal .container")
                 .text(message)
-                .prepend('<img id="theImg" src="themes/ring.svg" /><br>');
+                .prepend('<img id="theImg" src="themes/ring.gif" /><br>');
     }
 
     function showErrorModal(message, dismissable){
