@@ -6,7 +6,7 @@
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="./themes/jquery.mobile-1.4.5.css">
     <link rel="stylesheet" href="./themes/jquery.mobile.icons.min.css"/>
     <link rel="stylesheet" href="./themes/main.css"/>
 
@@ -151,7 +151,6 @@
 <script type="text/javascript" src="src/app.js"></script>
 
 <script>
-
     $(document).bind("mobileinit", function() {
         $.mobile.defaultPageTransition = 'none';
     });
@@ -182,7 +181,7 @@
                 .addClass("loading");
         $(".modal .container")
                 .text(message)
-                .prepend('<img id="theImg" src="http://i.stack.imgur.com/FhHRx.gif" /><br>');
+                .prepend('<img id="theImg" src="themes/ring.svg" /><br>');
     }
 
     function showErrorModal(message, dismissable){
@@ -216,6 +215,6 @@
 
     document.addEventListener("deviceready", onDeviceReady, false);
 </script>
-<script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" src="./libs/jquery.mobile-1.4.5.js"></script>
 </body>
 </html>
