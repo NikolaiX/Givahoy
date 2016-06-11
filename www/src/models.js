@@ -1,6 +1,12 @@
 /**
  * Created by nikolai on 25/03/16.
  */
+
+/*
+Types of charities defined by server:
+    l = location-based charity
+    b = beacon-based charity
+ */
 function Charity(Value, Name, Location, Type){
     this.value = Value;
     this.name = Name;

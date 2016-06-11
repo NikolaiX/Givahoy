@@ -53,6 +53,9 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconScanner.enabled === false) {
             BeaconScanner.begin();
         }
+         
+         //clears location-based charities from list
+         RuntimeDataFactory.deleteLocations(updateScope);
         navigator.geolocation.getCurrentPosition(
             function (currentLocation) {
                 userLocation = currentLocation;
@@ -283,7 +286,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         ContactServer(builtRequest)
             .then(function (result) {
                 var newCharities = ServerResultGetCharities(result);
-
+                console.log(newCharities);
                 //Check if Charity is already in list
                 var charityAlreadyExists;
                 for(var newCharityindex in newCharities){
@@ -301,6 +304,19 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
             }).catch(function (result) {
             showErrorModal("There was a problem contacting the server, check your internet connection or try again later", true);
         });
+    }
+    function deleteLocations(onCallBack){
+        //iterates through array backwards to avoid problems using index in for statement
+        var i = ServerDataObjects.charities.length
+        while(i--) {
+            if(ServerDataObjects.charities[i].type === "l"){
+                console.log(ServerDataObjects.charities);
+                console.log("Charity removed: " + ServerDataObjects.charities[i].name);
+                ServerDataObjects.charities.splice(i, 1);
+                console.log(ServerDataObjects.charities);
+            }
+        }
+        onCallBack();
     }
 
     /*
@@ -390,6 +406,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         transactionHistory: ServerDataObjects.transactionHistory,
         AddLocation: GetCharitiesFromLocation,
         AddBeacon: GetCharityFromBeacon,
-        makeTransaction: makeTransaction
+        makeTransaction: makeTransaction,
+        deleteLocations: deleteLocations
     }
 }]);
