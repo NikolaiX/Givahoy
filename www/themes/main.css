@@ -5,6 +5,7 @@
 
 body{
     font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    min-height: 100%;
 }
 
 /* Disable jQuery UI focus glow */
@@ -111,29 +112,25 @@ body .ui-page-theme-a {
     text-align: center;
     justify-content:center;
     align-items:center;
-
+    background: #EEE;
 }
 
 .modal img{
     padding-bottom: 40px;
     overflow: auto;
 }
-.modal.loading {
-    display: block;
-    background: #EEE;
+.modal .loadingContent, .modal .registrationContent{
+    display: none;
+}
 
+.modal.loading .loadingContent{
+    display: block;
+}
+.modal.registration .registrationContent{
+    display: block
 }
 .modal.dismissible .exitButton{
     display: block;
-}
-.modal .exitButton{
-    display: none;
-    background: url('cross.png') no-repeat;
-    background-size: contain;
-    height: 40px;
-    width: 40px;
-    float: right;
-    margin: 10px;
 }
 .modal .container{
     top: 50%;
@@ -143,6 +140,15 @@ body .ui-page-theme-a {
     transform: translateY(-50%);
     padding-left: 20%;
     padding-right: 20%;
+}
+.modal .exitButton{
+    display: none;
+    background: url('cross.png') no-repeat;
+    background-size: contain;
+    height: 40px;
+    width: 40px;
+    float: right;
+    margin: 10px;
 }
 .modal.completedTransaction{
     display: block;
@@ -170,6 +176,7 @@ body .ui-page-theme-a {
 .modal.error .container{
     display: block;
 }
+
 .modal-underlay{
     position:fixed;
     z-index: 999;
@@ -178,7 +185,7 @@ body .ui-page-theme-a {
     background-color: rgba(0, 0, 0, 0.2);
     display: none;
 }
-.modal.loading ~ .modal-underlay{
+.modal.display, .modal.display ~ .modal-underlay{
     display:block;
 }
 .modal.completedTransaction ~ .modal-underlay{
