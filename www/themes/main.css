@@ -119,20 +119,16 @@ body .ui-page-theme-a {
     padding-bottom: 40px;
     overflow: auto;
 }
-.modal .loadingContent, .modal .registrationContent{
+.modal .loadingContent,
+.modal .registrationContent,
+.modal .registration2Content,
+.modal .errorContent,
+.modal .successfulTransactionContent{
     display: none;
 }
 
 .modal.loading .loadingContent{
     display: block;
-}
-.modal.registration .registrationContent{
-    display: block
-}
-.modal.dismissible .exitButton{
-    display: block;
-}
-.modal .container{
     top: 50%;
     position: relative;
     -webkit-transform: translateY(-50%);
@@ -141,8 +137,24 @@ body .ui-page-theme-a {
     padding-left: 20%;
     padding-right: 20%;
 }
+.modal.registration .registrationContent,
+.modal.registration2 .registration2Content{
+    display: block;
+    top: 50%;
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.modal.dismissible .exitButton{
+    display: block;
+}
+
 .modal .exitButton{
     display: none;
+    position: fixed;
     background: url('cross.png') no-repeat;
     background-size: contain;
     height: 40px;
@@ -150,27 +162,47 @@ body .ui-page-theme-a {
     float: right;
     margin: 10px;
 }
-.modal.completedTransaction{
+.modal.successfulTransaction{
+    background: rgb( 226, 90, 76 );
+}
+.modal.successfulTransaction .successfulTransactionContent{
     display: block;
     background: rgb( 226, 90, 76 );
     color: RGB( 236, 234, 234 );
     text-transform: uppercase;
     font-size: large;
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding-left: 20%;
+    padding-right: 20%;
+    top: 50%;
 }
+
 .modal.error{
-    display: block;
     background: rgb( 255, 73, 18 );
+}
+.modal.error .errorContent{
+    display: block;
     color: RGB( 236, 234, 234 );
     font-size: medium;
+    top: 50%;
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding-left: 20%;
+    padding-right: 20%;
 }
-.modal.completedTransaction .dismissible{
+.modal.successfulTransaction .dismissible{
     display: block;
 }
 .modal.error .dismissible{
     display: block;
 }
 
-.modal.completedTransaction .container{
+.modal.successfulTransaction .container{
     display: block;
 }
 .modal.error .container{
@@ -188,7 +220,7 @@ body .ui-page-theme-a {
 .modal.display, .modal.display ~ .modal-underlay{
     display:block;
 }
-.modal.completedTransaction ~ .modal-underlay{
+.modal.successfulTransaction ~ .modal-underlay{
     display:block;
 }
 .modal.error ~ .modal-underlay{

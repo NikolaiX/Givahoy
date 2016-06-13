@@ -92,9 +92,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             $scope.CharityDropdownValue = RuntimeDataFactory.charities[0].value.toString();
 
         }
-
-
-        console.log(this);
+        
         $timeout(function(){
             //Naughty hack to circumvent problem with dropdown label not updating
             setTimeout(function(){
