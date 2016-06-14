@@ -65,13 +65,7 @@ body .ui-page-theme-a {
 #availbal {
     text-align: center;
 }
-.button {
-    height: inherit;
-    margin: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 5px 10px;
-}
+
 
 .styled-select select {
     background: transparent;
@@ -101,7 +95,7 @@ body .ui-page-theme-a {
 #location-button{
     border: 0;
 }
-.modal {
+.givahoy-modal {
     display:    none;
     position:   fixed;
     z-index:    1000;
@@ -115,19 +109,19 @@ body .ui-page-theme-a {
     background: #EEE;
 }
 
-.modal img{
+.givahoy-modal img{
     padding-bottom: 40px;
     overflow: auto;
 }
-.modal .loadingContent,
-.modal .registrationContent,
-.modal .registration2Content,
-.modal .errorContent,
-.modal .successfulTransactionContent{
+.givahoy-modal .loadingContent,
+.givahoy-modal .registrationContent,
+.givahoy-modal .registration2Content,
+.givahoy-modal .errorContent,
+.givahoy-modal .successfulTransactionContent{
     display: none;
 }
 
-.modal.loading .loadingContent{
+.givahoy-modal.loading .loadingContent{
     display: block;
     top: 50%;
     position: relative;
@@ -137,9 +131,10 @@ body .ui-page-theme-a {
     padding-left: 20%;
     padding-right: 20%;
 }
-.modal.registration .registrationContent,
-.modal.registration2 .registration2Content{
+.givahoy-modal.registration .registrationContent,
+.givahoy-modal.registration2 .registration2Content{
     display: block;
+    font-size: medium;
     top: 50%;
     position: relative;
     -webkit-transform: translateY(-50%);
@@ -148,11 +143,11 @@ body .ui-page-theme-a {
     padding-left: 10%;
     padding-right: 10%;
 }
-.modal.dismissible .exitButton{
+.givahoy-modal.dismissible .exitButton{
     display: block;
 }
 
-.modal .exitButton{
+.givahoy-modal .exitButton{
     display: none;
     position: fixed;
     background: url('cross.png') no-repeat;
@@ -162,10 +157,10 @@ body .ui-page-theme-a {
     float: right;
     margin: 10px;
 }
-.modal.successfulTransaction{
+.givahoy-modal.successfulTransaction{
     background: rgb( 226, 90, 76 );
 }
-.modal.successfulTransaction .successfulTransactionContent{
+.givahoy-modal.successfulTransaction .successfulTransactionContent{
     display: block;
     background: rgb( 226, 90, 76 );
     color: RGB( 236, 234, 234 );
@@ -180,10 +175,10 @@ body .ui-page-theme-a {
     top: 50%;
 }
 
-.modal.error{
+.givahoy-modal.error{
     background: rgb( 255, 73, 18 );
 }
-.modal.error .errorContent{
+.givahoy-modal.error .errorContent{
     display: block;
     color: RGB( 236, 234, 234 );
     font-size: medium;
@@ -195,17 +190,17 @@ body .ui-page-theme-a {
     padding-left: 20%;
     padding-right: 20%;
 }
-.modal.successfulTransaction .dismissible{
+.givahoy-modal.successfulTransaction .dismissible{
     display: block;
 }
-.modal.error .dismissible{
+.givahoy-modal.error .dismissible{
     display: block;
 }
 
-.modal.successfulTransaction .container{
+.givahoy-modal.successfulTransaction .container{
     display: block;
 }
-.modal.error .container{
+.givahoy-modal.error .container{
     display: block;
 }
 
@@ -217,13 +212,13 @@ body .ui-page-theme-a {
     background-color: rgba(0, 0, 0, 0.2);
     display: none;
 }
-.modal.display, .modal.display ~ .modal-underlay{
+.givahoy-modal.display, .givahoy-modal.display ~ .modal-underlay{
     display:block;
 }
-.modal.successfulTransaction ~ .modal-underlay{
+.givahoy-modal.successfulTransaction ~ .modal-underlay{
     display:block;
 }
-.modal.error ~ .modal-underlay{
+.givahoy-modal.error ~ .modal-underlay{
     display:block;
 }
 

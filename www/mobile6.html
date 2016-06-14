@@ -7,8 +7,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./themes/jquery.mobile-1.4.5.css">
-<link rel="stylesheet" href="./themes/ionic.css">
     <link rel="stylesheet" href="./themes/jquery.mobile.icons.min.css"/>
+    <link rel="stylesheet" href="./themes/ionic.css">
     <link rel="stylesheet" href="./themes/main.css"/>
 
 </head>
@@ -111,7 +111,10 @@
     <div data-role="header">
         <img src="givahoybanner.png" width="50%" height="auto"/>
     </div>
-    <h2>To be implemented</h2>
+
+    <ul class="list">
+        <li class="item" onclick="showRegistrationModal()">Register Account</li>
+    </ul>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar" class="navbar">
             <ul>
@@ -122,8 +125,7 @@
         </div>
     </div>
 </div>
-
-    <div class="modal display loading">
+    <div class="givahoy-modal display loading">
 
         <div class="exitButton"></div>
         <div class="loadingContent">
@@ -131,13 +133,21 @@
             <span>Initialising Application, please wait</span>
         </div>
         <div class="registrationContent">
+            <h2>Account Registration</h2>
             Enter your email address to continue
             <br>
             <br>
-            <input type="email">
-            <br>
-            <br>
-            <button id="registrationsubmit">Register</button>
+            <form name="registrationForm" ng-submit="registrationForm.$valid && registerUser(user)" novalidate>
+                <div class="list">
+                    <label class="item item-input">
+                        <input type="email" placeholder="Email Address" ng-model="user.email" required>
+                    </label>
+
+                    <input type="submit" value="Submit" class="item button button-positive">
+                </div>
+            </form>
+
+
         </div>
         <div class="registration2Content">
             <h2>Thank you</h2>
@@ -193,13 +203,13 @@
         return selectedLocation;
     }
 
-    $(" .modal .exitButton").click(function(){
+    $(" .givahoy-modal .exitButton").click(function(){
         clearModal();
     });
 
     function clearModal(){
         console.log("clearModal called");
-        $(".modal")
+        $(".givahoy-modal")
                 .removeClass("display")
                 .removeClass("loading")
                 .removeClass("registration")
@@ -210,47 +220,47 @@
 
     function showLoadingModal(message){
         clearModal();
-        $(".modal")
+        $(".givahoy-modal")
                 .addClass("display")
                 .addClass("loading");
-        $(".modal .loadingContent span")
+        $(".givahoy-modal .loadingContent span")
                 .text(message);
     }
 
     function showRegistrationModal(){
         clearModal();
-        $(".modal")
+        $(".givahoy-modal")
                 .addClass("display")
                 .addClass("registration")
-                .addClass("dismissable");
+                .addClass("dismissible");
     }
 
     function showRegistration2Modal(){
         clearModal();
-        $(".modal")
+        $(".givahoy-modal")
                 .addClass("display")
                 .addClass("registration2")
-                .addClass("dismissable");
+                .addClass("dismissible");
     }
     function showErrorModal(message, dismissable){
         clearModal();
-        $(".modal")
+        $(".givahoy-modal")
                 .addClass("display")
                 .addClass("error");
         if(dismissable) {
-            $(".modal").addClass("dismissible");
+            $(".givahoy-modal").addClass("dismissible");
         }
-        $(".modal .errorContent span")
+        $(".givahoy-modal .errorContent span")
                 .text(message);
     }
 
     function showTransactionCompletedModal(charity, amount){
         clearModal();
-        $(".modal")
+        $(".givahoy-modal")
                 .addClass("display")
                 .addClass("successfulTransaction")
                 .addClass("dismissible");
-        $(".modal .successfulTransactionContent span")
+        $(".givahoy-modal .successfulTransactionContent span")
                 .text("Thank you for your $" + amount + " donation to " + charity);
     }
 

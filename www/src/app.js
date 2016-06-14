@@ -25,6 +25,11 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     $scope.makeTransaction = InitiateTransaction;
     $scope.refreshList = updateCharityList;
 
+    $scope.registerUser = function(user){
+        showLoadingModal("Registering Email...");
+        //Do magic stuff here
+        setTimeout(function(){showRegistration2Modal();},100)
+    };
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
