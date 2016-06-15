@@ -174,7 +174,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 }]);
 
 
-givahoyApp.factory("LocalData", function(){
+givahoyApp.factory("LocalData", ['Server'], function(Server){
     var user = function(){
         userData = {
             "uuid": device.uuid,
@@ -205,21 +205,21 @@ givahoyApp.factory("LocalData", function(){
 
 
 
-
-
-
-givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
-    var ContactServer = function(body){
+givahoyApp.service('Server', function () {
+    this.sendRequest = function(body){
         var apigClient = apigClientFactory.newClient();
 
         return apigClient.allpurposePost({}, body, {});
     };
+});
+
+
+givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalData, Server) {
     var ServerDataObjects = {
         charities: [],
         userBalance: 0,
         transactionHistory: []
     };
-
 
     function Initialise(onCallback, location){
         var initialiseRequest = new ServerDataRequestBuilder();
@@ -232,7 +232,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
             .initialCall()
             .build();
 
-        ContactServer(request)
+        Server.sendRequest(request)
             .then(function (result) {
                 console.log(JSON.stringify(result));
                 ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
@@ -248,7 +248,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         var body = transactionDataBody(amount, charityValue);
         console.log(JSON.stringify(body));
         console.log("make transaction called in factory");
-        ContactServer(body)
+        Server.sendRequest(body)
             .then(function(result){
                 ServerDataObjects.userBalance = ServerResultGetBalance(result);
                 /*
@@ -273,7 +273,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         var builtRequest = request.build();
 
         console.log(JSON.stringify(builtRequest));
-        ContactServer(request.build())
+        Server.sendRequest(request.build())
             .then(function (result) {
                 console.log("Data for beacon returned");
                 var convertedCharities = ServerResultGetCharities(result);
@@ -286,7 +286,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', function(LocalData) {
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
         var builtRequest = request.build();
-        ContactServer(builtRequest)
+        Server.sendRequest(builtRequest)
             .then(function (result) {
                 var newCharities = ServerResultGetCharities(result);
                 console.log(newCharities);
