@@ -93,11 +93,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         Sets default selection on charity list to first charity found if none is already set
          */
         if ($scope.CharityDropdownValue === null && RuntimeDataFactory.charities.length > 0){
-            console.log("Fillin' the default");
             $scope.CharityDropdownValue = RuntimeDataFactory.charities[0].value.toString();
-
         }
-        
         $timeout(function(){
             //Naughty hack to circumvent problem with dropdown label not updating
             setTimeout(function(){
@@ -126,15 +123,9 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             "Are you sure you want to donate $" + amount + " to " + getSelectedLocation().text() + "?",
             function (buttonIndex) {
                 if (buttonIndex == 1) {
-                    /*
-                     Create processing page
-                     */
-                    console.log(amount);
                     showLoadingModal("Your Transaction is being Processed");
                     RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
-                        console.log(status);
                         updateScope();
-                        console.log(amount);
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
                         }else{
@@ -150,7 +141,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     var BeaconScanner = {
         enabled: false,
         begin: function(){
-            console.log("Started scanning for beacons");
             this.enabled = true;
             console.log(JSON.stringify(this));
             evothings.eddystone.startScan(
@@ -179,23 +169,29 @@ givahoyApp.factory("LocalData", ['Server'], function(Server){
         userData = {
             "uuid": device.uuid,
             "uid": window.localStorage.getItem('uid'),
-            "UserDeviceID": window.localStorage.getItem('vrandom'),
-            isRegistered: window.localStorage.getItem('isRegistered')
+            email: window.localStorage.getItem('email'),
+            registrationStatus: window.localStorage.getItem('registrationStatus'),
+            initialise: function(uid){
+                if (uid === parseInt(uid, 10)){
+                    window.localStorage.setItem('uid', uid);
+                    window.localStorage.setItem('registrationStatus', "initialised");
+                }
+            },
+            registerUser: function(email, onCallBack){
+                window.localStorage.setItem('email', email);
+                window.localStorage.setItem('registrationStatus', "registered");
+                onCallBack()
+            },
+            validateRegistration: function(){
+                window.localStorage.setItem('registrationStatus', "validated");
+            }
         };
 
         return userData;
     };
-    var setUser = function(uid, UserDeviceID){
-        if (uid === parseInt(uid, 10) && UserDeviceID === parseInt(UserDeviceID, 10)){
-            window.localStorage.setItem('uid', uid);
-            window.localStorage.setItem('vrandom', UserDeviceID);
-            window.localStorage.setItem('isRegistered', true);
-        }
-    };
 
     return{
-        user: user(),
-        setUser: setUser()
+        user: user()
     }
 });
 
