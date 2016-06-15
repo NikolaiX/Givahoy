@@ -170,16 +170,18 @@ givahoyApp.factory("LocalData", ['Server'], function(Server){
             "uuid": device.uuid,
             "uid": window.localStorage.getItem('uid'),
             email: window.localStorage.getItem('email'),
-            registrationStatus: window.localStorage.getItem('registrationStatus'),
+            isInitialised: window.localStorage.getItem('initialised'),
+            isPendingValidation: window.localStorage.getItem('pendingValidation'),
+            isRegistered: window.localStorage.getItem('isRegistered'),
             initialise: function(uid){
                 if (uid === parseInt(uid, 10)){
                     window.localStorage.setItem('uid', uid);
-                    window.localStorage.setItem('registrationStatus', "initialised");
+                    window.localStorage.setItem('initialised', "true");
                 }
             },
             registerUser: function(email, onCallBack){
                 window.localStorage.setItem('email', email);
-                window.localStorage.setItem('registrationStatus', "registered");
+                window.localStorage.setItem('pendingValidation', "true");
                 onCallBack()
             },
             validateRegistration: function(){
