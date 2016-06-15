@@ -27,8 +27,15 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 
     $scope.registerUser = function(user){
         showLoadingModal("Registering Email...");
-        //Do magic stuff here
-        setTimeout(function(){showRegistration2Modal();},100)
+        RuntimeDataFactory.registerUser(user.email, function(response){
+            if(response === "Success"){
+                LocalData.user.registerUser(user.email);
+                showRegistration2Modal();
+            }
+            else if(response === "Fail"){
+                showErrorModal("There was a problem registering your account, please try again", true);
+            }
+        })
     };
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
@@ -105,8 +112,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     }
 
     function InitiateTransaction(amount) {
-        var theAmount = amount;
-        console.log(amount);
         if (RuntimeDataFactory.balance + 50 <= amount) {
             alert('Insufficient Funds');
             return;
@@ -319,6 +324,15 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalD
         }
         onCallBack();
     }
+    function registerUser(email, onCallBack){
+        var request = registerUserDataBody(email);
+        Server.sendRequest(request)
+            .then(function(result){
+                onCallBack("Success");
+        }).catch(function(result){
+            onCallBack("Fail");
+        })
+    }
 
     /*
     Builder object that creates a JSON body for a charity information request that's readable by the server.
@@ -374,7 +388,27 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalD
             return this.body;
         };
     };
+    function registerUserDataBody(email){
+        /*
+         Example data:
+         "saction": "MakeTransaction",
+         "tuuid": device.uuid,
+         "vuid": localStorage.uid,
+         "vrandom": localStorage.vrandom
+         "email": email
+         Every value must be accounted for!
+         */
+        return {
+            //This is where you define the body of the request
 
+            "saction": "MakeTransaction",
+            "linstancelocationid": charityValue,
+            "tuuid": LocalData.user.uuid,
+            "vuid": LocalData.user.uid,
+            "vrandom": LocalData.user.UserDeviceID,
+            "email": email
+        };
+    }
     function transactionDataBody(amount, charityValue){
         /*
          Example data:
@@ -408,6 +442,7 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalD
         AddLocation: GetCharitiesFromLocation,
         AddBeacon: GetCharityFromBeacon,
         makeTransaction: makeTransaction,
-        deleteLocations: deleteLocations
+        deleteLocations: deleteLocations,
+        registerUser: registerUser
     }
 }]);
