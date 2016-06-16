@@ -2,7 +2,7 @@
  * Created by nikolai on 24/03/16.
  */
 var givahoyApp = angular.module('givahoyApp',[]);
-givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory', function($scope, $timeout, RuntimeDataFactory){
+givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory','LocalData', function($scope, $timeout, RuntimeDataFactory, LocalData){
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -24,17 +24,21 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
     $scope.refreshList = updateCharityList;
+    $scope.user = LocalData.user;
 
     $scope.registerUser = function(user){
         showLoadingModal("Registering Email...");
-        RuntimeDataFactory.registerUser(user.email, function(response){
-            if(response === "Success"){
-                LocalData.user.registerUser(user.email);
-                showRegistration2Modal();
-            }
-            else if(response === "Fail"){
-                showErrorModal("There was a problem registering your account, please try again", true);
-            }
+        RuntimeDataFactory.registerUser(
+            user.email,
+            function(response){
+                if(response === "Success"){
+                    LocalData.user.registerUser(user.email);
+                    updateScope();
+                    showRegistration2Modal();
+                }
+                else if(response === "Fail"){
+                    showErrorModal("There was a problem registering your account, please try again", true);
+                }
         })
     };
     navigator.geolocation.getCurrentPosition(
@@ -169,28 +173,36 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 }]);
 
 
-givahoyApp.factory("LocalData", ['Server'], function(Server){
+givahoyApp.factory("LocalData", ['Server', function(Server){
     var user = function(){
         userData = {
             "uuid": device.uuid,
             "uid": window.localStorage.getItem('uid'),
             email: window.localStorage.getItem('email'),
-            isInitialised: window.localStorage.getItem('initialised'),
-            isPendingValidation: window.localStorage.getItem('pendingValidation'),
-            isRegistered: window.localStorage.getItem('isRegistered'),
+            get isInitialised(){
+                return window.localStorage.getItem('initialised') === "true" ;
+            },
+            get isRegistered(){
+                return window.localStorage.getItem('registered') === "true" ;
+            },
             initialise: function(uid){
                 if (uid === parseInt(uid, 10)){
                     window.localStorage.setItem('uid', uid);
                     window.localStorage.setItem('initialised', "true");
                 }
             },
-            registerUser: function(email, onCallBack){
+            registerUser: function(email){
                 window.localStorage.setItem('email', email);
-                window.localStorage.setItem('pendingValidation', "true");
-                onCallBack()
+                window.localStorage.setItem('registered', "true");
             },
-            validateRegistration: function(){
-                window.localStorage.setItem('registrationStatus', "validated");
+            toggleRegistration: function(){
+                if(this.isRegistered){
+                    window.localStorage.setItem('registered', "false");
+                    console.log("Registration set to false");
+                }else{
+                    console.log("Registration set to true");
+                    window.localStorage.setItem('registered', "true");
+                }
             }
         };
 
@@ -200,7 +212,7 @@ givahoyApp.factory("LocalData", ['Server'], function(Server){
     return{
         user: user()
     }
-});
+}]);
 
 
 
@@ -325,13 +337,15 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalD
         onCallBack();
     }
     function registerUser(email, onCallBack){
-        var request = registerUserDataBody(email);
-        Server.sendRequest(request)
+        var body = registerUserDataBody(email);
+        Server.sendRequest(body)
             .then(function(result){
                 onCallBack("Success");
-        }).catch(function(result){
-            onCallBack("Fail");
-        })
+            })
+            .catch(function(result){
+                console.log(result);
+                onCallBack("Fail");
+            });
     }
 
     /*
@@ -401,11 +415,9 @@ givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalD
         return {
             //This is where you define the body of the request
 
-            "saction": "MakeTransaction",
-            "linstancelocationid": charityValue,
+            "saction": "ValidateUser",
             "tuuid": LocalData.user.uuid,
             "vuid": LocalData.user.uid,
-            "vrandom": LocalData.user.UserDeviceID,
             "email": email
         };
     }

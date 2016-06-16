@@ -113,7 +113,9 @@
     </div>
 
     <ul class="list">
-        <li class="item" onclick="showRegistrationModal()">Register Account</li>
+        <li ng-if="!user.isRegistered"
+            class="item" onclick="showRegistrationModal()">Register Account</li>
+        <li class="item" ng-click="user.toggleRegistration()">Toggle registration (Developer Setting)</li>
     </ul>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar" class="navbar">
@@ -151,7 +153,7 @@
         </div>
         <div class="registration2Content">
             <h2>Thank you</h2>
-            Please check your inbox to finish registering and how to top up your account
+            Check your inbox to continue registration and instructions for how to top up your account
         </div>
         <div class="errorContent">
             <img src="images/warning.png" />
@@ -213,6 +215,7 @@
                 .removeClass("display")
                 .removeClass("loading")
                 .removeClass("registration")
+                .removeClass("registration2")
                 .removeClass("successfulTransaction")
                 .removeClass("error")
                 .removeClass("dismissible");
