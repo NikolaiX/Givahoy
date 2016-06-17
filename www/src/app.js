@@ -2,7 +2,7 @@
  * Created by nikolai on 24/03/16.
  */
 var givahoyApp = angular.module('givahoyApp',[]);
-givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDataFactory','LocalData', function($scope, $timeout, RuntimeDataFactory, LocalData){
+givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi','LocalData', function($scope, $timeout, ServerApi, LocalData){
     /*
     Temporary initialisation until registration model is implemented
      */
@@ -16,10 +16,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         enabled: false
     };
     $scope.ServerData = {
-        localData: RuntimeDataFactory.localData,
-        charities: RuntimeDataFactory.charities,
-        balance: RuntimeDataFactory.balance,
-        transactionHistory: RuntimeDataFactory.transactionHistory
+        localData: ServerApi.localData,
+        charities: ServerApi.charities,
+        balance: ServerApi.balance,
+        transactionHistory: ServerApi.transactionHistory
     };
     $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
@@ -28,7 +28,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
 
     $scope.registerUser = function(user){
         showLoadingModal("Registering Email...");
-        RuntimeDataFactory.registerUser(
+        ServerApi.registerUser(
             user.email,
             function(response){
                 if(response === "Success"){
@@ -45,7 +45,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         function(currentLocation) {
             userLocation = currentLocation;
             userLocation.enabled = true;
-            RuntimeDataFactory.Initialise(
+            ServerApi.Initialise(
                 function(){
                     updateScope();
                     clearModal();
@@ -54,7 +54,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             );
         },/*Initialise Server without location data if not available*/
         function(result){
-            RuntimeDataFactory.Initialise(
+            ServerApi.Initialise(
                 function(){
                     console.log("Location not enabled");
                     updateScope();
@@ -71,12 +71,12 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         }
          
          //clears location-based charities from list
-         RuntimeDataFactory.deleteLocations(updateScope);
+         ServerApi.deleteLocations(updateScope);
         navigator.geolocation.getCurrentPosition(
             function (currentLocation) {
                 userLocation = currentLocation;
                 console.log(userLocation);
-                RuntimeDataFactory.AddLocation(currentLocation, function () {
+                ServerApi.AddLocation(currentLocation, function () {
                     updateScope();
                     clearModal();
                 });
@@ -103,8 +103,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
         /*
         Sets default selection on charity list to first charity found if none is already set
          */
-        if ($scope.CharityDropdownValue === null && RuntimeDataFactory.charities.length > 0){
-            $scope.CharityDropdownValue = RuntimeDataFactory.charities[0].value.toString();
+        if ($scope.CharityDropdownValue === null && ServerApi.charities.length > 0){
+            $scope.CharityDropdownValue = ServerApi.charities[0].value.toString();
         }
         $timeout(function(){
             //Naughty hack to circumvent problem with dropdown label not updating
@@ -116,7 +116,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
     }
 
     function InitiateTransaction(amount) {
-        if (RuntimeDataFactory.balance + 50 <= amount) {
+        if (ServerApi.balance + 50 <= amount) {
             alert('Insufficient Funds');
             return;
         }
@@ -133,7 +133,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             function (buttonIndex) {
                 if (buttonIndex == 1) {
                     showLoadingModal("Your Transaction is being Processed");
-                    RuntimeDataFactory.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
+                    ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         updateScope();
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
@@ -166,7 +166,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'RuntimeDat
             if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
                 discoveredBeacons[beacon.address] = beacon;
                 console.log("beacon pushed to array");
-                RuntimeDataFactory.AddBeacon(beacon, updateScope);
+                ServerApi.AddBeacon(beacon, updateScope);
             }
         }
     };

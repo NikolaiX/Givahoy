@@ -1,7 +1,7 @@
 /**
  * Created by nikolai on 17/06/16.
  */
-givahoyApp.factory('RuntimeDataFactory', ['LocalData', 'Server', function(LocalData, Server) {
+givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Server) {
     var ServerDataObjects = {
         charities: [],
         userBalance: 0,
