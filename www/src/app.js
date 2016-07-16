@@ -3,24 +3,15 @@
  */
 var givahoyApp = angular.module('givahoyApp',[]);
 givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi','LocalData', function($scope, $timeout, ServerApi, LocalData){
-    /*
-    Temporary initialisation until registration model is implemented
-     */
-    deviceID={
-        "uuid": device.uuid,
-        "uid": window.localStorage.getItem('uid'),
-        "vrandom": window.localStorage.getItem('vrandom')
-    };
-    console.log(JSON.stringify(deviceID));
+
     var userLocation = {
         enabled: false
     };
-    $scope.ServerData = {
-        localData: ServerApi.localData,
-        charities: ServerApi.charities,
-        balance: ServerApi.balance,
-        transactionHistory: ServerApi.transactionHistory
-    };
+    
+    $scope.charities = [];
+    $scope.userBalance = 0;
+    $scope.transactionHistory = [];
+
     $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
     $scope.refreshList = updateCharityList;
@@ -28,41 +19,49 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
 
     $scope.registerUser = function(user){
         showLoadingModal("Registering Email...");
-        ServerApi.registerUser(
-            user.email,
-            function(response){
-                if(response === "Success"){
-                    LocalData.user.registerUser(user.email);
+        ServerApi.registerUser(user.email)
+            .then(function (response) {
+                if(response === "Success" && LocalData.user.isRegistered){
                     updateScope();
                     showRegistration2Modal();
                 }
-                else if(response === "Fail"){
+                else {
                     showErrorModal("There was a problem registering your account, please try again", true);
                 }
-        })
+            });
     };
+    
+    
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
             userLocation.enabled = true;
-            ServerApi.Initialise(
-                function(){
+            ServerApi.Initialise(currentLocation)
+                .then(function (returnedData) {
+                    console.log(returnedData);
+                    $scope.charities.push.apply($scope.charities, returnedData.charities);
+                    $scope.userBalance = returnedData.userBalance;
+                    $scope.transactionHistory.push.apply($scope.transactionHistory, returnedData.transactionHistory);
+
+                    if(LocalData.user.isInitialised === false){
+                        LocalData.user.initialise(returnedData.uid);
+                    }
+
                     updateScope();
                     clearModal();
-                },
-                userLocation
-            );
+                })
         },/*Initialise Server without location data if not available*/
         function(result){
-            ServerApi.Initialise(
-                function(){
-                    console.log("Location not enabled");
+            ServerApi.Initialise()
+                .then(function (returnedData) {
+                    $scope.userBalance = returnedData.userBalance;
+                    $scope.transactionHistory.push.apply($scope.transactionHistory, returnedData.transactionHistory);
                     updateScope();
                     clearModal();
-                });
+                })
         });
 
-     function updateCharityList() {
+    function updateCharityList() {
         showLoadingModal("Refreshing List of Charities");
 
         //Enables beacon scanning in case bluetooth has been enabled after app initialisation
@@ -70,16 +69,43 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             BeaconScanner.begin();
         }
          
-         //clears location-based charities from list
-         ServerApi.deleteLocations(updateScope);
+        //clears location-based charities from list
+        var i = $scope.charities.length;
+        while(i--) {
+            if($scope.charities[i].type === "l"){
+                console.log($scope.charities);
+                console.log("Charity removed: " + $scope.charities[i].name);
+                $scope.charities.splice(i, 1);
+                console.log($scope.charities);
+            }
+        }
+
+        /*
+        todo: remove the redundancy that is the charityalreadyexists stuff
+         */
         navigator.geolocation.getCurrentPosition(
             function (currentLocation) {
                 userLocation = currentLocation;
-                console.log(userLocation);
-                ServerApi.AddLocation(currentLocation, function () {
-                    updateScope();
-                    clearModal();
-                });
+                ServerApi.GetCharityFromLocation(currentLocation)
+                    .then(function(newCharities){
+                        console.log(newCharities);
+                        //Check if Charity is already in list
+                        var charityAlreadyExists;
+                        for(var newCharityIndex in newCharities){
+                            charityAlreadyExists = false;
+                            for(var existingCharityIndex in $scope.charities){
+                                if(newCharities[newCharityIndex].value === $scope.charities[existingCharityIndex].value){
+                                    charityAlreadyExists = true;
+                                }
+                            }
+                            if(charityAlreadyExists == false){
+                                $scope.charities.push(newCharities[newCharityIndex]);
+                            }
+                        }
+
+                        updateScope();
+                        clearModal();
+                    });
             }, function () {
                 alert("There was a problem getting current location");
                 clearModal();
@@ -103,8 +129,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         /*
         Sets default selection on charity list to first charity found if none is already set
          */
-        if ($scope.CharityDropdownValue === null && ServerApi.charities.length > 0){
-            $scope.CharityDropdownValue = ServerApi.charities[0].value.toString();
+        if ($scope.CharityDropdownValue === null && $scope.charities.length > 0){
+            $scope.CharityDropdownValue = $scope.charities[0].value.toString();
         }
         $timeout(function(){
             //Naughty hack to circumvent problem with dropdown label not updating
@@ -116,7 +142,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
     }
 
     function InitiateTransaction(amount) {
-        if (ServerApi.balance + 50 <= amount) {
+        if ($scope.balance + 50 <= amount) {
             alert('Insufficient Funds');
             return;
         }
@@ -133,14 +159,28 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             function (buttonIndex) {
                 if (buttonIndex == 1) {
                     showLoadingModal("Your Transaction is being Processed");
-                    ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
+                    
+                    ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"))
+                        .then(function(result){
+                            updateScope();
+                            if(result.success == true){
+                                $scope.userBalance = result.balance;
+                                showTransactionCompletedModal(getSelectedLocation().text(), amount);
+                            }else{
+                                showErrorModal("Sorry, there was a problem processing your donation.", true);
+                            }
+                    });
+                    
+                    
+                    
+                    /*ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
                         updateScope();
                         if(status == "Success"){
                             showTransactionCompletedModal(getSelectedLocation().text(), amount);
                         }else{
                             showErrorModal("Sorry, there was a problem processing your donation.", true);
                         }
-                    });
+                    });*/
                 }
             });
     }
@@ -166,18 +206,31 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
                 discoveredBeacons[beacon.address] = beacon;
                 console.log("beacon pushed to array");
-                ServerApi.AddBeacon(beacon, updateScope);
+                ServerApi.ProcessBeacon(beacon)
+                    .then(function(newCharities){
+                        console.log("Processing new shit");
+                        $scope.charities.push.apply($scope.charities, newCharities);
+                        console.log($scope.charities);
+                        updateScope();
+                    });
             }
         }
     };
 }]);
 
 
-givahoyApp.factory("LocalData", ['Server', function(Server){
+givahoyApp.factory("LocalData", function(){
     var user = function(){
         userData = {
-            "uuid": device.uuid,
-            "uid": window.localStorage.getItem('uid'),
+            get uuid(){
+                if(device.platform == "browser"){
+                    return "12b69eb1d5a2a398";
+                }
+                else{
+                    return device.uuid;
+                }
+            },
+            uid: window.localStorage.getItem('uid'),
             email: window.localStorage.getItem('email'),
             get isInitialised(){
                 return window.localStorage.getItem('initialised') === "true" ;
@@ -186,12 +239,14 @@ givahoyApp.factory("LocalData", ['Server', function(Server){
                 return window.localStorage.getItem('registered') === "true" ;
             },
             initialise: function(uid){
-                if (uid === parseInt(uid, 10)){
+                if (typeof uid === 'number'){
                     window.localStorage.setItem('uid', uid);
                     window.localStorage.setItem('initialised', "true");
+                    console.log(this.isInitialised);
+                    console.log("UID: " + window.localStorage.getItem('uid'));
                 }
             },
-            registerUser: function(email){
+            setRegistered: function(email){
                 window.localStorage.setItem('email', email);
                 window.localStorage.setItem('registered', "true");
             },
@@ -203,13 +258,19 @@ givahoyApp.factory("LocalData", ['Server', function(Server){
                     console.log("Registration set to true");
                     window.localStorage.setItem('registered', "true");
                 }
+            },
+            disableInitialisation: function(){
+                console.log(this.isInitialised);
+                console.log("UID: " + this.uid);
+                window.localStorage.setItem('initialised', "false");
+                window.localStorage.setItem('uid', "");
+                console.log(this.isInitialised);
             }
         };
-
         return userData;
     };
 
     return{
         user: user()
     }
-}]);
+});

@@ -8,7 +8,11 @@ givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Serv
         transactionHistory: []
     };
 
-    function Initialise(onCallback, location){
+    /*
+    Used to get current user data on launch,
+    as well as device-identifying data on first launch
+     */
+    function Initialise(location){
         var initialiseRequest = new ServerDataRequestBuilder();
 
         if(typeof location !== 'undefined'){
@@ -19,105 +23,93 @@ givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Serv
             .initialCall()
             .build();
 
-        Server.sendRequest(request)
+        var serverCall = Server.sendRequest(request)
             .then(function (result) {
-                console.log(JSON.stringify(result));
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, ServerResultGetCharities(result));
-                ServerDataObjects.userBalance = ServerResultGetBalance(result);
-                ServerDataObjects.transactionHistory.push.apply(ServerDataObjects.transactionHistory, ServerResultGetTransactionHistory(result));
-                onCallback();
+                console.log(result);
+                var returnObject = {
+                    charities: ServerResultGetCharities(result),
+                    userBalance: ServerResultGetBalance(result),
+                    transactionHistory: ServerResultGetTransactionHistory(result),
+                    uid: ServerResultGetUID(result)
+                };
+                console.log(JSON.stringify(returnObject));
+                return returnObject;
             }).catch(function (result) {
             showErrorModal("There was a problem contacting the server, check your internet connection or try again later", false);
         });
+        return serverCall;
     }
 
-    function makeTransaction(amount, charityValue, onCallBack){
+    function makeTransaction(amount, charityValue){
         var body = transactionDataBody(amount, charityValue);
         console.log(JSON.stringify(body));
         console.log("make transaction called in factory");
-        Server.sendRequest(body)
+        var serverCall = Server.sendRequest(body)
             .then(function(result){
-                ServerDataObjects.userBalance = ServerResultGetBalance(result);
+                var returnObject = {
+                    success: true,
+                    balance: ServerResultGetBalance(result)
+                };
+                console.log(result);
                 /*
                  var newItem = ServerResultGetTransactionHistory(result);
                  ServerDataObjects.transactionHistory.push(newItem);
                  */
-                onCallBack("Success");
+                return returnObject;
             })
             .catch(function(result){
-                onCallBack("Fail");
+                var returnObject = {
+                    success: false
+                };
+                return returnObject;
             });
-
-
+        return serverCall;
     }
 
-    function GetCharityFromBeacon(beacon, onCallBack){
+    function GetCharityFromBeacon(beacon){
         console.log("getcharitiesfrombeacon called");
         var beacons = [];
         beacons.push(beacon);
         var request = new ServerDataRequestBuilder();
         request.useBeacons(beacons);
-        var builtRequest = request.build();
 
-        console.log(JSON.stringify(builtRequest));
-        Server.sendRequest(request.build())
+        var serverCall = Server.sendRequest(request.build())
             .then(function (result) {
                 console.log("Data for beacon returned");
-                var convertedCharities = ServerResultGetCharities(result);
-                ServerDataObjects.charities.push.apply(ServerDataObjects.charities, convertedCharities);
-                onCallBack();
+                return ServerResultGetCharities(result);
             });
+        return serverCall;
     }
 
-    function GetCharitiesFromLocation(location, onCallBack){
+    function GetCharitiesFromLocation(location){
         var request = new ServerDataRequestBuilder();
         request.useLocation(location);
         var builtRequest = request.build();
-        Server.sendRequest(builtRequest)
+        var serverCall = Server.sendRequest(builtRequest)
             .then(function (result) {
                 var newCharities = ServerResultGetCharities(result);
-                console.log(newCharities);
-                //Check if Charity is already in list
-                var charityAlreadyExists;
-                for(var newCharityindex in newCharities){
-                    charityAlreadyExists = false;
-                    for(existingCharityIndex in ServerDataObjects.charities){
-                        if(newCharities[newCharityindex].value === ServerDataObjects.charities[existingCharityIndex].value){
-                            charityAlreadyExists = true;
-                        }
-                    }
-                    if(charityAlreadyExists == false){
-                        ServerDataObjects.charities.push(newCharities[newCharityindex]);
-                    }
-                }
-                onCallBack();
+                return newCharities;
             }).catch(function (result) {
             showErrorModal("There was a problem contacting the server, check your internet connection or try again later", true);
         });
+
+        return serverCall;
     }
-    function deleteLocations(onCallBack){
-        //iterates through array backwards to avoid problems using index in for statement
-        var i = ServerDataObjects.charities.length
-        while(i--) {
-            if(ServerDataObjects.charities[i].type === "l"){
-                console.log(ServerDataObjects.charities);
-                console.log("Charity removed: " + ServerDataObjects.charities[i].name);
-                ServerDataObjects.charities.splice(i, 1);
-                console.log(ServerDataObjects.charities);
-            }
-        }
-        onCallBack();
-    }
-    function registerUser(email, onCallBack){
+
+    function registerUser(email){
         var body = registerUserDataBody(email);
-        Server.sendRequest(body)
+
+        var serverCall = Server.sendRequest(body)
             .then(function(result){
-                onCallBack("Success");
+                console.log(result);
+                LocalData.user.setRegistered(email);
+                return "Success"
             })
             .catch(function(result){
                 console.log(result);
-                onCallBack("Fail");
             });
+
+        return serverCall;
     }
 
     /*
@@ -223,10 +215,9 @@ givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Serv
         charities: ServerDataObjects.charities,
         balance: ServerDataObjects.userBalance,
         transactionHistory: ServerDataObjects.transactionHistory,
-        AddLocation: GetCharitiesFromLocation,
-        AddBeacon: GetCharityFromBeacon,
+        GetCharityFromLocation: GetCharitiesFromLocation,
+        ProcessBeacon: GetCharityFromBeacon,
         makeTransaction: makeTransaction,
-        deleteLocations: deleteLocations,
         registerUser: registerUser
     }
 }]);
