@@ -89,7 +89,7 @@ function modal(message, callback, title, buttonLabels, domObjects) {
         mainWindow.setTimeout(function() {
             callback(result);
         }, 10);
-    };
+    }
     modalWindow.addEventListener('unload', onUnload, false);
 
     // call callback and destroy modal

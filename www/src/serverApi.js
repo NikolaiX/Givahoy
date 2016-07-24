@@ -22,7 +22,7 @@ givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Serv
         var request = initialiseRequest
             .initialCall()
             .build();
-
+        console.log(JSON.stringify(request));
         var serverCall = Server.sendRequest(request)
             .then(function (result) {
                 console.log(result);

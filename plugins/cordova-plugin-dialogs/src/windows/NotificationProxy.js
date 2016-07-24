@@ -36,8 +36,7 @@ if (typeof toStaticHTML !== 'undefined') {
 // simple html-based implementation until it is available
 function createPromptDialog(title, message, buttons, defaultText, callback) {
 
-    var isPhone = cordova.platformId == "windows" && WinJS.Utilities.isPhone;;
-
+    var isPhone = cordova.platformId == "windows" && WinJS.Utilities.isPhone;
     var dlgWrap = document.createElement("div");
     dlgWrap.style.position = "absolute";
     dlgWrap.style.width = "100%";

@@ -97,7 +97,7 @@ function getNumberFormatter(options) {
         }
         default:
             throw "The options.type can be 'decimal', 'percent', or 'currency' only";
-    };
+    }
 }
 
 module.exports = {

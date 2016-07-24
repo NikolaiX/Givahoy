@@ -230,8 +230,12 @@ givahoyApp.factory("LocalData", function(){
                     return device.uuid;
                 }
             },
-            uid: window.localStorage.getItem('uid'),
-            email: window.localStorage.getItem('email'),
+            get uid(){
+                return window.localStorage.getItem('uid');
+            },
+            get email(){
+                return window.localStorage.getItem('email');
+            },
             get isInitialised(){
                 return window.localStorage.getItem('initialised') === "true" ;
             },

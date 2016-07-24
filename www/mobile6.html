@@ -25,7 +25,7 @@
             <img id="refreshCharityList" src="images/refresh.png" ng-click="refreshList()">
             <select id="locations" data-corners="false" data-shadow="false" ng-model="CharityDropdownValue">
                 <!--<option id="defaultOption" disabled selected>Select your option</option> -->
-                <option ng-repeat="charity in ServerData.charities | orderBy:'-type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
+                <option ng-repeat="charity in charities | orderBy:'-type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
             </select>
         </div>
         <br>
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div>
-            <p id="availbal">Available Balance: ${{ServerData.localData.userBalance}}</p>
+            <p id="availbal">Available Balance: ${{userBalance}}</p>
         </div>
     </div>
     <div data-role="footer" data-id="foo1" data-position="fixed">
@@ -79,7 +79,7 @@
 
     <div class="page-heading">Transaction History</div>
     <ul class="transaction-history-list">
-        <li class="transaction-item" ng-repeat="transaction in ServerData.transactionHistory" ng-class="{special: transaction.tdbcr !== 'db'}">
+        <li class="transaction-item" ng-repeat="transaction in transactionHistory" ng-class="{special: transaction.tdbcr !== 'db'}">
             <div ng-if="transaction.tdbcr === 'db'">
                 <div class="label">{{transaction.sinstancename}}</div>
                 <div class="details">
@@ -116,6 +116,8 @@
         <li ng-if="!user.isRegistered"
             class="item" onclick="showRegistrationModal()">Register Account</li>
         <li class="item" ng-click="user.toggleRegistration()">Toggle registration (Developer Setting)</li>
+        <li ng-if="user.isInitialised"
+            class="item" ng-click="user.disableInitialisation()">Disable Initialisation (Developer Setting)</li>
     </ul>
     <div data-role="footer" data-id="foo1" data-position="fixed">
         <div data-role="navbar" class="navbar">

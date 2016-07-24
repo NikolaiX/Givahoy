@@ -29,9 +29,8 @@ var Region = require('com.unarin.cordova.beacon.Region');
  * 
  * @type {Regions}
  */
-function Regions (){};
-
-
+function Regions() {
+}
 /**
  * Creates an instance of {@link Region} from the provided map of parameters.
  *

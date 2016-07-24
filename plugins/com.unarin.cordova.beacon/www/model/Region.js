@@ -30,8 +30,7 @@ var _ = require('com.unarin.cordova.beacon.underscorejs');
 function Region (identifier) {
 	Region.checkIdentifier(identifier);
     this.identifier = identifier;
-};
-
+}
 Region.checkIdentifier = function (identifier) {
 	if (!_.isString(identifier)) {
 		throw new TypeError(identifier + ' is not a String.');

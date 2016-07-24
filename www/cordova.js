@@ -1273,7 +1273,7 @@ channel.join(function() {
 
     // Fire event to notify that all objects are created
     channel.onCordovaReady.fire();
-pag
+pag;
     // Fire onDeviceReady event once page has fully loaded, all
     // constructors have run and cordova info has been received from native
     // side.
