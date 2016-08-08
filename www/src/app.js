@@ -1,13 +1,17 @@
 /**
  * Created by nikolai on 24/03/16.
  */
-var givahoyApp = angular.module('givahoyApp',[]);
+var givahoyApp = angular.module('givahoyApp',['ionic']);
+
+givahoyApp.config(['$ionicConfigProvider', function ($ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position('bottom');
+}]);
 givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi','LocalData', function($scope, $timeout, ServerApi, LocalData){
 
     var userLocation = {
         enabled: false
     };
-    
+
     $scope.charities = [];
     $scope.userBalance = 0;
     $scope.transactionHistory = [];
@@ -277,4 +281,41 @@ givahoyApp.factory("LocalData", function(){
     return{
         user: user()
     }
+});
+
+givahoyApp.config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
+
+        .state('tabs', {
+            url: "/tab",
+            abstract: true,
+            templateUrl: "templates/tabs.html"
+        })
+        .state('tabs.give', {
+            url: "/give",
+            views: {
+                'tab-give': {
+                    templateUrl: "templates/tab-give.html"
+                }
+            }
+        })
+        .state('tabs.history', {
+            url: "/history",
+            views: {
+                'tab-history': {
+                    templateUrl: "templates/tab-history.html"
+                }
+            }
+        })
+        .state('tabs.settings', {
+            url: "/settings",
+            views: {
+                'tab-settings': {
+                    templateUrl: "templates/tab-settings.html"
+                }
+            }
+        });
+
+
+    $urlRouterProvider.otherwise('/tab/give');
 });
