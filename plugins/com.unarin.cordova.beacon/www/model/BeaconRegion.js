@@ -49,9 +49,9 @@ function BeaconRegion (identifier, uuid, major, minor, notifyEntryStateOnDisplay
     this.minor = minor;
     this.notifyEntryStateOnDisplay = notifyEntryStateOnDisplay;
 
-    this.typeName = 'BeaconRegion';  
-};
+    this.typeName = 'BeaconRegion';
 
+}
 // Create a BeaconRegion.prototype object that inherits from Region.prototype.
 // Note: A common error here is to use "new Region()" to create the
 // BeaconRegion.prototype. That's incorrect for several reasons, not least 

@@ -526,7 +526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)));
 
 /***/ },
 /* 5 */
@@ -1085,5 +1085,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ }
 /******/ ])
 });
-;
 //# sourceMappingURL=axios.map

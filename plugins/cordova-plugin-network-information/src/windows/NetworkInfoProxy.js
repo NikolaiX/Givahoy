@@ -76,7 +76,7 @@ module.exports = {
     {
         var reportConnectionInfoOnce = function () {
             win(getCurrrentConnectionType(), { keepCallback: true });
-        }
+        };
 
         // report current connection  type
         setTimeout(reportConnectionInfoOnce, 0);

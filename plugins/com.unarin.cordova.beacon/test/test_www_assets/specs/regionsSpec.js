@@ -43,7 +43,7 @@ describe('Regions', function() {
 
 	it('has a method which throws if a non Region object is passed in', function () {
 		expect(function () {
-			Regions.checkRegionType(new Object())
+			Regions.checkRegionType({})
 		}).toThrow();
 	});
 

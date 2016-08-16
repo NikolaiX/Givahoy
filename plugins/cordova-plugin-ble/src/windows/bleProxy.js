@@ -1139,7 +1139,7 @@ var winble = {
 				var msg = "Could not remove event listener:" + e;
 				winble.logger.logError("disableCharacteristicNotification", msg);
 				errorCallback(msg);
-				return;
+				
 			}
 		},
 

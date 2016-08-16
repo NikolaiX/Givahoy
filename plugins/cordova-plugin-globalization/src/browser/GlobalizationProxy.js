@@ -78,7 +78,7 @@ function convertToMomentLocalizedFormat(options) {
             switch(options.selector) {
                 case 'date and time': return 'lll';
                 case 'date': return 'l';
-                case 'time': return 'LT'
+                case 'time': return 'LT';
                 default:
                     throw selectorError;
             }
@@ -229,7 +229,10 @@ var globalization = {
 
             var formatter = new Intl.NumberFormat(getCrossPlatformLocale(), options);
 
-            if (!formatter.hasOwnProperty('resolved')) { fail('Not supported'); return; };
+            if (!formatter.hasOwnProperty('resolved')) {
+                fail('Not supported');
+                return;
+            }
             var pattern = formatter.resolved.pattern;
             win( { 
                 pattern: pattern,

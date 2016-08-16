@@ -39,8 +39,8 @@ var Regions = require('com.unarin.cordova.beacon.Regions');
  * 
  * @returns {Delegate} An instance of the type {@type Delegate}.
  */
-function Delegate (){};
-
+function Delegate() {
+}
 /**
  * A bunch of static pre-processor methods to parse and unmarshal the region objects.
  */

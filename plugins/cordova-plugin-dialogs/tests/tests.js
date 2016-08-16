@@ -57,12 +57,12 @@ exports.defineManualTests = function (contentEl, createActionButton) {
         var logLine = document.createElement('div');
         logLine.innerHTML = message;
         log.appendChild(logLine);
-    }
+    };
 
     var clearLog = function () {
         var log = document.getElementById('info');
         log.innerHTML = '';
-    }
+    };
 
     var beep = function () {
         console.log("beep()");

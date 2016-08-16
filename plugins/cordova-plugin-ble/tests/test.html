@@ -80,7 +80,7 @@ function displayDeviceTree(obj, level, indent)
 	{
 		if (obj.hasOwnProperty(prop))
 		{
-			var value = obj[prop]
+			var value = obj[prop];
 			if (typeof value != 'object')
 			{
 				testLog(indent + prop + ': ' + value)
@@ -93,10 +93,10 @@ function displayDeviceTree(obj, level, indent)
 	{
 		if (obj.hasOwnProperty(prop))
 		{
-			var value = obj[prop]
+			var value = obj[prop];
 			if (typeof value == 'object')
 			{
-				testLog(indent + label)
+				testLog(indent + label);
 				displayDeviceTree(value, level + 1, indent + '  ')
 			}
 		}
@@ -442,7 +442,7 @@ function testReadDescriptor(deviceHandle, descriptorHandle, descriptorData, read
 	);
 }
 
-document.addEventListener('deviceready', onDeviceReady, false)
+document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady()
 {

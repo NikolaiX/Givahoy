@@ -34,8 +34,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                 }
             });
     };
-    
-    
+
+
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
@@ -72,7 +72,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconService .enabled === false) {
             BeaconService .begin(evothings.eddystone);
         }
-         
+
         //clears location-based charities from list
         var i = $scope.charities.length;
         while(i--) {
@@ -85,7 +85,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         }
 
         /*
-        todo: remove the redundancy that is the charityalreadyexists stuff
+         todo: remove the redundancy that is the charityalreadyexists stuff
          */
         navigator.geolocation.getCurrentPosition(
             function (currentLocation) {
@@ -131,7 +131,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
 
     function updateScope(){
         /*
-        Sets default selection on charity list to first charity found if none is already set
+         Sets default selection on charity list to first charity found if none is already set
          */
         if ($scope.CharityDropdownValue === null && $scope.charities.length > 0){
             $scope.CharityDropdownValue = $scope.charities[0].value.toString();
@@ -163,7 +163,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             function (buttonIndex) {
                 if (buttonIndex == 1) {
                     showLoadingModal("Your Transaction is being Processed");
-                    
+
                     ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"))
                         .then(function(result){
                             updateScope();
@@ -173,18 +173,18 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                             }else{
                                 showErrorModal("Sorry, there was a problem processing your donation.", true);
                             }
-                    });
-                    
-                    
-                    
+                        });
+
+
+
                     /*ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
-                        updateScope();
-                        if(status == "Success"){
-                            showTransactionCompletedModal(getSelectedLocation().text(), amount);
-                        }else{
-                            showErrorModal("Sorry, there was a problem processing your donation.", true);
-                        }
-                    });*/
+                     updateScope();
+                     if(status == "Success"){
+                     showTransactionCompletedModal(getSelectedLocation().text(), amount);
+                     }else{
+                     showErrorModal("Sorry, there was a problem processing your donation.", true);
+                     }
+                     });*/
                 }
             });
     }

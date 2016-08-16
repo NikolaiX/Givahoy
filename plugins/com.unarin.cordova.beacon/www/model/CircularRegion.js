@@ -56,9 +56,8 @@ function CircularRegion (identifier, latitude, longitude, radius){
 	// {String} typeName A String holding the name of the Objective-C type that the value
 	//    this will get converted to once the data is in the Objective-C runtime.
 	this.typeName = 'CircularRegion';
-  
-};
- 
+
+}
 // Create a CircularRegion.prototype object that inherits from Region.prototype.
 // Note: A common error here is to use "new Region()" to create the
 // CircularRegion.prototype. That's incorrect for several reasons, not least 

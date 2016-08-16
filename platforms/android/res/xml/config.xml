@@ -42,7 +42,7 @@
     <icon density="mdpi" platform="android" src="www/images/icon.png" />
     <icon density="hdpi" platform="android" src="www/images/icon.png" />
     <icon density="xhdpi" platform="android" src="www/images/icon.png" />
-    <content src="mobile6.html" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

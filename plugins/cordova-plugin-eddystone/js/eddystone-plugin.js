@@ -33,8 +33,7 @@ evothings = window.evothings || {};
  */
 evothings.util = {};
 
-;(function()
-{
+(function () {
 	/**
 	 * Interpret byte buffer as little endian 8 bit integer.
 	 * Returns converted number.
@@ -45,10 +44,10 @@ evothings.util = {};
 	 */
 	evothings.util.littleEndianToInt8 = function(data, offset)
 	{
-		var x = evothings.util.littleEndianToUint8(data, offset)
-		if (x & 0x80) x = x - 256
+		var x = evothings.util.littleEndianToUint8(data, offset);
+		if (x & 0x80) x = x - 256;
 		return x
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as unsigned little endian 8 bit integer.
@@ -61,7 +60,7 @@ evothings.util = {};
 	evothings.util.littleEndianToUint8 = function(data, offset)
 	{
 		return data[offset]
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as little endian 16 bit integer.
@@ -75,7 +74,7 @@ evothings.util = {};
 	{
 		return (evothings.util.littleEndianToInt8(data, offset + 1) << 8) +
 			evothings.util.littleEndianToUint8(data, offset)
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as unsigned little endian 16 bit integer.
@@ -89,7 +88,7 @@ evothings.util = {};
 	{
 		return (evothings.util.littleEndianToUint8(data, offset + 1) << 8) +
 			evothings.util.littleEndianToUint8(data, offset)
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as unsigned little endian 32 bit integer.
@@ -105,7 +104,7 @@ evothings.util = {};
 			(evothings.util.littleEndianToUint8(data, offset + 2) << 16) +
 			(evothings.util.littleEndianToUint8(data, offset + 1) << 8) +
 			evothings.util.littleEndianToUint8(data, offset)
-	}
+	};
 
 
 	/**
@@ -120,7 +119,7 @@ evothings.util = {};
 	{
 		return (evothings.util.littleEndianToInt8(data, offset) << 8) +
 			evothings.util.littleEndianToUint8(data, offset + 1)
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as unsigned big endian 16 bit integer.
@@ -134,7 +133,7 @@ evothings.util = {};
 	{
 		return (evothings.util.littleEndianToUint8(data, offset) << 8) +
 			evothings.util.littleEndianToUint8(data, offset + 1)
-	}
+	};
 
 	/**
 	 * Interpret byte buffer as unsigned big endian 32 bit integer.
@@ -150,7 +149,7 @@ evothings.util = {};
 			(evothings.util.littleEndianToUint8(data, offset + 1) << 16) +
 			(evothings.util.littleEndianToUint8(data, offset + 2) << 8) +
 			evothings.util.littleEndianToUint8(data, offset + 3)
-	}
+	};
 
 	/**
 	 * Converts a single Base64 character to a 6-bit integer.
@@ -199,7 +198,7 @@ evothings.util = {};
 		}
 
 		return taBytes;
-	}
+	};
 
 	/**
 	 * Returns the integer i in hexadecimal string form,
@@ -210,12 +209,12 @@ evothings.util = {};
 	 * @public
 	 */
 	evothings.util.toHexString = function(i, byteCount) {
-		var string = (new Number(i)).toString(16);
+		var string = (Number(i)).toString(16);
 		while(string.length < byteCount*2) {
 			string = '0'+string;
 		}
 		return string;
-	}
+	};
 
 	/**
 	 * Takes a ArrayBuffer or TypedArray and returns its hexadecimal representation.
@@ -247,8 +246,7 @@ evothings.util = {};
 
 // File: easyble.js
 
-;(function()
-{
+(function () {
 	// Load script used by this file.
 	evothings.__NOOP_FUN__('libs/evothings/util/util.js');
 
@@ -430,7 +428,7 @@ evothings.util = {};
 			}
 
 			// Check if we already have got the device.
-			var existingDevice = internal.knownDevices[device.address]
+			var existingDevice = internal.knownDevices[device.address];
 			if (existingDevice)
 			{
 				// Do not report device again if flag is set.
@@ -528,7 +526,7 @@ evothings.util = {};
 			// Parse types we know and care about.
 			// Skip other types.
 
-			var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb'
+			var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb';
 
 			// Convert 16-byte Uint8Array to RFC-4122-formatted UUID.
 			function arrayToUUID(array, offset)
@@ -644,7 +642,7 @@ evothings.util = {};
 
 		console.log(JSON.stringify(advertisementData));
 		*/
-	}
+	};
 
 	/**
 	 * Returns true if the device matches the serviceFilter, or if there is no filter.
@@ -674,7 +672,7 @@ evothings.util = {};
 			}
 		}
 		return false;
-	}
+	};
 
 	/**
 	 * Add functions to the device object to allow calling them
@@ -1574,11 +1572,11 @@ evothings.util = {};
 // prerequisites
 evothings.__NOOP_FUN__([
 	'libs/evothings/easyble/easyble.js',
-])
+]);
 
 evothings.eddystone = {};
 
-;(function() {
+(function () {
 // constants
 var BLUETOOTH_BASE_UUID = '-0000-1000-8000-00805f9b34fb';
 
@@ -1622,12 +1620,12 @@ evothings.eddystone.startScan = function(win, fail) {
 		// we can forward it to the user.
 		if(parseFrameUID(device, byteArray, win, fail)) return;
 		if(parseFrameURL(device, byteArray, win, fail)) return;
-		if(parseFrameTLM(device, byteArray, win, fail)) return;
+		if(parseFrameTLM(device, byteArray, win, fail)) 
 
 	}, function(error) {
 		fail(error);
 	});
-}
+};
 
 /** This function is a parameter to startScan() and is called when a new device is discovered.
 * @callback scanCallback
@@ -1652,7 +1650,7 @@ evothings.eddystone.startScan = function(win, fail) {
 evothings.eddystone.stopScan = function() {
 	evothings.easyble.stopScan();
 	isScanning = false;
-}
+};
 
 // Return true on frame type recognition, false otherwise.
 function parseFrameUID(device, data, win, fail) {
