@@ -60,22 +60,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                 })
         },/*Initialise Server without location data if not available*/
         function(result){
-            ServerApi.Initialise()
-                .then(function (returnedData) {
-                    $scope.userBalance = returnedData.userBalance;
-                    $scope.transactionHistory.push.apply($scope.transactionHistory, returnedData.transactionHistory)
-
-                    if(LocalData.user.isInitialised === false){
-                        LocalData.user.initialise(returnedData.uid);
-                    }
-                    if(cordova.plugins.BluetoothStatus.hasBTLE){
-                        BeaconService.begin(evothings.eddystone);
-                    }else{
-                        console.log("No bluetoothLE detected, beacon functionality disabled");
-                    }
-                    updateScope();
-                    clearModal();
-                })
+            showErrorModal("This application needs access to your location to function. Please enable this under your phones settings.", false);
         });
 
     function updateCharityList() {
