@@ -50,7 +50,11 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                     if(LocalData.user.isInitialised === false){
                         LocalData.user.initialise(returnedData.uid);
                     }
-
+                    if(cordova.plugins.BluetoothStatus.hasBTLE){
+                        BeaconService.begin(evothings.eddystone);
+                    }else{
+                        console.log("No bluetoothLE detected, beacon functionality disabled");
+                    }
                     updateScope();
                     clearModal();
                 })
@@ -59,7 +63,16 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             ServerApi.Initialise()
                 .then(function (returnedData) {
                     $scope.userBalance = returnedData.userBalance;
-                    $scope.transactionHistory.push.apply($scope.transactionHistory, returnedData.transactionHistory);
+                    $scope.transactionHistory.push.apply($scope.transactionHistory, returnedData.transactionHistory)
+
+                    if(LocalData.user.isInitialised === false){
+                        LocalData.user.initialise(returnedData.uid);
+                    }
+                    if(cordova.plugins.BluetoothStatus.hasBTLE){
+                        BeaconService.begin(evothings.eddystone);
+                    }else{
+                        console.log("No bluetoothLE detected, beacon functionality disabled");
+                    }
                     updateScope();
                     clearModal();
                 })
@@ -69,8 +82,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         showLoadingModal("Refreshing List of Charities");
 
         //Enables beacon scanning in case bluetooth has been enabled after app initialisation
-        if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconService .enabled === false) {
-            BeaconService .begin(evothings.eddystone);
+        if (cordova.plugins.BluetoothStatus.BTenabled === true && BeaconService.enabled === false) {
+            BeaconService.begin(evothings.eddystone);
         }
 
         //clears location-based charities from list
@@ -116,16 +129,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             });
     }
 
-    /*
-     Having bluetooth check inside timeout fixes issue with bluetooth status not being represented correctly
-     */
-    setTimeout(function() {
-        if(cordova.plugins.BluetoothStatus.hasBTLE){
-            BeaconService .begin(evothings.eddystone);
-        }else{
-            console.log("No bluetoothLE detected, beacon functionality disabled");
-        }
-    }, 1);
 
     console.log("Angular controller has been loaded");
 
@@ -189,13 +192,14 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             });
     }
 
-
+    var beaconScanPasses = 0;
     var discoveredBeacons = {};
     var BeaconService = {
         enabled: false,
         begin: function(beaconScanner){
             this.enabled = true;
-            console.log(JSON.stringify(this));
+            console.log(JSON.stringify(this))
+            console.log("beacon scan has started");
             beaconScanner.startScan(
                 this.processBeaconBroadcast
                 ,
@@ -207,6 +211,8 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             )
         },
         processBeaconBroadcast: function (beacon) {
+            beaconScanPasses += 1;
+            console.log("Beacon scanned: pass " + beaconScanPasses)
             if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
                 discoveredBeacons[beacon.address] = beacon;
                 console.log("beacon pushed to array");
