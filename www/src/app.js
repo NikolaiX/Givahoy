@@ -13,10 +13,15 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
     };
 
     $scope.charities = [];
+    $scope.charityDropdown = {
+        selected: null,
+        label: function(charity){
+            return charity.name + " (" + charity.location + ")"
+        }
+    }
     $scope.userBalance = 0;
     $scope.transactionHistory = [];
 
-    $scope.CharityDropdownValue = null;
     $scope.makeTransaction = InitiateTransaction;
     $scope.refreshList = updateCharityList;
     $scope.user = LocalData.user;
@@ -133,13 +138,13 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         });
     }
 
-    function InitiateTransaction(amount) {
+    function InitiateTransaction(amount, charity) {
         if ($scope.balance + 50 <= amount) {
             alert('Insufficient Funds');
             return;
         }
 
-        if($scope.CharityDropdownValue === null){
+        if(charity === null){
             alert("No Charities Found!");
             return;
         }
@@ -147,12 +152,12 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
          todo: Change selected Charity check to angular model
          */
         navigator.notification.confirm(
-            "Are you sure you want to donate $" + amount + " to " + getSelectedLocation().text() + "?",
+            "Are you sure you want to donate $" + amount + " to " + charity.name + "?",
             function (buttonIndex) {
                 if (buttonIndex == 1) {
                     showLoadingModal("Your Transaction is being Processed");
 
-                    ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"))
+                    ServerApi.makeTransaction(amount, charity.value)
                         .then(function(result){
                             updateScope();
                             if(result.success == true){
@@ -162,18 +167,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                                 showErrorModal("Sorry, there was a problem processing your donation.", true);
                             }
                         });
-
-
-
-                    /*ServerApi.makeTransaction(amount, getSelectedLocation().attr("value"), function(status){
-                     updateScope();
-                     if(status == "Success"){
-                     showTransactionCompletedModal(getSelectedLocation().text(), amount);
-                     }else{
-                     showErrorModal("Sorry, there was a problem processing your donation.", true);
-                     }
-                     });*/
-                }
+                    }
             });
     }
 
