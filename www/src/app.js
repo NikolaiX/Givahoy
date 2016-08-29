@@ -126,16 +126,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         /*
          Sets default selection on charity list to first charity found if none is already set
          */
-        if ($scope.CharityDropdownValue === null && $scope.charities.length > 0){
-            $scope.CharityDropdownValue = $scope.charities[0].value.toString();
+        if ($scope.charityDropdown.selected === null && $scope.charities.length > 0){
+            $scope.charityDropdown.selected = $scope.charities[0];
         }
-        $timeout(function(){
-            //Naughty hack to circumvent problem with dropdown label not updating
-            setTimeout(function(){
-                $('#locations').selectmenu('refresh');
-            },1);
-            console.log("Scope updated");
-        });
+        console.log("Scope updated");
     }
 
     function InitiateTransaction(amount, charity) {

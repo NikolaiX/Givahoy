@@ -3,13 +3,8 @@
         <br>
         <br>
         <br>
-        <div>Current Selected Item:{{charityDropdown.selected}}
+        <div>
             <div id="locationWrapper">
-<!--                <img id="refreshCharityList" src="images/refresh.png" ng-click="refreshList()">
-                <select id="locations" data-corners="false" data-shadow="false" ng-model="CharityDropdownValue">
-                    <option ng-repeat="charity in charities | orderBy:'-type'" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
-                </select>-->
-
                 <img id="refreshCharityList" src="images/refresh.png" ng-click="refreshList()">
                 <div class="list">
                     <label class="item item-input item-select">
@@ -18,9 +13,6 @@
                         </div>
                         <select id="locations" ng-model="charityDropdown.selected" ng-options="charityDropdown.label(charity) for charity in charities
                          | orderBy:'type'">
-                            <!--
-                            <option ng-repeat="charity in charities | orderBy:'type'" ng-model="selectedValue" value={{charity.value}}>{{charity.name}} ({{charity.location}})</option>
-                        -->
                         </select>
                     </label>
                 </div>
