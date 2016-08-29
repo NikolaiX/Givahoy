@@ -40,7 +40,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             });
     };
 
-
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
             userLocation = currentLocation;
@@ -137,14 +136,10 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             alert('Insufficient Funds');
             return;
         }
-
         if(charity === null){
-            alert("No Charities Found!");
+            alert("No Charity selected!");
             return;
         }
-        /*
-         todo: Change selected Charity check to angular model
-         */
         navigator.notification.confirm(
             "Are you sure you want to donate $" + amount + " to " + charity.name + "?",
             function (buttonIndex) {
@@ -165,7 +160,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             });
     }
 
-    var beaconScanPasses = 0;
     var discoveredBeacons = {};
     var BeaconService = {
         enabled: false,
@@ -184,14 +178,11 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
             )
         },
         processBeaconBroadcast: function (beacon) {
-            beaconScanPasses += 1;
-            console.log("Beacon scanned: pass " + beaconScanPasses)
             if(!discoveredBeacons[beacon.address] && isGivahoyBeacon(beacon)){
                 discoveredBeacons[beacon.address] = beacon;
                 console.log("beacon pushed to array");
                 ServerApi.ProcessBeacon(beacon)
                     .then(function(newCharities){
-                        console.log("Processing new shit");
                         $scope.charities.push.apply($scope.charities, newCharities);
                         console.log($scope.charities);
                         updateScope();
