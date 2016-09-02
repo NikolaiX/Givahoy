@@ -31,10 +31,10 @@
             Enter your email address to continue
             <br>
             <br>
-            <form name="registrationForm" ng-submit="registrationForm.$valid && registerUser(user)" novalidate>
+            <form name="registrationForm" ng-submit="registrationForm.$valid && registerUser(regInfo)" novalidate>
                 <div class="list">
                     <label class="item item-input">
-                        <input type="email" placeholder="Email Address" ng-model="user.email" required>
+                        <input type="email" placeholder="Email Address" ng-model="regInfo.email" required>
                     </label>
 
                     <input type="submit" value="Submit" class="item button button-positive">

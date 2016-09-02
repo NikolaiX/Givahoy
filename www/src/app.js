@@ -26,9 +26,9 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
     $scope.refreshList = updateCharityList;
     $scope.user = LocalData.user;
 
-    $scope.registerUser = function(user){
+    $scope.registerUser = function(regInfo){
         showLoadingModal("Registering Email...");
-        ServerApi.registerUser(user.email)
+        ServerApi.registerUser(regInfo.email)
             .then(function (response) {
                 if(response === "Success" && LocalData.user.isRegistered){
                     updateScope();
@@ -231,6 +231,7 @@ givahoyApp.factory("LocalData", function(){
             toggleRegistration: function(){
                 if(this.isRegistered){
                     window.localStorage.setItem('registered', "false");
+                    window.localStorage.setItem('email', null);
                     console.log("Registration set to false");
                 }else{
                     console.log("Registration set to true");
