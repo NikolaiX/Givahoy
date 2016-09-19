@@ -14,16 +14,18 @@ function Charity(Value, Name, Location, Type){
     this.type = Type;
 }
 
-function debitTransaction(ID, connectionID, date, instance, location, amount){
+function debitTransaction(ID, connectionID, date, name, location, amount){
+    this.transactionType = "debit";
     this.ID = ID;
     this.connectionID = connectionID;
     this.date = date;
-    this.instance = instance;
+    this.name = name;
     this.location = location;
     this.amount = amount;
 }
 
 function creditTransaction(ID, connectionID, date, amount){
+    this.transactionType = "credit";
     this.ID = ID;
     this.connectionID = connectionID;
     this.date = date;
@@ -144,5 +146,38 @@ function ServerResultGetUID(json){
 }
 function ServerResultGetTransactionHistory(json){
     console.log(JSON.stringify(json.data.sresult2.txns));
-    return json.data.sresult2.txns;
+
+    var transactionObjects = [];
+    var serverTransactions = json.data.sresult2.txns;
+
+    if(serverTransactions === null){
+        return transactionObjects;
+    }
+
+    var newTransactionObject
+    for (var i = 0; i < serverTransactions.length; i++) {
+        console.log("Adding new transaction");
+        if(serverTransactions[i].tdbcr == "db"){
+            newTransactionObject = new debitTransaction(
+                serverTransactions[i].lpaymentid,
+                serverTransactions[i].lconnectionid,
+                serverTransactions[i].ddate,
+                serverTransactions[i].sinstancename,
+                serverTransactions[i].slocationname,
+                serverTransactions[i].mpayamount
+            );
+        }
+        else if(serverTransactions[i].tdbcr == "cr"){
+            newTransactionObject = new creditTransaction(
+                serverTransactions[i].lpaymentid,
+                serverTransactions[i].lconnectionid,
+                serverTransactions[i].ddate,
+                serverTransactions[i].mpayamount
+            );
+        }
+        transactionObjects.push(newTransactionObject);
+    }
+    return transactionObjects;
 }
+
+

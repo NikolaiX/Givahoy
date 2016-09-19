@@ -2,19 +2,19 @@
     <ion-content id="historypage">
         <div class="page-heading">Transaction History</div>
         <ul class="transaction-history-list">
-            <li class="transaction-item" ng-repeat="transaction in transactionHistory" ng-class="{special: transaction.tdbcr !== 'db'}">
-                <div ng-if="transaction.tdbcr === 'db'">
-                    <div class="label">{{transaction.sinstancename}}</div>
+            <li class="transaction-item" ng-repeat="transaction in transactionHistory" ng-class="{special: transaction.transactionType !== 'debit'}">
+                <div ng-if="transaction.transactionType === 'debit'">
+                    <div class="label">{{transaction.name}}</div>
                     <div class="details">
-                        <div class="detail-medium">{{transaction.ddate | date:'dd-MM-yyyy'}}</div>
-                        <div class="detail-small">${{transaction.mpayamount}}</div>
+                        <div class="detail-medium">{{transaction.date | date:'dd-MM-yyyy'}}</div>
+                        <div class="detail-small">${{transaction.amount}}</div>
                     </div>
                 </div>
-                <div ng-if="transaction.tdbcr === 'cr'">
+                <div ng-if="transaction.transactionType === 'credit'">
                     <div class="label">Account Top Up</div>
                     <div class="details">
-                        <div class="detail-medium">{{transaction.ddate | date:'dd-MM-yyyy'}}</div>
-                        <div class="detail-small">${{transaction.mpayamount}}</div>
+                        <div class="detail-medium">{{transaction.date | date:'dd-MM-yyyy'}}</div>
+                        <div class="detail-small">${{transaction.amount}}</div>
                     </div>
                 </div>
             </li>

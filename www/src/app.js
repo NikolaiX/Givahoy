@@ -205,7 +205,12 @@ givahoyApp.factory("LocalData", function(){
                 }
             },
             get uid(){
-                return window.localStorage.getItem('uid');
+                if(device.platform == "browser"){
+                    return "501446376089";
+                }
+                else{
+                    return window.localStorage.getItem('uid');
+                }
             },
             get email(){
                 return window.localStorage.getItem('email');
