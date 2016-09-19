@@ -128,6 +128,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         if ($scope.charityDropdown.selected === null && $scope.charities.length > 0){
             $scope.charityDropdown.selected = $scope.charities[0];
         }
+        $scope.$apply();
         console.log("Scope updated");
     }
 
@@ -191,7 +192,6 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
         }
     };
 }]);
-
 
 givahoyApp.factory("LocalData", function(){
     var user = function(){

@@ -145,8 +145,6 @@ function ServerResultGetUID(json){
     return parseInt(json.data.mbalance.vuid);
 }
 function ServerResultGetTransactionHistory(json){
-    console.log(JSON.stringify(json.data.sresult2.txns));
-
     var transactionObjects = [];
     var serverTransactions = json.data.sresult2.txns;
 
@@ -156,7 +154,6 @@ function ServerResultGetTransactionHistory(json){
 
     var newTransactionObject
     for (var i = 0; i < serverTransactions.length; i++) {
-        console.log("Adding new transaction");
         if(serverTransactions[i].tdbcr == "db"){
             newTransactionObject = new debitTransaction(
                 serverTransactions[i].lpaymentid,
