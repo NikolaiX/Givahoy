@@ -14,6 +14,22 @@ function Charity(Value, Name, Location, Type){
     this.type = Type;
 }
 
+function debitTransaction(ID, connectionID, date, instance, location, amount){
+    this.ID = ID;
+    this.connectionID = connectionID;
+    this.date = date;
+    this.instance = instance;
+    this.location = location;
+    this.amount = amount;
+}
+
+function creditTransaction(ID, connectionID, date, amount){
+    this.ID = ID;
+    this.connectionID = connectionID;
+    this.date = date;
+    this.amount = amount;
+}
+
 /*
  Checks beacon namespace
  Must be modified to check namespace properly once one has been decided
@@ -127,6 +143,6 @@ function ServerResultGetUID(json){
     return parseInt(json.data.mbalance.vuid);
 }
 function ServerResultGetTransactionHistory(json){
-    console.log(json.data.sresult2.txns);
+    console.log(JSON.stringify(json.data.sresult2.txns));
     return json.data.sresult2.txns;
 }
