@@ -244,6 +244,10 @@ ion-header-bar{
 
 /* JB Added
 */
+.payment-button-block{
+    width: 90%;
+    margin-left: 5%;
+}
 .button-block {
     width:100%;
     Text-align:center ;
@@ -251,7 +255,7 @@ ion-header-bar{
 }
 .round-button {
     display:inline-block;
-    width:25%;
+    width:30%;
 
 }
 .round-button-circle {

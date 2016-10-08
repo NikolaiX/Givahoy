@@ -20,31 +20,34 @@
 
             <br>
             <br>
-            <div class="button-block">
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(1, charityDropdown.selected)" class="round-button">$1</a></div>
+            <div class="payment-button-block">
+                <div class="button-block">
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(1, charityDropdown.selected)" class="round-button">$1</a></div>
+                    </div>
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(2, charityDropdown.selected)" class="round-button">$2</a></div>
+                    </div>
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(5, charityDropdown.selected)" class="round-button">$5</a></div>
+                    </div>
                 </div>
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(2, charityDropdown.selected)" class="round-button">$2</a></div>
+                <div class="button-block">
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(10, charityDropdown.selected)" class="round-button">$10</a></div>
+                    </div>
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(20, charityDropdown.selected)" class="round-button">$20</a></div>
+                    </div>
                 </div>
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(5, charityDropdown.selected)" class="round-button">$5</a></div>
+                <div class="button-block">
+                    <div class="round-button">
+                        <div class="round-button-circle"><a ng-click="makeTransaction(0, charityDropdown.selected)" class="round-button"
+                        font-family="Arial">&hearts;</a></div>
+                    </div>
                 </div>
             </div>
-            <div class="button-block">
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(10, charityDropdown.selected)" class="round-button">$10</a></div>
-                </div>
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(20, charityDropdown.selected)" class="round-button">$20</a></div>
-                </div>
-            </div>
-            <div class="button-block">
-                <div class="round-button">
-                    <div class="round-button-circle"><a ng-click="makeTransaction(0, charityDropdown.selected)" class="round-button"
-                                                        font-family="Arial">&hearts;</a></div>
-                </div>
-            </div>
+            
             <div>
                 <p id="availbal">Available Balance: ${{userBalance}}</p>
             </div>
