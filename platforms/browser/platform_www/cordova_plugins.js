@@ -178,7 +178,8 @@ module.exports.metadata =
     "cordova-plugin-ble": "1.0.1",
     "cordova-plugin-eddystone": "1.0.2",
     "cordova-plugin-bluetooth-status": "1.0.4",
-    "cordova-plugin-whitelist": "1.3.0"
+    "cordova-plugin-whitelist": "1.3.0",
+    "cordova-plugin-crosswalk-webview": "2.1.0"
 }
 // BOTTOM OF METADATA
 });

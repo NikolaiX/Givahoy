@@ -42,6 +42,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.mangetout.givahoy"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         }
     },
     "dependent_plugins": {}

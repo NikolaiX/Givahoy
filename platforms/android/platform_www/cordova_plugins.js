@@ -147,7 +147,8 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "2.1.0",
     "cordova-plugin-globalization": "1.0.2",
     "cordova-plugin-network-information": "1.2.0",
-    "cordova-plugin-whitelist": "1.3.0"
+    "cordova-plugin-whitelist": "1.3.0",
+    "cordova-plugin-crosswalk-webview": "2.1.0"
 };
 // BOTTOM OF METADATA
 });
