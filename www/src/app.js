@@ -2,7 +2,7 @@
  * Created by nikolai on 24/03/16.
  */
 var givahoyApp = angular.module('givahoyApp',['ionic']);
-
+console.log("Started app");
 givahoyApp.config(['$ionicConfigProvider', function ($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
 }]);
@@ -11,6 +11,7 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
     var userLocation = {
         enabled: false
     };
+
 
     $scope.charities = [];
     $scope.charityDropdown = {
@@ -39,13 +40,16 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                 }
             });
     };
+    console.log("About to get position");
 
     navigator.geolocation.getCurrentPosition(
         function(currentLocation) {
+            console.log("Got location");
             userLocation = currentLocation;
             userLocation.enabled = true;
             ServerApi.Initialise(currentLocation)
                 .then(function (returnedData) {
+                    console.log("Got location data from server");
                     console.log(returnedData);
                     $scope.charities.push.apply($scope.charities, returnedData.charities);
                     $scope.userBalance = returnedData.userBalance;

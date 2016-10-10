@@ -32,7 +32,6 @@ givahoyApp.factory('ServerApi', ['LocalData', 'Server', function(LocalData, Serv
                     transactionHistory: ServerResultGetTransactionHistory(result),
                     uid: ServerResultGetUID(result)
                 };
-                console.log(JSON.stringify(returnObject));
                 return returnObject;
             }).catch(function (result) {
             showErrorModal("There was a problem contacting the server, check your internet connection or try again later", false);

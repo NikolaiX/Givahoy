@@ -167,7 +167,6 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-whitelist": "1.2.1",
     "cordova-plugin-device": "1.1.1",
     "cordova-plugin-console": "1.0.2",
     "cordova-plugin-dialogs": "1.2.0",
@@ -178,7 +177,8 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.2.0",
     "cordova-plugin-ble": "1.0.1",
     "cordova-plugin-eddystone": "1.0.2",
-    "cordova-plugin-bluetooth-status": "1.0.4"
+    "cordova-plugin-bluetooth-status": "1.0.4",
+    "cordova-plugin-whitelist": "1.3.0"
 }
 // BOTTOM OF METADATA
 });

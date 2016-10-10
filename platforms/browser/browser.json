@@ -18,9 +18,6 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.mangetout.giveahoy"
         },
@@ -53,6 +50,9 @@
         },
         "cordova-plugin-bluetooth-status": {
             "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         }
     },
     "dependent_plugins": {},
@@ -222,7 +222,6 @@
         }
     ],
     "plugin_metadata": {
-        "cordova-plugin-whitelist": "1.2.1",
         "cordova-plugin-device": "1.1.1",
         "cordova-plugin-console": "1.0.2",
         "cordova-plugin-dialogs": "1.2.0",
@@ -233,6 +232,7 @@
         "cordova-plugin-network-information": "1.2.0",
         "cordova-plugin-ble": "1.0.1",
         "cordova-plugin-eddystone": "1.0.2",
-        "cordova-plugin-bluetooth-status": "1.0.4"
+        "cordova-plugin-bluetooth-status": "1.0.4",
+        "cordova-plugin-whitelist": "1.3.0"
     }
 }

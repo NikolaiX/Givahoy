@@ -7,9 +7,6 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.mangetout.giveahoy"
-        },
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.mangetout.giveahoy"
         },
@@ -42,6 +39,9 @@
         },
         "cordova-plugin-ble": {
             "PACKAGE_NAME": "com.mangetout.giveahoy"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.mangetout.givahoy"
         }
     },
     "dependent_plugins": {}

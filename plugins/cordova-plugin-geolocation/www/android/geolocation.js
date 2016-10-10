@@ -41,7 +41,7 @@ module.exports = {
 
     watchPosition: function(success, error, args) {
         var pluginWatchId = utils.createUUID();
-
+        
         var win = function() {
             var geo = cordova.require('cordova/modulemapper').getOriginalSymbol(window, 'navigator.geolocation');
             pluginToNativeWatchMap[pluginWatchId] = geo.watchPosition(success, error, args);
