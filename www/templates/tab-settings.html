@@ -1,13 +1,15 @@
 <ion-view>
     <ion-content id="settingspage">
         <ul class="list">
-            <li ng-if="!user.isRegistered"
-                class="item" onclick="showRegistrationModal()">Register Account</li>
-                <!--
-            <li class="item" ng-click="user.toggleRegistration()">Toggle registration (Developer Setting)</li>
-            <li ng-if="user.isInitialised"
-                class="item" ng-click="user.disableInitialisation()">Disable Initialisation (Developer Setting)</li>
-                -->
+            <li ng-if="!user.isRegistered" class="item" onclick="showRegistrationModal()">
+				Register Account
+			</li>
+			<li ng-if="user.isRegistered" class="item">
+				Signed in as {{user.email}}
+			</li>
+			
+            <!--<li class="item" ng-click="user.toggleRegistration()">Toggle registration (Developer Setting)</li> -->
+               
         </ul>
     </ion-content>
 </ion-view>
