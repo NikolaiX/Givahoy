@@ -247,6 +247,8 @@ ion-header-bar{
 .payment-button-block{
     width: 90%;
     margin-left: 5%;
+    max-width: 700px;
+    margin: 0 auto;
 }
 .button-block {
     width:100%;
