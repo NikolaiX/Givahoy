@@ -137,10 +137,12 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
     }
 
     function InitiateTransaction(amount, charity) {
-        if ($scope.balance <= amount) {
+        /*
+        if ($scope.userBalance < amount) {
             alert('Insufficient Funds');
             return;
         }
+        */
         if(charity === null){
             alert("No Charity selected!");
             return;
