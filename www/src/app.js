@@ -67,9 +67,11 @@ givahoyApp.controller('givahoyAppController', ['$scope', '$timeout', 'ServerApi'
                     clearModal();
                 })
         },/*Initialise Server without location data if not available*/
-        function(result){
-            showErrorModal("This application needs access to your location to function. Please enable this under your phones settings.", false);
-        });
+        function (result) {
+            console.log(result);
+            showErrorModal("This application needs access to your location to function. Please enable high-accuracy location in your phones settings and restart the app.", false);
+        }
+        ,{timeout: 2000});
 
     function updateCharityList() {
         showLoadingModal("Refreshing List of Charities");
